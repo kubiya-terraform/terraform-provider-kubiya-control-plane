@@ -1,0 +1,20 @@
+provider:
+  name: control_plane
+resources:
+  # TODO: Add your resources configuration here
+  # Example:
+  # agent:
+  #   read:
+  #     path: /agents/{id}
+  #     method: GET
+  #   create:
+  #     path: /agents
+  #     method: POST
+  #   delete:
+  #     path: /agents/{id}
+  #     method: DELETE
+  #   update:
+  #     path: /agents/{id}
+  #     method: PUT
+data_sources:
+  # TODO: Add your data sources configuration here

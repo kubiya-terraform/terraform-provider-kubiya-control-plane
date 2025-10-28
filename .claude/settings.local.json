@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//home/dima/Projects/work/kubiya/terraform-provider-kubiya/internal/provider/**)",
+      "Read(//home/dima/Projects/work/kubiya/terraform-provider-kubiya/**)",
+      "Bash(mkdir:*)",
+      "Bash(go mod init:*)",
+      "Bash(go get:*)",
+      "Bash(go mod tidy:*)",
+      "Bash(go build:*)",
+      "Bash(tree:*)",
+      "Read(//home/dima/Projects/work/kubiya/agent-control-plane/control-plane-api/app/models/**)",
+      "Read(//home/dima/Projects/work/kubiya/agent-control-plane/control-plane-api/app/routers/**)",
+      "Read(//home/dima/Projects/work/kubiya/agent-control-plane/control-plane-api/app/**)",
+      "Bash(make fmt-check:*)",
+      "Bash(make vet:*)",
+      "Bash(make test:*)",
+      "Bash(make fmt:*)",
+      "Bash(make ci:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
