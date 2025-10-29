@@ -1,4 +1,5 @@
 .idea
+.claude
 tmp
 __debug_*
 examples/terraform.log

@@ -1,20 +1,367 @@
 provider:
   name: control_plane
+  description: Terraform provider for managing Kubiya Control Plane resources
+  base_url: https://control-plane.kubiya.ai
+  api_version: v1
+
+authentication:
+  type: bearer_token
+  environment_variables:
+    - KUBIYA_CONTROL_PLANE_API_KEY
+    - KUBIYA_CONTROL_PLANE_ORG_ID
+    - KUBIYA_CONTROL_PLANE_BASE_URL  # Optional override
+
 resources:
-  # TODO: Add your resources configuration here
-  # Example:
-  # agent:
-  #   read:
-  #     path: /agents/{id}
-  #     method: GET
-  #   create:
-  #     path: /agents
-  #     method: POST
-  #   delete:
-  #     path: /agents/{id}
-  #     method: DELETE
-  #   update:
-  #     path: /agents/{id}
-  #     method: PUT
+  agent:
+    description: AI agents with LLM configuration
+    endpoints:
+      read:
+        path: /api/v1/agents/{id}
+        method: GET
+      create:
+        path: /api/v1/agents
+        method: POST
+      update:
+        path: /api/v1/agents/{id}
+        method: PATCH
+      delete:
+        path: /api/v1/agents/{id}
+        method: DELETE
+    attributes:
+      required:
+        - name
+        - model_id
+        - runtime
+      optional:
+        - description
+        - llm_config
+        - configuration
+        - team_id
+        - capabilities
+      computed:
+        - id
+        - status
+        - created_at
+        - updated_at
+
+  team:
+    description: Teams for organizing agents
+    endpoints:
+      read:
+        path: /api/v1/teams/{id}
+        method: GET
+      create:
+        path: /api/v1/teams
+        method: POST
+      update:
+        path: /api/v1/teams/{id}
+        method: PATCH
+      delete:
+        path: /api/v1/teams/{id}
+        method: DELETE
+    attributes:
+      required:
+        - name
+      optional:
+        - description
+        - configuration
+        - execution_environment
+      computed:
+        - id
+        - created_at
+        - updated_at
+
+  project:
+    description: Projects for grouping resources
+    endpoints:
+      read:
+        path: /api/v1/projects/{id}
+        method: GET
+      create:
+        path: /api/v1/projects
+        method: POST
+      update:
+        path: /api/v1/projects/{id}
+        method: PATCH
+      delete:
+        path: /api/v1/projects/{id}
+        method: DELETE
+    attributes:
+      required:
+        - name
+      optional:
+        - description
+        - goals
+        - settings
+      computed:
+        - id
+        - created_at
+        - updated_at
+
+  environment:
+    description: Execution environments with custom settings
+    endpoints:
+      read:
+        path: /api/v1/environments/{id}
+        method: GET
+      create:
+        path: /api/v1/environments
+        method: POST
+      update:
+        path: /api/v1/environments/{id}
+        method: PATCH
+      delete:
+        path: /api/v1/environments/{id}
+        method: DELETE
+    attributes:
+      required:
+        - name
+      optional:
+        - description
+        - configuration
+        - settings
+        - execution_environment
+        - tags
+      computed:
+        - id
+        - status
+        - created_at
+        - updated_at
+
+  toolset:
+    description: Toolsets (filesystem, shell, docker, etc.)
+    endpoints:
+      read:
+        path: /api/v1/toolsets/{id}
+        method: GET
+      create:
+        path: /api/v1/toolsets
+        method: POST
+      update:
+        path: /api/v1/toolsets/{id}
+        method: PATCH
+      delete:
+        path: /api/v1/toolsets/{id}
+        method: DELETE
+    attributes:
+      required:
+        - name
+        - type
+      optional:
+        - description
+        - configuration
+        - enabled
+      computed:
+        - id
+        - created_at
+        - updated_at
+
+  policy:
+    description: OPA Rego governance policies
+    endpoints:
+      read:
+        path: /api/v1/policies/{id}
+        method: GET
+      create:
+        path: /api/v1/policies
+        method: POST
+      update:
+        path: /api/v1/policies/{id}
+        method: PUT  # Note: Policies use PUT, not PATCH
+      delete:
+        path: /api/v1/policies/{id}
+        method: DELETE
+    attributes:
+      required:
+        - name
+        - policy_content
+      optional:
+        - description
+        - enabled
+      computed:
+        - id
+        - created_at
+        - updated_at
+
+  worker:
+    description: Worker registration
+    endpoints:
+      read:
+        path: /api/v1/workers/{id}
+        method: GET
+      create:
+        path: /api/v1/workers
+        method: POST
+      delete:
+        path: /api/v1/workers/{id}
+        method: DELETE
+    attributes:
+      required:
+        - name
+      optional:
+        - description
+        - configuration
+      computed:
+        - id
+        - status
+        - created_at
+        - updated_at
+    notes:
+      - Workers do not support UPDATE operations (runtime entities)
+
 data_sources:
-  # TODO: Add your data sources configuration here
+  agent:
+    description: Look up existing agents
+    endpoint:
+      path: /api/v1/agents/{id}
+      method: GET
+    attributes:
+      required:
+        - id
+      computed:
+        - name
+        - description
+        - model_id
+        - runtime
+        - llm_config
+        - configuration
+        - team_id
+        - capabilities
+        - status
+        - created_at
+        - updated_at
+
+  team:
+    description: Look up existing teams
+    endpoint:
+      path: /api/v1/teams/{id}
+      method: GET
+    attributes:
+      required:
+        - id
+      computed:
+        - name
+        - description
+        - configuration
+        - execution_environment
+        - created_at
+        - updated_at
+
+  project:
+    description: Look up existing projects
+    endpoint:
+      path: /api/v1/projects/{id}
+      method: GET
+    attributes:
+      required:
+        - id
+      computed:
+        - name
+        - description
+        - goals
+        - settings
+        - created_at
+        - updated_at
+
+  environment:
+    description: Look up existing environments
+    endpoint:
+      path: /api/v1/environments/{id}
+      method: GET
+    attributes:
+      required:
+        - id
+      computed:
+        - name
+        - description
+        - configuration
+        - settings
+        - execution_environment
+        - tags
+        - status
+        - created_at
+        - updated_at
+
+  toolset:
+    description: Look up existing toolsets
+    endpoint:
+      path: /api/v1/toolsets/{id}
+      method: GET
+    attributes:
+      required:
+        - id
+      computed:
+        - name
+        - description
+        - type
+        - configuration
+        - enabled
+        - created_at
+        - updated_at
+
+  policy:
+    description: Look up existing policies
+    endpoint:
+      path: /api/v1/policies/{id}
+      method: GET
+    attributes:
+      required:
+        - id
+      computed:
+        - name
+        - description
+        - policy  # Policy content
+        - enabled
+        - created_at
+        - updated_at
+
+testing:
+  integration_tests:
+    location: test/integration_test.go
+    count: 8
+    requires:
+      - KUBIYA_CONTROL_PLANE_API_KEY
+      - KUBIYA_CONTROL_PLANE_ORG_ID
+
+  testdata_tests:
+    location: test/testdata_test.go
+    count: 7
+    configurations: testdata/
+    requires:
+      - KUBIYA_CONTROL_PLANE_API_KEY
+      - KUBIYA_CONTROL_PLANE_ORG_ID
+
+examples:
+  location: examples/
+  resources:
+    - agent
+    - team
+    - project
+    - environment
+    - toolset
+    - policy
+    - worker
+    - complete-setup
+
+documentation:
+  location: docs/
+  structure:
+    - index.md
+    - guides/getting-started.md
+    - resources/*.md
+    - data-sources/*.md
+
+notes:
+  - All resources except Policy use PATCH for updates
+  - Policy uses PUT for updates (full replacement)
+  - Workers do not support UPDATE operations
+  - Workers do not have data sources (runtime entities)
+  - JSON fields (configuration, settings, etc.) must be encoded as JSON strings
+  - All timestamps are RFC3339 format
+  - IDs are UUIDs
+
+versioning:
+  terraform:
+    min_version: "1.0"
+  provider:
+    version: "1.0.0"
