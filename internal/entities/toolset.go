@@ -6,12 +6,12 @@ import "time"
 type ToolSetType string
 
 const (
-	ToolSetTypeFileSystem    ToolSetType = "file_system"
-	ToolSetTypeShell         ToolSetType = "shell"
-	ToolSetTypeDocker        ToolSetType = "docker"
-	ToolSetTypePython        ToolSetType = "python"
+	ToolSetTypeFileSystem     ToolSetType = "file_system"
+	ToolSetTypeShell          ToolSetType = "shell"
+	ToolSetTypeDocker         ToolSetType = "docker"
+	ToolSetTypePython         ToolSetType = "python"
 	ToolSetTypeFileGeneration ToolSetType = "file_generation"
-	ToolSetTypeCustom        ToolSetType = "custom"
+	ToolSetTypeCustom         ToolSetType = "custom"
 )
 
 // ToolSet represents a toolset in the control plane

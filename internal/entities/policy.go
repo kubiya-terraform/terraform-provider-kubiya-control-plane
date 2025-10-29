@@ -37,9 +37,9 @@ type PolicyCreateRequest struct {
 
 // PolicyUpdateRequest represents the request to update a policy
 type PolicyUpdateRequest struct {
-	Name          *string    `json:"name,omitempty"`
-	Description   *string    `json:"description,omitempty"`
-	PolicyContent *string    `json:"policy_content,omitempty"`
-	Enabled       *bool      `json:"enabled,omitempty"`
-	Tags          []string   `json:"tags,omitempty"`
+	Name          *string  `json:"name,omitempty"`
+	Description   *string  `json:"description,omitempty"`
+	PolicyContent *string  `json:"policy_content,omitempty"`
+	Enabled       *bool    `json:"enabled,omitempty"`
+	Tags          []string `json:"tags,omitempty"`
 }

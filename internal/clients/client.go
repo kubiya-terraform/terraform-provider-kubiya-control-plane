@@ -17,12 +17,11 @@ type Client struct {
 	APIKey         string
 	BaseURL        string
 	HTTPClient     *http.Client
-	Env            string
 	OrganizationID string
 }
 
 // New creates a new Control Plane API client
-func New(apiKey, env string) (*Client, error) {
+func New(apiKey string) (*Client, error) {
 	// Get logger
 	logger := kubiyasentry.GetLogger()
 
@@ -31,7 +30,7 @@ func New(apiKey, env string) (*Client, error) {
 		return nil, fmt.Errorf("API key is required")
 	}
 
-	baseURL := getBaseURL(env)
+	baseURL := getBaseURL()
 
 	// Get organization ID from environment variable
 	orgID := os.Getenv("KUBIYA_CONTROL_PLANE_ORG_ID")
@@ -49,19 +48,16 @@ func New(apiKey, env string) (*Client, error) {
 	client := &Client{
 		APIKey:         apiKey,
 		BaseURL:        baseURL,
-		Env:            env,
 		OrganizationID: orgID,
 		HTTPClient:     httpClient,
 	}
 
 	logger.Info("Created Kubiya Control Plane client",
-		"environment", env,
 		"base_url", baseURL,
 		"organization_id", orgID,
 	)
 
 	kubiyasentry.AddBreadcrumb("client", "Kubiya Control Plane client created", sentry.LevelInfo, map[string]interface{}{
-		"environment":     env,
 		"base_url":        baseURL,
 		"organization_id": orgID,
 	})
@@ -69,23 +65,17 @@ func New(apiKey, env string) (*Client, error) {
 	return client, nil
 }
 
-// getBaseURL returns the appropriate base URL for the given environment
-func getBaseURL(env string) string {
-	// Check for custom base URL from environment
+// getBaseURL returns the base URL for the Control Plane API
+// Default: https://control-plane.kubiya.ai
+// Override with KUBIYA_CONTROL_PLANE_BASE_URL environment variable
+func getBaseURL() string {
+	// Check for custom base URL from environment variable
 	if customURL := os.Getenv("KUBIYA_CONTROL_PLANE_BASE_URL"); customURL != "" {
 		return customURL
 	}
 
-	switch env {
-	case "development":
-		return "http://localhost:7777"
-	case "staging":
-		return "https://agent-control-plane-staging.vercel.app"
-	case "production":
-		return "https://agent-control-plane.vercel.app"
-	default:
-		return "http://localhost:7777"
-	}
+	// Default production URL
+	return "https://control-plane.kubiya.ai"
 }
 
 // DoRequest performs an HTTP request with proper headers

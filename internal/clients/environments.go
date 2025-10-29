@@ -39,7 +39,7 @@ func (c *Client) GetEnvironment(id string) (*entities.Environment, error) {
 
 // UpdateEnvironment updates an existing environment
 func (c *Client) UpdateEnvironment(id string, req *entities.EnvironmentUpdateRequest) (*entities.Environment, error) {
-	resp, err := c.DoRequest(http.MethodPut, fmt.Sprintf("/api/v1/environments/%s", id), req)
+	resp, err := c.DoRequest(http.MethodPatch, fmt.Sprintf("/api/v1/environments/%s", id), req)
 	if err != nil {
 		return nil, err
 	}

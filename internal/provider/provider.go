@@ -44,6 +44,8 @@ func (p *kubiyaControlPlaneProvider) DataSources(context.Context) []func() datas
 		NewTeamDataSource,
 		NewProjectDataSource,
 		NewEnvironmentDataSource,
+		NewToolSetDataSource,
+		NewPolicyDataSource,
 	}
 }
 
@@ -79,7 +81,6 @@ func (p *kubiyaControlPlaneProvider) Configure(ctx context.Context, _ provider.C
 	const (
 		apiKeyEnvVar         = "KUBIYA_CONTROL_PLANE_API_KEY"
 		orgIDEnvVar          = "KUBIYA_CONTROL_PLANE_ORG_ID"
-		envKeyEnvVar         = "KUBIYA_CONTROL_PLANE_ENV"
 		missingAPIKey        = "Kubiya Control Plane API Key Not Configured"
 		missingAPIKeyDetails = "Please set the Kubiya Control Plane API Key using the environment variable 'KUBIYA_CONTROL_PLANE_API_KEY'. " +
 			"Use the command below:\n> export KUBIYA_CONTROL_PLANE_API_KEY=YOUR_API_KEY"
@@ -104,29 +105,19 @@ func (p *kubiyaControlPlaneProvider) Configure(ctx context.Context, _ provider.C
 		return
 	}
 
-	// Fetch the environment or set to default
-	env := os.Getenv(envKeyEnvVar)
-	if env == "" {
-		env = "development"
-		logger.Debug("Using default environment", "environment", env)
-	} else {
-		logger.Info("Using configured environment", "environment", env)
-	}
-
-	// Set Sentry environment tag
+	// Set Sentry tags
 	sentry.ConfigureScope(func(scope *sentry.Scope) {
-		scope.SetTag("environment", env)
 		scope.SetTag("provider.version", p.version)
 		scope.SetTag("organization_id", orgID)
 	})
 
 	// Log client creation attempt
-	logger.Debug("Creating Kubiya Control Plane client", "environment", env)
+	logger.Debug("Creating Kubiya Control Plane client")
 
-	// Create a new Kubiya Control Plane client using the API key and environment
-	client, err := clients.New(apiKey, env)
+	// Create a new Kubiya Control Plane client using the API key
+	client, err := clients.New(apiKey)
 	if err != nil {
-		logger.Error("Failed to create Kubiya Control Plane client", "error", err, "environment", env)
+		logger.Error("Failed to create Kubiya Control Plane client", "error", err)
 		kubiyasentry.RecordError(ctx, err)
 		kubiyasentry.SetSpanStatus(span, sentry.SpanStatusInternalError)
 		resp.Diagnostics.AddError("Failed to Create Kubiya Control Plane Client", "An error occurred while creating the Kubiya Control Plane client: "+err.Error())
@@ -134,7 +125,7 @@ func (p *kubiyaControlPlaneProvider) Configure(ctx context.Context, _ provider.C
 	}
 
 	// Success
-	logger.Info("Successfully configured Kubiya Control Plane provider", "environment", env, "version", p.version)
+	logger.Info("Successfully configured Kubiya Control Plane provider", "version", p.version)
 	kubiyasentry.SetSpanStatus(span, sentry.SpanStatusOK)
 
 	// Attach the client to be used by resources and data sources

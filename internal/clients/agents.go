@@ -39,7 +39,7 @@ func (c *Client) GetAgent(id string) (*entities.Agent, error) {
 
 // UpdateAgent updates an existing agent
 func (c *Client) UpdateAgent(id string, req *entities.AgentUpdateRequest) (*entities.Agent, error) {
-	resp, err := c.DoRequest(http.MethodPut, fmt.Sprintf("/api/v1/agents/%s", id), req)
+	resp, err := c.DoRequest(http.MethodPatch, fmt.Sprintf("/api/v1/agents/%s", id), req)
 	if err != nil {
 		return nil, err
 	}

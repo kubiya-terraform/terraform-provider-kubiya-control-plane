@@ -39,7 +39,7 @@ func (c *Client) GetTeam(id string) (*entities.Team, error) {
 
 // UpdateTeam updates an existing team
 func (c *Client) UpdateTeam(id string, req *entities.TeamUpdateRequest) (*entities.Team, error) {
-	resp, err := c.DoRequest(http.MethodPut, fmt.Sprintf("/api/v1/teams/%s", id), req)
+	resp, err := c.DoRequest(http.MethodPatch, fmt.Sprintf("/api/v1/teams/%s", id), req)
 	if err != nil {
 		return nil, err
 	}

@@ -39,7 +39,7 @@ func (c *Client) GetProject(id string) (*entities.Project, error) {
 
 // UpdateProject updates an existing project
 func (c *Client) UpdateProject(id string, req *entities.ProjectUpdateRequest) (*entities.Project, error) {
-	resp, err := c.DoRequest(http.MethodPut, fmt.Sprintf("/api/v1/projects/%s", id), req)
+	resp, err := c.DoRequest(http.MethodPatch, fmt.Sprintf("/api/v1/projects/%s", id), req)
 	if err != nil {
 		return nil, err
 	}

@@ -11,7 +11,7 @@ import (
 
 const (
 	version = "dev"
-	address = "hashicorp.com/kubiya/kubiya-control-plane"
+	address = "hashicorp.com/kubiya/control-plane"
 )
 
 func main() {
