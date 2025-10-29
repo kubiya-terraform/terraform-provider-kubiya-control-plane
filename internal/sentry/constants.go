@@ -14,7 +14,7 @@ const (
 	// DefaultDSN is a fallback for local development (empty means Sentry disabled)
 	DefaultDSN = ""
 
-	// Default environment if KUBIYA_CONTROL_PLANE_ENV is not set
+	// Default environment for Sentry
 	DefaultEnvironment = "development"
 
 	// Supported environment values

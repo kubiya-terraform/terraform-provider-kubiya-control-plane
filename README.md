@@ -31,8 +31,7 @@ The provider requires an API key and organization ID to authenticate with the Ku
 ```shell
 export KUBIYA_CONTROL_PLANE_API_KEY=your_api_key_here
 export KUBIYA_CONTROL_PLANE_ORG_ID=your_organization_id_here
-export KUBIYA_CONTROL_PLANE_ENV=development  # Optional: defaults to 'development', can be 'staging' or 'production'
-export KUBIYA_CONTROL_PLANE_BASE_URL=http://localhost:7777  # Optional: override base URL (defaults based on env)
+export KUBIYA_CONTROL_PLANE_BASE_URL=http://localhost:7777  # Optional: override base URL (defaults to https://control-plane.kubiya.ai)
 ```
 
 ### Example Usage
@@ -50,7 +49,7 @@ provider "kubiya_control_plane" {
   # Configuration is read from environment variables:
   # - KUBIYA_CONTROL_PLANE_API_KEY (required)
   # - KUBIYA_CONTROL_PLANE_ORG_ID (required)
-  # - KUBIYA_CONTROL_PLANE_ENV (optional, defaults to "development")
+  # - KUBIYA_CONTROL_PLANE_BASE_URL (optional, defaults to https://control-plane.kubiya.ai)
 }
 
 # Create a project
