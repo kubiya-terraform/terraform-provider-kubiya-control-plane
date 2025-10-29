@@ -173,7 +173,7 @@ func (d *environmentDataSource) Read(ctx context.Context, req datasource.ReadReq
 	}
 
 	// Convert settings to JSON string
-	if environment.Settings != nil && len(environment.Settings) > 0 {
+	if len(environment.Settings) > 0 {
 		settingsJSON, err := toJSONString(environment.Settings)
 		if err != nil {
 			resp.Diagnostics.AddError("Error converting settings", err.Error())
@@ -187,7 +187,7 @@ func (d *environmentDataSource) Read(ctx context.Context, req datasource.ReadReq
 	config.Status = types.StringValue(string(environment.Status))
 
 	// Convert execution environment to JSON string
-	if environment.ExecutionEnvironment != nil && len(environment.ExecutionEnvironment) > 0 {
+	if len(environment.ExecutionEnvironment) > 0 {
 		execEnvJSON, err := toJSONString(environment.ExecutionEnvironment)
 		if err != nil {
 			resp.Diagnostics.AddError("Error converting execution_environment", err.Error())

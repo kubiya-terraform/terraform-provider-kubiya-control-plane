@@ -119,7 +119,7 @@ func (d *toolsetDataSource) Read(ctx context.Context, req datasource.ReadRequest
 	config.Type = types.StringValue(string(toolset.Type))
 
 	// Convert configuration to JSON string
-	if toolset.Configuration != nil && len(toolset.Configuration) > 0 {
+	if len(toolset.Configuration) > 0 {
 		configJSON, err := toJSONString(toolset.Configuration)
 		if err != nil {
 			resp.Diagnostics.AddError("Error converting configuration", err.Error())

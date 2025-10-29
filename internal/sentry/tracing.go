@@ -195,11 +195,10 @@ func WrapHandlerFunc(handler http.HandlerFunc, operation string) http.HandlerFun
 	return func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
 
-		// Extract trace context from headers if present
-		var spanOptions []sentry.SpanOption
+		// Extract trace context from headers if present for distributed tracing
 		if traceHeader := r.Header.Get(TraceHeader); traceHeader != "" {
-			// Continue trace from header - create span options
-			spanOptions = append(spanOptions, sentry.ContinueFromHeaders(traceHeader, r.Header.Get(BaggageHeader)))
+			// Continue trace from header
+			_ = sentry.ContinueFromHeaders(traceHeader, r.Header.Get(BaggageHeader))
 		}
 
 		// Start transaction

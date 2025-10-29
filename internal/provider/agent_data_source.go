@@ -153,7 +153,7 @@ func (d *agentDataSource) Read(ctx context.Context, req datasource.ReadRequest, 
 	}
 
 	// Convert configuration to JSON string
-	if agent.Configuration != nil && len(agent.Configuration) > 0 {
+	if len(agent.Configuration) > 0 {
 		configJSON, err := toJSONString(agent.Configuration)
 		if err != nil {
 			resp.Diagnostics.AddError("Error converting configuration", err.Error())
@@ -171,7 +171,7 @@ func (d *agentDataSource) Read(ctx context.Context, req datasource.ReadRequest, 
 	}
 
 	// Convert LLM config to JSON string
-	if agent.LLMConfig != nil && len(agent.LLMConfig) > 0 {
+	if len(agent.LLMConfig) > 0 {
 		llmConfigJSON, err := toJSONString(agent.LLMConfig)
 		if err != nil {
 			resp.Diagnostics.AddError("Error converting llm_config", err.Error())

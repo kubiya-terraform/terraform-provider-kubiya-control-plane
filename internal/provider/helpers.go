@@ -21,7 +21,7 @@ func parseJSON(jsonStr string) (map[string]interface{}, error) {
 
 // toJSONString converts a map to a JSON string
 func toJSONString(data map[string]interface{}) (string, error) {
-	if data == nil || len(data) == 0 {
+	if len(data) == 0 {
 		return "{}", nil
 	}
 
@@ -31,33 +31,4 @@ func toJSONString(data map[string]interface{}) (string, error) {
 	}
 
 	return string(bytes), nil
-}
-
-// Action constants for resource operations
-const (
-	readAction   = "read"
-	createAction = "create"
-	deleteAction = "delete"
-	updateAction = "update"
-)
-
-// resourceActionError returns a formatted error message for resource actions
-func resourceActionError(action, resourceType, err string) (string, string) {
-	summary := fmt.Sprintf("Failed to %s %s", action, resourceType)
-	detail := fmt.Sprintf("An error occurred while performing %s operation on %s: %s", action, resourceType, err)
-	return summary, detail
-}
-
-// configResourceError returns a formatted error message for configuration errors
-func configResourceError(resourceType string) (string, string) {
-	summary := fmt.Sprintf("%s Resource Configuration Error", resourceType)
-	detail := fmt.Sprintf("Expected configured %s client. Please report this issue to the provider developers.", resourceType)
-	return summary, detail
-}
-
-// convertResourceError returns a formatted error message for conversion errors
-func convertResourceError(resourceType, err string) (string, string) {
-	summary := fmt.Sprintf("Failed to convert %s data", resourceType)
-	detail := fmt.Sprintf("An error occurred while converting %s data: %s", resourceType, err)
-	return summary, detail
 }

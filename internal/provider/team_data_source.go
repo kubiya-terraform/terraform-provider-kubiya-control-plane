@@ -125,7 +125,7 @@ func (d *teamDataSource) Read(ctx context.Context, req datasource.ReadRequest, r
 	config.Status = types.StringValue(string(team.Status))
 
 	// Convert configuration to JSON string
-	if team.Configuration != nil && len(team.Configuration) > 0 {
+	if len(team.Configuration) > 0 {
 		configJSON, err := toJSONString(team.Configuration)
 		if err != nil {
 			resp.Diagnostics.AddError("Error converting configuration", err.Error())
@@ -150,7 +150,7 @@ func (d *teamDataSource) Read(ctx context.Context, req datasource.ReadRequest, r
 	}
 
 	// Convert execution environment to JSON string
-	if team.ExecutionEnvironment != nil && len(team.ExecutionEnvironment) > 0 {
+	if len(team.ExecutionEnvironment) > 0 {
 		execEnvJSON, err := toJSONString(team.ExecutionEnvironment)
 		if err != nil {
 			resp.Diagnostics.AddError("Error converting execution_environment", err.Error())

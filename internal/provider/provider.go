@@ -59,10 +59,8 @@ func (p *kubiyaControlPlaneProvider) Metadata(_ context.Context, _ provider.Meta
 
 func (p *kubiyaControlPlaneProvider) Configure(ctx context.Context, _ provider.ConfigureRequest, resp *provider.ConfigureResponse) {
 	// Initialize Sentry when provider is configured
-	if err := kubiyasentry.Initialize(); err != nil {
-		// Log error but don't fail provider configuration
-		// Sentry is optional for functionality
-	}
+	// Sentry is optional for functionality, so we ignore initialization errors
+	_ = kubiyasentry.Initialize()
 
 	// Get logger and add to context
 	logger := kubiyasentry.GetLogger()

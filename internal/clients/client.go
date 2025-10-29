@@ -109,7 +109,7 @@ func (c *Client) DoRequest(method, path string, body interface{}) (*http.Respons
 
 // ParseResponse parses the HTTP response into the provided interface
 func ParseResponse(resp *http.Response, target interface{}) error {
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	bodyBytes, err := io.ReadAll(resp.Body)
 	if err != nil {

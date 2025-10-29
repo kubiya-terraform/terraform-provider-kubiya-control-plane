@@ -160,7 +160,7 @@ func (d *projectDataSource) Read(ctx context.Context, req datasource.ReadRequest
 	}
 
 	// Convert settings to JSON string
-	if project.Settings != nil && len(project.Settings) > 0 {
+	if len(project.Settings) > 0 {
 		settingsJSON, err := toJSONString(project.Settings)
 		if err != nil {
 			resp.Diagnostics.AddError("Error converting settings", err.Error())
