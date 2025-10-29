@@ -1,7 +1,7 @@
 terraform {
   required_providers {
     kubiya_control_plane = {
-      source = "hashicorp.com/kubiya/kubiya"
+      source = "hashicorp.com/kubiya/control-plane"
     }
   }
 }
@@ -10,8 +10,7 @@ provider "kubiya_control_plane" {
   # Configuration will be read from environment variables:
   # - KUBIYA_CONTROL_PLANE_API_KEY (required)
   # - KUBIYA_CONTROL_PLANE_ORG_ID (required)
-  # - KUBIYA_CONTROL_PLANE_ENV (optional, defaults to "development")
-  # - KUBIYA_CONTROL_PLANE_BASE_URL (optional, override base URL)
+  # - KUBIYA_CONTROL_PLANE_BASE_URL (optional, defaults to https://control-plane.kubiya.ai)
 }
 
 # Create a project for organizing agents and teams

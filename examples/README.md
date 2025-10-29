@@ -1,44 +1,50 @@
-# Examples
+# Kubiya Control Plane Terraform Provider Examples
 
-This directory contains example Terraform configurations for the Kubiya Control Plane provider.
+This directory contains example Terraform configurations for using the Kubiya Control Plane Provider. Each subdirectory demonstrates a specific resource type or use case.
 
 ## Prerequisites
 
-1. Set up your API key and organization ID:
-   ```shell
-   export KUBIYA_CONTROL_PLANE_API_KEY=your_api_key_here
-   export KUBIYA_CONTROL_PLANE_ORG_ID=your_organization_id_here
-   ```
+Before running any examples, ensure you have:
 
-2. (Optional) Set the environment:
-   ```shell
-   export KUBIYA_CONTROL_PLANE_ENV=development  # or staging, production
-   ```
+1. **Terraform installed** (version 1.0 or later)
+2. **Kubiya Control Plane credentials**:
+   - API Key
+   - Organization ID
 
-## Running the Examples
+## Configuration
 
-1. Navigate to this directory:
-   ```shell
-   cd examples
-   ```
+Set the required environment variables:
 
-2. Initialize Terraform:
-   ```shell
-   terraform init
-   ```
+```bash
+export KUBIYA_CONTROL_PLANE_API_KEY="your-api-key"
+export KUBIYA_CONTROL_PLANE_ORG_ID="your-org-id"
+# Optional: Override the default API URL
+# export KUBIYA_CONTROL_PLANE_BASE_URL="https://custom-url.example.com"
+```
 
-3. Review the planned changes:
-   ```shell
-   terraform plan
-   ```
+## Examples Directory Structure
 
-4. Apply the configuration:
-   ```shell
-   terraform apply
-   ```
+### Individual Resource Examples
 
-## Available Examples
+Each directory contains examples for a specific resource type:
 
-- `main.tf` - Basic provider configuration
+- **agent/** - Agent resource and data source examples
+- **team/** - Team resource and data source examples
+- **project/** - Project resource and data source examples
+- **environment/** - Environment resource and data source examples
+- **toolset/** - ToolSet resource and data source examples
+- **policy/** - Policy resource and data source examples
+- **worker/** - Worker resource examples
+- **complete-setup/** - End-to-end example showing all resources working together
 
-More examples will be added as resources are implemented.
+## Usage
+
+Navigate to any example directory and run:
+
+```bash
+terraform init
+terraform plan
+terraform apply
+```
+
+See individual example directories for detailed documentation.

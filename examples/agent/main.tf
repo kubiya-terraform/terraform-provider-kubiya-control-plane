@@ -1,0 +1,63 @@
+terraform {
+  required_providers {
+    kubiya_control_plane = {
+      source = "kubiya/control-plane"
+    }
+  }
+}
+
+provider "kubiya_control_plane" {
+  # Configuration is via environment variables:
+  # KUBIYA_CONTROL_PLANE_API_KEY
+  # KUBIYA_CONTROL_PLANE_ORG_ID
+  # KUBIYA_CONTROL_PLANE_BASE_URL (optional, defaults to https://control-plane.kubiya.ai)
+}
+
+# Create an agent
+resource "kubiya_control_plane_agent" "example" {
+  name        = "example-agent"
+  description = "An example agent for demonstration"
+
+  # LLM configuration
+  model_id = "gpt-4"
+  llm_config = jsonencode({
+    temperature = 0.7
+    max_tokens  = 2000
+  })
+
+  # Runtime configuration
+  runtime = "default"
+
+  # Agent capabilities
+  capabilities = ["code_execution", "file_operations"]
+
+  # Agent configuration
+  configuration = jsonencode({
+    max_retries = 3
+    timeout     = 300
+  })
+
+  # Optional: Associate with a team
+  # team_id = kubiya_control_plane_team.example.id
+}
+
+# Look up an existing agent by ID
+data "kubiya_control_plane_agent" "existing" {
+  id = "agent-uuid-here"
+}
+
+# Output agent information
+output "agent_id" {
+  value       = kubiya_control_plane_agent.example.id
+  description = "The ID of the created agent"
+}
+
+output "agent_status" {
+  value       = kubiya_control_plane_agent.example.status
+  description = "The current status of the agent"
+}
+
+output "existing_agent_name" {
+  value       = data.kubiya_control_plane_agent.existing.name
+  description = "Name of the existing agent"
+}
