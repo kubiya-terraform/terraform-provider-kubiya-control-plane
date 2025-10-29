@@ -1,4 +1,4 @@
-.PHONY: build install test clean fmt vet lint validate ci check tidy version help
+.PHONY: build install test test-integration test-unit test-coverage clean fmt vet lint validate ci check tidy version help
 
 # Default target
 default: help
@@ -13,10 +13,28 @@ install:
 	@echo "Installing provider..."
 	go install
 
-# Run tests
+# Run all tests (unit + integration)
 test:
-	@echo "Running tests..."
+	@echo "Running all tests..."
 	go test ./... -v
+
+# Run unit tests only (exclude integration tests in test/ directory)
+test-unit:
+	@echo "Running unit tests..."
+	go test $$(go list ./... | grep -v '/test$$') -v
+
+# Run integration tests (requires KUBIYA_CONTROL_PLANE_API_KEY and KUBIYA_CONTROL_PLANE_ORG_ID)
+test-integration:
+	@echo "Running integration tests..."
+	@if [ -z "$$KUBIYA_CONTROL_PLANE_API_KEY" ]; then \
+		echo "Error: KUBIYA_CONTROL_PLANE_API_KEY environment variable is not set"; \
+		exit 1; \
+	fi
+	@if [ -z "$$KUBIYA_CONTROL_PLANE_ORG_ID" ]; then \
+		echo "Error: KUBIYA_CONTROL_PLANE_ORG_ID environment variable is not set"; \
+		exit 1; \
+	fi
+	go test ./test -v -timeout 30m
 
 # Run tests with coverage
 test-coverage:
@@ -61,11 +79,11 @@ validate:
 	@cd examples && terraform init -backend=false || true
 	@cd examples && terraform validate || true
 
-# Run CI checks locally
-ci: fmt-check vet test
+# Run CI checks locally (excludes integration tests)
+ci: fmt-check vet test-unit
 	@echo "All CI checks passed!"
 
-# Run all checks (fmt, vet, test)
+# Run all checks including integration tests (requires API credentials)
 check: fmt vet test
 	@echo "All checks passed!"
 
@@ -115,21 +133,23 @@ release:
 # Help
 help:
 	@echo "Available targets:"
-	@echo "  build          - Build the provider binary"
-	@echo "  install        - Install the provider locally"
-	@echo "  test           - Run tests"
-	@echo "  test-coverage  - Run tests with coverage report"
-	@echo "  clean          - Clean build artifacts"
-	@echo "  fmt            - Format code"
-	@echo "  fmt-check      - Check if code is formatted"
-	@echo "  vet            - Run go vet"
-	@echo "  lint           - Run all linters"
-	@echo "  validate       - Validate Terraform examples"
-	@echo "  ci             - Run CI checks locally (fmt-check, vet, test)"
-	@echo "  check          - Run all checks (fmt, vet, test)"
-	@echo "  tidy           - Tidy go modules"
-	@echo "  tidy-check     - Check if go.mod is tidy"
-	@echo "  version        - Show current version"
-	@echo "  version-bump   - Bump version (usage: make version-bump VERSION=x.y.z)"
-	@echo "  release        - Create a release (usage: make release VERSION=x.y.z)"
-	@echo "  help           - Show this help message"
+	@echo "  build            - Build the provider binary"
+	@echo "  install          - Install the provider locally"
+	@echo "  test             - Run all tests (unit + integration)"
+	@echo "  test-unit        - Run unit tests only"
+	@echo "  test-integration - Run integration tests (requires API credentials)"
+	@echo "  test-coverage    - Run tests with coverage report"
+	@echo "  clean            - Clean build artifacts"
+	@echo "  fmt              - Format code"
+	@echo "  fmt-check        - Check if code is formatted"
+	@echo "  vet              - Run go vet"
+	@echo "  lint             - Run all linters"
+	@echo "  validate         - Validate Terraform examples"
+	@echo "  ci               - Run CI checks (fmt-check, vet, unit tests only)"
+	@echo "  check            - Run all checks (fmt, vet, all tests)"
+	@echo "  tidy             - Tidy go modules"
+	@echo "  tidy-check       - Check if go.mod is tidy"
+	@echo "  version          - Show current version"
+	@echo "  version-bump     - Bump version (usage: make version-bump VERSION=x.y.z)"
+	@echo "  release          - Create a release (usage: make release VERSION=x.y.z)"
+	@echo "  help             - Show this help message"
