@@ -39,13 +39,13 @@ export KUBIYA_CONTROL_PLANE_BASE_URL=http://localhost:7777  # Optional: override
 ```terraform
 terraform {
   required_providers {
-    kubiya_control_plane = {
-      source = "hashicorp.com/kubiya/control-plane"
+    controlplane = {
+      source = "kubiya/control-plane"
     }
   }
 }
 
-provider "kubiya_control_plane" {
+provider "controlplane" {
   # Configuration is read from environment variables:
   # - KUBIYA_CONTROL_PLANE_API_KEY (required)
   # - KUBIYA_CONTROL_PLANE_ORG_ID (required)
@@ -53,33 +53,49 @@ provider "kubiya_control_plane" {
 }
 
 # Create a project
-resource "kubiya_control_plane_project" "example" {
+resource "controlplane_project" "example" {
   name        = "example-project"
   key         = "EX"
   description = "Example project"
-  visibility  = "private"
+
+  settings = jsonencode({
+    owner       = "devops-team"
+    environment = "production"
+  })
 }
 
 # Create an environment
-resource "kubiya_control_plane_environment" "production" {
-  name         = "production"
-  display_name = "Production Environment"
-  description  = "Production environment for agents"
+resource "controlplane_environment" "production" {
+  name        = "production"
+  description = "Production environment for agents"
+
+  settings = jsonencode({
+    region     = "us-east-1"
+    max_workers = 5
+  })
 }
 
 # Create a team
-resource "kubiya_control_plane_team" "example" {
+resource "controlplane_team" "example" {
   name        = "example-team"
   description = "Example team"
+
+  configuration = jsonencode({
+    max_agents = 10
+  })
 }
 
 # Create an agent
-resource "kubiya_control_plane_agent" "example" {
+resource "controlplane_agent" "example" {
   name        = "example-agent"
   description = "Example AI agent"
-  model_id    = "kubiya/claude-sonnet-4"
-  runtime     = "claude_code"
-  team_id     = kubiya_control_plane_team.example.id
+  model_id    = "gpt-4"
+  runtime     = "default"
+
+  llm_config = jsonencode({
+    temperature = 0.7
+    max_tokens  = 2000
+  })
 }
 ```
 
@@ -87,47 +103,53 @@ resource "kubiya_control_plane_agent" "example" {
 
 The provider currently supports the following resources:
 
-- `kubiya_control_plane_agent` - Manage AI agents
-- `kubiya_control_plane_team` - Manage teams
-- `kubiya_control_plane_project` - Manage projects
-- `kubiya_control_plane_environment` - Manage execution environments
+- `controlplane_agent` - Manage AI agents
+- `controlplane_team` - Manage teams
+- `controlplane_project` - Manage projects
+- `controlplane_environment` - Manage execution environments
+- `controlplane_toolset` - Manage toolsets (filesystem, shell, docker)
+- `controlplane_policy` - Manage OPA Rego governance policies
+- `controlplane_worker` - Register and manage workers
 
 ## Data Sources
 
 The provider supports the following data sources for read-only lookups:
 
-- `kubiya_control_plane_agent` - Lookup existing agents by ID
-- `kubiya_control_plane_team` - Lookup existing teams by ID
-- `kubiya_control_plane_project` - Lookup existing projects by ID
-- `kubiya_control_plane_environment` - Lookup existing environments by ID
+- `controlplane_agent` - Lookup existing agents by ID
+- `controlplane_team` - Lookup existing teams by ID
+- `controlplane_project` - Lookup existing projects by ID
+- `controlplane_environment` - Lookup existing environments by ID
+- `controlplane_toolset` - Lookup existing toolsets by ID
+- `controlplane_policy` - Lookup existing policies by ID
 
 ### Example Data Source Usage
 
 ```terraform
 # Lookup an existing agent
-data "kubiya_control_plane_agent" "existing" {
+data "controlplane_agent" "existing" {
   id = "agent-uuid-here"
 }
 
 # Use the data source in other resources
-resource "kubiya_control_plane_agent" "new_agent" {
+resource "controlplane_agent" "new_agent" {
   name        = "new-agent"
-  description = "New agent based on ${data.kubiya_control_plane_agent.existing.name}"
-  model_id    = data.kubiya_control_plane_agent.existing.model_id
-  runtime     = data.kubiya_control_plane_agent.existing.runtime
+  description = "New agent based on ${data.controlplane_agent.existing.name}"
+  model_id    = data.controlplane_agent.existing.model_id
+  runtime     = data.controlplane_agent.existing.runtime
+
+  llm_config = data.controlplane_agent.existing.llm_config
 }
 
 # Lookup a project and use its information
-data "kubiya_control_plane_project" "ml_project" {
+data "controlplane_project" "ml_project" {
   id = "project-uuid-here"
 }
 
 output "project_info" {
   value = {
-    name        = data.kubiya_control_plane_project.ml_project.name
-    key         = data.kubiya_control_plane_project.ml_project.key
-    agent_count = data.kubiya_control_plane_project.ml_project.agent_count
-    team_count  = data.kubiya_control_plane_project.ml_project.team_count
+    name     = data.controlplane_project.ml_project.name
+    key      = data.controlplane_project.ml_project.key
+    settings = data.controlplane_project.ml_project.settings
   }
 }
 ```
@@ -153,7 +175,7 @@ For local development and testing, you can use the following configuration in yo
 ```hcl
 provider_installation {
   dev_overrides {
-    "hashicorp.com/kubiya/control-plane" = "/path/to/your/GOPATH/bin"
+    "kubiya/control-plane" = "/path/to/your/GOPATH/bin"
   }
 
   direct {}

@@ -1,31 +1,31 @@
 ---
-page_title: "kubiya_control_plane_toolset Data Source"
+page_title: "controlplane_toolset Data Source"
 subcategory: ""
 description: |-
   Retrieves information about a Kubiya toolset
 ---
 
-# kubiya_control_plane_toolset (Data Source)
+# controlplane_toolset (Data Source)
 
 Retrieves information about an existing toolset in the Kubiya Control Plane.
 
 ## Example Usage
 
 ```terraform
-data "kubiya_control_plane_toolset" "shell" {
+data "controlplane_toolset" "shell" {
   id = "toolset-uuid-here"
 }
 
 output "toolset_name" {
-  value = data.kubiya_control_plane_toolset.shell.name
+  value = data.controlplane_toolset.shell.name
 }
 
 output "toolset_type" {
-  value = data.kubiya_control_plane_toolset.shell.type
+  value = data.controlplane_toolset.shell.type
 }
 
 output "toolset_enabled" {
-  value = data.kubiya_control_plane_toolset.shell.enabled
+  value = data.controlplane_toolset.shell.enabled
 }
 ```
 

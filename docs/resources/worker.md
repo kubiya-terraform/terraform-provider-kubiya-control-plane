@@ -1,18 +1,18 @@
 ---
-page_title: "kubiya_control_plane_worker Resource"
+page_title: "controlplane_worker Resource"
 subcategory: ""
 description: |-
   Manages a Kubiya worker registration
 ---
 
-# kubiya_control_plane_worker (Resource)
+# controlplane_worker (Resource)
 
 Manages a worker registration in the Kubiya Control Plane. Workers are execution nodes that run agent tasks. Note that workers typically self-register at runtime, so this resource is primarily for pre-registration and discovery.
 
 ## Example Usage
 
 ```terraform
-resource "kubiya_control_plane_worker" "example" {
+resource "controlplane_worker" "example" {
   environment_name = "production"
   hostname         = "worker-node-01"
 
@@ -59,5 +59,5 @@ resource "kubiya_control_plane_worker" "example" {
 Workers can be imported using their ID:
 
 ```shell
-terraform import kubiya_control_plane_worker.example worker-uuid-here
+terraform import controlplane_worker.example worker-uuid-here
 ```

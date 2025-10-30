@@ -40,40 +40,47 @@ Create a file named `main.tf`:
 ```terraform
 terraform {
   required_providers {
-    kubiya_control_plane = {
+    controlplane = {
       source  = "kubiya/control-plane"
       version = "~> 1.0"
     }
   }
 }
 
-provider "kubiya_control_plane" {
-  # Configuration via environment variables
+provider "controlplane" {
+  # Configuration via environment variables:
+  # KUBIYA_CONTROL_PLANE_API_KEY
+  # KUBIYA_CONTROL_PLANE_ORG_ID
+  # KUBIYA_CONTROL_PLANE_BASE_URL (optional)
 }
 
 # Create an environment
-resource "kubiya_control_plane_environment" "dev" {
+resource "controlplane_environment" "dev" {
   name        = "development"
   description = "Development environment"
 
-  configuration = jsonencode({
-    region = "us-east-1"
+  settings = jsonencode({
+    region      = "us-east-1"
+    max_workers = 5
   })
 }
 
 # Create a team
-resource "kubiya_control_plane_team" "platform" {
+resource "controlplane_team" "platform" {
   name        = "platform-team"
   description = "Platform engineering team"
+
+  configuration = jsonencode({
+    max_agents = 10
+  })
 }
 
 # Create an agent
-resource "kubiya_control_plane_agent" "assistant" {
+resource "controlplane_agent" "assistant" {
   name        = "dev-assistant"
   description = "Development assistant agent"
   model_id    = "gpt-4"
   runtime     = "default"
-  team_id     = kubiya_control_plane_team.platform.id
 
   llm_config = jsonencode({
     temperature = 0.7
@@ -83,12 +90,12 @@ resource "kubiya_control_plane_agent" "assistant" {
 
 # Output important information
 output "environment_id" {
-  value       = kubiya_control_plane_environment.dev.id
+  value       = controlplane_environment.dev.id
   description = "Development environment ID"
 }
 
 output "agent_id" {
-  value       = kubiya_control_plane_agent.assistant.id
+  value       = controlplane_agent.assistant.id
   description = "Assistant agent ID"
 }
 ```
@@ -128,12 +135,12 @@ Create a file named `data.tf`:
 
 ```terraform
 # Look up the created agent
-data "kubiya_control_plane_agent" "assistant" {
-  id = kubiya_control_plane_agent.assistant.id
+data "controlplane_agent" "assistant" {
+  id = controlplane_agent.assistant.id
 }
 
 output "agent_status" {
-  value = data.kubiya_control_plane_agent.assistant.status
+  value = data.controlplane_agent.assistant.status
 }
 ```
 
@@ -143,7 +150,7 @@ Expand your configuration by adding toolsets and policies:
 
 ```terraform
 # Add a shell toolset
-resource "kubiya_control_plane_toolset" "shell" {
+resource "controlplane_toolset" "shell" {
   name    = "shell-commands"
   type    = "shell"
   enabled = true
@@ -155,7 +162,7 @@ resource "kubiya_control_plane_toolset" "shell" {
 }
 
 # Add a security policy
-resource "kubiya_control_plane_policy" "security" {
+resource "controlplane_policy" "security" {
   name        = "basic-security"
   description = "Basic security policy"
   enabled     = true

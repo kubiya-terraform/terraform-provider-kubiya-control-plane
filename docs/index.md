@@ -28,21 +28,29 @@ The provider requires authentication via environment variables.
 ```terraform
 terraform {
   required_providers {
-    kubiya_control_plane = {
+    controlplane = {
       source  = "kubiya/control-plane"
       version = "~> 1.0"
     }
   }
 }
 
-provider "kubiya_control_plane" {
-  # Configuration is via environment variables
+provider "controlplane" {
+  # Configuration is via environment variables:
+  # KUBIYA_CONTROL_PLANE_API_KEY
+  # KUBIYA_CONTROL_PLANE_ORG_ID
+  # KUBIYA_CONTROL_PLANE_BASE_URL (optional)
 }
 
-resource "kubiya_control_plane_agent" "example" {
+resource "controlplane_agent" "example" {
   name     = "my-agent"
   model_id = "gpt-4"
   runtime  = "default"
+
+  llm_config = jsonencode({
+    temperature = 0.7
+    max_tokens  = 2000
+  })
 }
 ```
 

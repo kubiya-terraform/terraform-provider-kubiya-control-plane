@@ -1,18 +1,18 @@
 ---
-page_title: "kubiya_control_plane_team Resource"
+page_title: "controlplane_team Resource"
 subcategory: ""
 description: |-
   Manages a Kubiya team
 ---
 
-# kubiya_control_plane_team (Resource)
+# controlplane_team (Resource)
 
 Manages a team in the Kubiya Control Plane. Teams are used to organize agents and share configuration across multiple agents.
 
 ## Example Usage
 
 ```terraform
-resource "kubiya_control_plane_team" "devops" {
+resource "controlplane_team" "devops" {
   name        = "devops-team"
   description = "DevOps automation team"
 
@@ -21,8 +21,6 @@ resource "kubiya_control_plane_team" "devops" {
     default_runtime   = "default"
     enable_monitoring = true
   })
-
-  capabilities = ["deployment", "monitoring", "reporting"]
 }
 ```
 
@@ -35,7 +33,6 @@ resource "kubiya_control_plane_team" "devops" {
 ### Optional
 
 - `description` (String) Description of the team's purpose
-- `capabilities` (List of String) List of team capabilities
 - `configuration` (String) Team configuration as JSON string
 
 ### Read-Only
@@ -50,5 +47,5 @@ resource "kubiya_control_plane_team" "devops" {
 Teams can be imported using their ID:
 
 ```shell
-terraform import kubiya_control_plane_team.devops team-uuid-here
+terraform import controlplane_team.devops team-uuid-here
 ```

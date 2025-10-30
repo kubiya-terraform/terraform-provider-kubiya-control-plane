@@ -1,18 +1,18 @@
 ---
-page_title: "kubiya_control_plane_environment Resource"
+page_title: "controlplane_environment Resource"
 subcategory: ""
 description: |-
   Manages a Kubiya execution environment
 ---
 
-# kubiya_control_plane_environment (Resource)
+# controlplane_environment (Resource)
 
 Manages an execution environment in the Kubiya Control Plane. Environments define the execution context for agents including variables, secrets, and integrations.
 
 ## Example Usage
 
 ```terraform
-resource "kubiya_control_plane_environment" "production" {
+resource "controlplane_environment" "production" {
   name        = "production"
   description = "Production environment for agents"
 
@@ -57,5 +57,5 @@ resource "kubiya_control_plane_environment" "production" {
 Environments can be imported using their ID:
 
 ```shell
-terraform import kubiya_control_plane_environment.production environment-uuid-here
+terraform import controlplane_environment.production environment-uuid-here
 ```

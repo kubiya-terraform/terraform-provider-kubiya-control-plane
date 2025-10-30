@@ -18,16 +18,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Features
 - **Resources**
-  - `kubiya_control_plane_agent` - Manage AI agents with Claude Code and default runtimes
-  - `kubiya_control_plane_team` - Manage teams with toolset associations
-  - `kubiya_control_plane_project` - Manage projects with policy controls
-  - `kubiya_control_plane_environment` - Manage execution environments
+  - `controlplane_agent` - Manage AI agents with Claude Code and default runtimes
+  - `controlplane_team` - Manage teams with toolset associations
+  - `controlplane_project` - Manage projects with policy controls
+  - `controlplane_environment` - Manage execution environments
 
 - **Data Sources**
-  - `kubiya_control_plane_agent` - Lookup existing agents
-  - `kubiya_control_plane_team` - Lookup existing teams
-  - `kubiya_control_plane_project` - Lookup existing projects
-  - `kubiya_control_plane_environment` - Lookup existing environments
+  - `controlplane_agent` - Lookup existing agents
+  - `controlplane_team` - Lookup existing teams
+  - `controlplane_project` - Lookup existing projects
+  - `controlplane_environment` - Lookup existing environments
 
 - **Configuration**
   - Multi-environment support (development, staging, production)

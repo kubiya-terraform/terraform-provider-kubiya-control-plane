@@ -30,24 +30,24 @@ docs/
 
 The provider manages the following resources:
 
-- **kubiya_control_plane_agent** - AI agents with LLM configuration
-- **kubiya_control_plane_team** - Teams for organizing agents
-- **kubiya_control_plane_project** - Projects for grouping resources
-- **kubiya_control_plane_environment** - Execution environments
-- **kubiya_control_plane_toolset** - Toolsets (filesystem, shell, docker, etc.)
-- **kubiya_control_plane_policy** - OPA Rego governance policies
-- **kubiya_control_plane_worker** - Worker registration
+- **controlplane_agent** - AI agents with LLM configuration
+- **controlplane_team** - Teams for organizing agents
+- **controlplane_project** - Projects for grouping resources
+- **controlplane_environment** - Execution environments
+- **controlplane_toolset** - Toolsets (filesystem, shell, docker, etc.)
+- **controlplane_policy** - OPA Rego governance policies
+- **controlplane_worker** - Worker registration
 
 ## Data Sources
 
 Corresponding data sources for resource lookup:
 
-- **kubiya_control_plane_agent** - Look up existing agents
-- **kubiya_control_plane_team** - Look up existing teams
-- **kubiya_control_plane_project** - Look up existing projects
-- **kubiya_control_plane_environment** - Look up existing environments
-- **kubiya_control_plane_toolset** - Look up existing toolsets
-- **kubiya_control_plane_policy** - Look up existing policies
+- **controlplane_agent** - Look up existing agents
+- **controlplane_team** - Look up existing teams
+- **controlplane_project** - Look up existing projects
+- **controlplane_environment** - Look up existing environments
+- **controlplane_toolset** - Look up existing toolsets
+- **controlplane_policy** - Look up existing policies
 
 ## Publishing to Terraform Registry
 

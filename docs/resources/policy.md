@@ -1,11 +1,11 @@
 ---
-page_title: "kubiya_control_plane_policy Resource"
+page_title: "controlplane_policy Resource"
 subcategory: ""
 description: |-
   Manages a Kubiya OPA policy
 ---
 
-# kubiya_control_plane_policy (Resource)
+# controlplane_policy (Resource)
 
 Manages an OPA (Open Policy Agent) Rego policy in the Kubiya Control Plane. Policies define governance rules for agent operations, security, compliance, and cost control.
 
@@ -13,7 +13,7 @@ Manages an OPA (Open Policy Agent) Rego policy in the Kubiya Control Plane. Poli
 
 ```terraform
 # Security policy
-resource "kubiya_control_plane_policy" "security" {
+resource "controlplane_policy" "security" {
   name        = "production-security-policy"
   description = "Security policy for production environments"
   enabled     = true
@@ -47,7 +47,7 @@ resource "kubiya_control_plane_policy" "security" {
 }
 
 # Cost control policy
-resource "kubiya_control_plane_policy" "cost_control" {
+resource "controlplane_policy" "cost_control" {
   name        = "cost-control-policy"
   description = "Policy to control infrastructure costs"
   enabled     = true
@@ -98,5 +98,5 @@ resource "kubiya_control_plane_policy" "cost_control" {
 Policies can be imported using their ID:
 
 ```shell
-terraform import kubiya_control_plane_policy.security policy-uuid-here
+terraform import controlplane_policy.security policy-uuid-here
 ```

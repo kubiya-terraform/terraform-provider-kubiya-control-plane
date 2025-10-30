@@ -1,18 +1,18 @@
 ---
-page_title: "kubiya_control_plane_project Resource"
+page_title: "controlplane_project Resource"
 subcategory: ""
 description: |-
   Manages a Kubiya project
 ---
 
-# kubiya_control_plane_project (Resource)
+# controlplane_project (Resource)
 
 Manages a project in the Kubiya Control Plane. Projects are used to group and organize related resources.
 
 ## Example Usage
 
 ```terraform
-resource "kubiya_control_plane_project" "platform" {
+resource "controlplane_project" "platform" {
   name        = "platform-automation"
   description = "Platform automation and operations project"
 
@@ -47,5 +47,5 @@ resource "kubiya_control_plane_project" "platform" {
 Projects can be imported using their ID:
 
 ```shell
-terraform import kubiya_control_plane_project.platform project-uuid-here
+terraform import controlplane_project.platform project-uuid-here
 ```

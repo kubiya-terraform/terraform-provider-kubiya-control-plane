@@ -1,11 +1,11 @@
 ---
-page_title: "kubiya_control_plane_toolset Resource"
+page_title: "controlplane_toolset Resource"
 subcategory: ""
 description: |-
   Manages a Kubiya toolset
 ---
 
-# kubiya_control_plane_toolset (Resource)
+# controlplane_toolset (Resource)
 
 Manages a toolset in the Kubiya Control Plane. Toolsets provide specific capabilities to agents such as filesystem access, shell commands, or Docker operations.
 
@@ -13,7 +13,7 @@ Manages a toolset in the Kubiya Control Plane. Toolsets provide specific capabil
 
 ```terraform
 # File system toolset
-resource "kubiya_control_plane_toolset" "filesystem" {
+resource "controlplane_toolset" "filesystem" {
   name        = "filesystem-ops"
   description = "File system operations"
   type        = "file_system"
@@ -27,7 +27,7 @@ resource "kubiya_control_plane_toolset" "filesystem" {
 }
 
 # Shell toolset
-resource "kubiya_control_plane_toolset" "shell" {
+resource "controlplane_toolset" "shell" {
   name        = "shell-commands"
   description = "Shell command execution"
   type        = "shell"
@@ -40,7 +40,7 @@ resource "kubiya_control_plane_toolset" "shell" {
 }
 
 # Docker toolset
-resource "kubiya_control_plane_toolset" "docker" {
+resource "controlplane_toolset" "docker" {
   name        = "docker-ops"
   description = "Docker operations"
   type        = "docker"
@@ -77,5 +77,5 @@ resource "kubiya_control_plane_toolset" "docker" {
 Toolsets can be imported using their ID:
 
 ```shell
-terraform import kubiya_control_plane_toolset.filesystem toolset-uuid-here
+terraform import controlplane_toolset.filesystem toolset-uuid-here
 ```

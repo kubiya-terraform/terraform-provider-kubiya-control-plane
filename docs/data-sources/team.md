@@ -1,27 +1,27 @@
 ---
-page_title: "kubiya_control_plane_team Data Source"
+page_title: "controlplane_team Data Source"
 subcategory: ""
 description: |-
   Retrieves information about a Kubiya team
 ---
 
-# kubiya_control_plane_team (Data Source)
+# controlplane_team (Data Source)
 
 Retrieves information about an existing team in the Kubiya Control Plane.
 
 ## Example Usage
 
 ```terraform
-data "kubiya_control_plane_team" "devops" {
+data "controlplane_team" "devops" {
   id = "team-uuid-here"
 }
 
 output "team_name" {
-  value = data.kubiya_control_plane_team.devops.name
+  value = data.controlplane_team.devops.name
 }
 
 output "team_config" {
-  value     = data.kubiya_control_plane_team.devops.configuration
+  value     = data.controlplane_team.devops.configuration
   sensitive = true
 }
 ```

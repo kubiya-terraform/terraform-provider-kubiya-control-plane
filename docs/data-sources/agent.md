@@ -1,11 +1,11 @@
 ---
-page_title: "kubiya_control_plane_agent Data Source"
+page_title: "controlplane_agent Data Source"
 subcategory: ""
 description: |-
   Retrieves information about a Kubiya agent
 ---
 
-# kubiya_control_plane_agent (Data Source)
+# controlplane_agent (Data Source)
 
 Retrieves information about an existing AI agent in the Kubiya Control Plane.
 
@@ -13,23 +13,23 @@ Retrieves information about an existing AI agent in the Kubiya Control Plane.
 
 ```terraform
 # Look up an agent by ID
-data "kubiya_control_plane_agent" "existing" {
+data "controlplane_agent" "existing" {
   id = "agent-uuid-here"
 }
 
 # Use the agent information
 output "agent_name" {
-  value = data.kubiya_control_plane_agent.existing.name
+  value = data.controlplane_agent.existing.name
 }
 
 output "agent_status" {
-  value = data.kubiya_control_plane_agent.existing.status
+  value = data.controlplane_agent.existing.status
 }
 
 # Reference in another resource
-resource "kubiya_control_plane_agent" "new" {
+resource "controlplane_agent" "new" {
   name    = "new-agent"
-  team_id = data.kubiya_control_plane_agent.existing.team_id
+  team_id = data.controlplane_agent.existing.team_id
   # ...
 }
 ```

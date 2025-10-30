@@ -1,11 +1,11 @@
 ---
-page_title: "kubiya_control_plane_agent Resource"
+page_title: "controlplane_agent Resource"
 subcategory: ""
 description: |-
   Manages a Kubiya AI agent
 ---
 
-# kubiya_control_plane_agent (Resource)
+# controlplane_agent (Resource)
 
 Manages an AI agent in the Kubiya Control Plane. Agents are autonomous AI assistants that can execute tasks, interact with tools, and follow policies.
 
@@ -13,7 +13,7 @@ Manages an AI agent in the Kubiya Control Plane. Agents are autonomous AI assist
 
 ```terraform
 # Basic agent
-resource "kubiya_control_plane_agent" "example" {
+resource "controlplane_agent" "example" {
   name        = "my-agent"
   description = "An example AI agent"
   model_id    = "gpt-4"
@@ -25,14 +25,11 @@ resource "kubiya_control_plane_agent" "example" {
   })
 
   capabilities = ["code_execution", "file_operations"]
-}
 
-# Agent with team association
-resource "kubiya_control_plane_agent" "team_agent" {
-  name     = "team-agent"
-  model_id = "gpt-4"
-  runtime  = "default"
-  team_id  = kubiya_control_plane_team.devops.id
+  configuration = jsonencode({
+    max_retries = 3
+    timeout     = 300
+  })
 }
 ```
 
@@ -50,7 +47,6 @@ resource "kubiya_control_plane_agent" "team_agent" {
 - `capabilities` (List of String) List of agent capabilities
 - `configuration` (String) Agent configuration as JSON string
 - `llm_config` (String) LLM configuration as JSON string (temperature, max_tokens, etc.)
-- `team_id` (String) ID of the team this agent belongs to
 
 ### Read-Only
 
@@ -64,5 +60,5 @@ resource "kubiya_control_plane_agent" "team_agent" {
 Agents can be imported using their ID:
 
 ```shell
-terraform import kubiya_control_plane_agent.example agent-uuid-here
+terraform import controlplane_agent.example agent-uuid-here
 ```

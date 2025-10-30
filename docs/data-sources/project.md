@@ -1,27 +1,27 @@
 ---
-page_title: "kubiya_control_plane_project Data Source"
+page_title: "controlplane_project Data Source"
 subcategory: ""
 description: |-
   Retrieves information about a Kubiya project
 ---
 
-# kubiya_control_plane_project (Data Source)
+# controlplane_project (Data Source)
 
 Retrieves information about an existing project in the Kubiya Control Plane.
 
 ## Example Usage
 
 ```terraform
-data "kubiya_control_plane_project" "platform" {
+data "controlplane_project" "platform" {
   id = "project-uuid-here"
 }
 
 output "project_name" {
-  value = data.kubiya_control_plane_project.platform.name
+  value = data.controlplane_project.platform.name
 }
 
 output "project_metadata" {
-  value = data.kubiya_control_plane_project.platform.metadata
+  value = data.controlplane_project.platform.metadata
 }
 ```
 

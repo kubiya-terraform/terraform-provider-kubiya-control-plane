@@ -1,27 +1,27 @@
 ---
-page_title: "kubiya_control_plane_environment Data Source"
+page_title: "controlplane_environment Data Source"
 subcategory: ""
 description: |-
   Retrieves information about a Kubiya environment
 ---
 
-# kubiya_control_plane_environment (Data Source)
+# controlplane_environment (Data Source)
 
 Retrieves information about an existing execution environment in the Kubiya Control Plane.
 
 ## Example Usage
 
 ```terraform
-data "kubiya_control_plane_environment" "production" {
+data "controlplane_environment" "production" {
   id = "environment-uuid-here"
 }
 
 output "environment_name" {
-  value = data.kubiya_control_plane_environment.production.name
+  value = data.controlplane_environment.production.name
 }
 
 output "environment_config" {
-  value     = data.kubiya_control_plane_environment.production.configuration
+  value     = data.controlplane_environment.production.configuration
   sensitive = true
 }
 ```
