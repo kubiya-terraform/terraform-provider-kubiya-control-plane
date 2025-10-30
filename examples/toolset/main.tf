@@ -15,8 +15,8 @@ provider "controlplane" {
 
 # Create a file system toolset
 resource "controlplane_toolset" "filesystem" {
-  name        = "example-filesystem-toolset"
-  description = "File system operations toolset"
+  name        = "production-filesystem-toolset"
+  description = "Production file system operations toolset"
   type        = "file_system"
   enabled     = true
 
@@ -29,8 +29,8 @@ resource "controlplane_toolset" "filesystem" {
 
 # Create a shell toolset
 resource "controlplane_toolset" "shell" {
-  name        = "example-shell-toolset"
-  description = "Shell command execution toolset"
+  name        = "production-shell-toolset"
+  description = "Production shell command execution toolset"
   type        = "shell"
   enabled     = true
 
@@ -43,8 +43,8 @@ resource "controlplane_toolset" "shell" {
 
 # Create a Docker toolset
 resource "controlplane_toolset" "docker" {
-  name        = "example-docker-toolset"
-  description = "Docker operations toolset"
+  name        = "production-docker-toolset"
+  description = "Production docker operations toolset"
   type        = "docker"
   enabled     = true
 
@@ -57,7 +57,7 @@ resource "controlplane_toolset" "docker" {
 
 # Look up an existing toolset by ID
 data "controlplane_toolset" "existing" {
-  id = "toolset-uuid-here"
+  id = "8455d897-8e2c-4528-bcb6-26493df3d35d"
 }
 
 # Output toolset information

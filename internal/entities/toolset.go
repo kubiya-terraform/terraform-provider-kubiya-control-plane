@@ -1,6 +1,47 @@
 package entities
 
-import "time"
+import (
+	"strings"
+	"time"
+)
+
+// FlexibleTime is a custom time type that can parse timestamps with or without timezone
+type FlexibleTime struct {
+	time.Time
+}
+
+// UnmarshalJSON handles parsing timestamps in multiple formats
+func (ft *FlexibleTime) UnmarshalJSON(b []byte) error {
+	s := strings.Trim(string(b), "\"")
+	if s == "null" || s == "" {
+		return nil
+	}
+
+	// Try parsing with timezone first (RFC3339)
+	t, err := time.Parse(time.RFC3339, s)
+	if err == nil {
+		ft.Time = t
+		return nil
+	}
+
+	// Try parsing without timezone, assume UTC
+	layouts := []string{
+		"2006-01-02T15:04:05.999999",
+		"2006-01-02T15:04:05",
+		"2006-01-02 15:04:05.999999",
+		"2006-01-02 15:04:05",
+	}
+
+	for _, layout := range layouts {
+		t, err := time.Parse(layout, s)
+		if err == nil {
+			ft.Time = t.UTC()
+			return nil
+		}
+	}
+
+	return err
+}
 
 // ToolSetType represents the type of toolset
 type ToolSetType string
@@ -24,8 +65,8 @@ type ToolSet struct {
 	Icon           string                 `json:"icon,omitempty"`
 	Enabled        bool                   `json:"enabled"`
 	Configuration  map[string]interface{} `json:"configuration,omitempty"`
-	CreatedAt      *time.Time             `json:"created_at,omitempty"`
-	UpdatedAt      *time.Time             `json:"updated_at,omitempty"`
+	CreatedAt      *FlexibleTime          `json:"created_at,omitempty"`
+	UpdatedAt      *FlexibleTime          `json:"updated_at,omitempty"`
 }
 
 // ToolSetCreateRequest represents the request to create a toolset

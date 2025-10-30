@@ -112,7 +112,7 @@ resource "controlplane_policy" "compliance" {
 
 # Look up an existing policy by ID
 data "controlplane_policy" "existing" {
-  id = "policy-uuid-here"
+  id = "2db93293-2c30-4557-a08b-db6f80f9ef57"
 }
 
 # Output policy information
