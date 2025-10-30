@@ -15,11 +15,11 @@ provider "controlplane" {
 
 # Create an environment
 resource "controlplane_environment" "example" {
-  name        = "production"
+  name        = "test-env"
   description = "Production environment for agents"
 
   # Environment configuration
-  configuration = jsonencode({
+  settings = jsonencode({
     region           = "us-east-1"
     max_workers      = 5
     auto_scaling     = true
@@ -38,7 +38,7 @@ resource "controlplane_environment" "example" {
 
 # Look up an existing environment by ID
 data "controlplane_environment" "existing" {
-  id = "environment-uuid-here"
+  id = "1fe58e91-5a7f-460d-bafd-97dc8f6cb125"
 }
 
 # Output environment information
@@ -58,7 +58,7 @@ output "existing_environment_name" {
 }
 
 output "existing_environment_config" {
-  value       = data.controlplane_environment.existing.configuration
+  value       = data.controlplane_environment.existing.settings
   description = "Configuration of the existing environment"
   sensitive   = true
 }

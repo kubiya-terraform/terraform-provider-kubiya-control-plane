@@ -8,7 +8,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 
@@ -62,6 +61,7 @@ func (r *environmentResource) Schema(_ context.Context, _ resource.SchemaRequest
 			"display_name": schema.StringAttribute{
 				Description: "User-friendly display name",
 				Optional:    true,
+				Computed:    true,
 			},
 			"description": schema.StringAttribute{
 				Description: "Environment description",
@@ -77,10 +77,8 @@ func (r *environmentResource) Schema(_ context.Context, _ resource.SchemaRequest
 				Optional:    true,
 			},
 			"status": schema.StringAttribute{
-				Description: "Environment status (active, inactive)",
+				Description: "Environment status (active, inactive, ready)",
 				Computed:    true,
-				Optional:    true,
-				Default:     stringdefault.StaticString("active"),
 			},
 			"execution_environment": schema.StringAttribute{
 				Description: "Execution environment configuration as JSON string (env_vars, secrets, integration_ids)",

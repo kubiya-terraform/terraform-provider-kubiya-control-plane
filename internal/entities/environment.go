@@ -8,6 +8,7 @@ type EnvironmentStatus string
 const (
 	EnvironmentStatusActive   EnvironmentStatus = "active"
 	EnvironmentStatusInactive EnvironmentStatus = "inactive"
+	EnvironmentStatusReady    EnvironmentStatus = "ready"
 )
 
 // ExecutionEnvironment represents execution environment configuration
