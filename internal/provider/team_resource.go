@@ -65,6 +65,9 @@ func (r *teamResource) Schema(_ context.Context, _ resource.SchemaRequest, resp 
 				Description: "Team status (active, inactive, archived)",
 				Computed:    true,
 				Optional:    true,
+			PlanModifiers: []planmodifier.String{
+				stringplanmodifier.UseStateForUnknown(),
+			},
 			},
 			"configuration": schema.StringAttribute{
 				Description: "Team configuration as JSON string",

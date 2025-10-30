@@ -15,8 +15,8 @@ provider "controlplane" {
 
 # Create a team
 resource "controlplane_team" "example" {
-  name        = "example-team"
-  description = "An example team for demonstration"
+  name        = "test-team"
+  description = "A test team for demonstration"
 
   # Team configuration
   configuration = jsonencode({
@@ -24,14 +24,11 @@ resource "controlplane_team" "example" {
     default_runtime   = "default"
     enable_monitoring = true
   })
-
-  # Optional: Assign capabilities to the team
-  capabilities = ["deployment", "monitoring", "reporting"]
 }
 
 # Look up an existing team by ID
 data "controlplane_team" "existing" {
-  id = "team-uuid-here"
+  id = "71b17bbb-4143-4599-933a-d55b20994732"
 }
 
 # Output team information
