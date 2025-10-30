@@ -1,36 +1,48 @@
 terraform {
   required_providers {
-    kubiya_control_plane = {
+    controlplane = {
       source = "kubiya/control-plane"
     }
   }
 }
 
-provider "kubiya_control_plane" {
+provider "controlplane" {
   # Configuration via environment variables:
   # KUBIYA_CONTROL_PLANE_API_KEY
   # KUBIYA_CONTROL_PLANE_ORG_ID
+  # KUBIYA_CONTROL_PLANE_BASE_URL (optional, defaults to https://control-plane.kubiya.ai)
 }
 
 # Test worker resource
-resource "kubiya_control_plane_worker" "test" {
-  name        = "test-worker"
-  description = "Test worker for automated testing"
+# Note: Workers typically self-register at runtime, but can be pre-registered
+resource "controlplane_worker" "test" {
+  environment_name = "default"
+  hostname         = "test-worker-01"
 
-  configuration = jsonencode({
-    max_concurrent_tasks = 5
-    timeout              = 300
+  # Worker metadata
+  metadata = jsonencode({
+    region     = "us-east-1"
+    datacenter = "dc1"
+    capacity   = "test"
+    tags = {
+      environment = "test"
+      purpose     = "automated-testing"
+    }
   })
 }
 
 output "worker_id" {
-  value = kubiya_control_plane_worker.test.id
-}
-
-output "worker_name" {
-  value = kubiya_control_plane_worker.test.name
+  value = controlplane_worker.test.id
 }
 
 output "worker_status" {
-  value = kubiya_control_plane_worker.test.status
+  value = controlplane_worker.test.status
 }
+
+output "worker_registered_at" {
+  value = controlplane_worker.test.registered_at
+}
+
+# Note: Workers are runtime entities that self-manage their lifecycle.
+# The worker resource is primarily for registration and discovery.
+# Workers will connect to the control plane using the environment's worker token.

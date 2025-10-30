@@ -1,36 +1,50 @@
 terraform {
   required_providers {
-    kubiya_control_plane = {
+    controlplane = {
       source = "kubiya/control-plane"
     }
   }
 }
 
-provider "kubiya_control_plane" {
+provider "controlplane" {
   # Configuration via environment variables:
   # KUBIYA_CONTROL_PLANE_API_KEY
   # KUBIYA_CONTROL_PLANE_ORG_ID
+  # KUBIYA_CONTROL_PLANE_BASE_URL (optional, defaults to https://control-plane.kubiya.ai)
 }
 
 # Test project resource
-resource "kubiya_control_plane_project" "test" {
+resource "controlplane_project" "test" {
   name        = "test-project"
+  key         = "TEST"
   description = "Test project for automated testing"
+
+  # Project settings
+  settings = jsonencode({
+    owner       = "devops-team"
+    environment = "test"
+    cost_center = "engineering"
+  })
 }
 
 # Test data source lookup
-data "kubiya_control_plane_project" "test_lookup" {
-  id = kubiya_control_plane_project.test.id
+data "controlplane_project" "test_lookup" {
+  id = controlplane_project.test.id
 }
 
 output "project_id" {
-  value = kubiya_control_plane_project.test.id
+  value = controlplane_project.test.id
 }
 
 output "project_name" {
-  value = data.kubiya_control_plane_project.test_lookup.name
+  value = data.controlplane_project.test_lookup.name
 }
 
 output "project_description" {
-  value = data.kubiya_control_plane_project.test_lookup.description
+  value = data.controlplane_project.test_lookup.description
+}
+
+output "project_settings" {
+  value     = data.controlplane_project.test_lookup.settings
+  sensitive = true
 }

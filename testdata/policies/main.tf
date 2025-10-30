@@ -1,23 +1,25 @@
 terraform {
   required_providers {
-    kubiya_control_plane = {
+    controlplane = {
       source = "kubiya/control-plane"
     }
   }
 }
 
-provider "kubiya_control_plane" {
+provider "controlplane" {
   # Configuration via environment variables:
   # KUBIYA_CONTROL_PLANE_API_KEY
   # KUBIYA_CONTROL_PLANE_ORG_ID
+  # KUBIYA_CONTROL_PLANE_BASE_URL (optional, defaults to https://control-plane.kubiya.ai)
 }
 
 # Test policy resource
-resource "kubiya_control_plane_policy" "test" {
+resource "controlplane_policy" "test" {
   name        = "test-policy"
   description = "Test policy for automated testing"
   enabled     = true
 
+  # OPA Rego policy content
   policy_content = <<-EOT
     package kubiya.test
 
@@ -36,26 +38,28 @@ resource "kubiya_control_plane_policy" "test" {
       msg := "Only admins can access sensitive resources"
     }
   EOT
+
+  tags = ["test", "automated-testing"]
 }
 
 # Test data source lookup
-data "kubiya_control_plane_policy" "test_lookup" {
-  id = kubiya_control_plane_policy.test.id
+data "controlplane_policy" "test_lookup" {
+  id = controlplane_policy.test.id
 }
 
 output "policy_id" {
-  value = kubiya_control_plane_policy.test.id
+  value = controlplane_policy.test.id
 }
 
 output "policy_name" {
-  value = data.kubiya_control_plane_policy.test_lookup.name
+  value = data.controlplane_policy.test_lookup.name
 }
 
 output "policy_enabled" {
-  value = data.kubiya_control_plane_policy.test_lookup.enabled
+  value = data.controlplane_policy.test_lookup.enabled
 }
 
 output "policy_content" {
-  value     = data.kubiya_control_plane_policy.test_lookup.policy
+  value     = data.controlplane_policy.test_lookup.policy_content
   sensitive = true
 }
