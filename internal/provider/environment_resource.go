@@ -185,7 +185,11 @@ func (r *environmentResource) Create(ctx context.Context, req resource.CreateReq
 		plan.Description = types.StringValue(*environment.Description)
 	}
 
-	plan.Status = types.StringValue(string(environment.Status))
+	if environment.Status != "" {
+		plan.Status = types.StringValue(string(environment.Status))
+	} else {
+		plan.Status = types.StringNull()
+	}
 
 	if environment.CreatedAt != nil {
 		plan.CreatedAt = types.StringValue(environment.CreatedAt.String())
@@ -224,7 +228,11 @@ func (r *environmentResource) Read(ctx context.Context, req resource.ReadRequest
 		state.Description = types.StringValue(*environment.Description)
 	}
 
-	state.Status = types.StringValue(string(environment.Status))
+	if environment.Status != "" {
+		state.Status = types.StringValue(string(environment.Status))
+	} else {
+		state.Status = types.StringNull()
+	}
 
 	if environment.CreatedAt != nil {
 		state.CreatedAt = types.StringValue(environment.CreatedAt.String())
@@ -283,8 +291,35 @@ func (r *environmentResource) Update(ctx context.Context, req resource.UpdateReq
 		return
 	}
 
-	// Update state
-	plan.UpdatedAt = types.StringValue(environment.UpdatedAt.String())
+	// Update all computed fields from response
+	plan.ID = types.StringValue(environment.ID)
+	plan.Name = types.StringValue(environment.Name)
+
+	if environment.DisplayName != nil {
+		plan.DisplayName = types.StringValue(*environment.DisplayName)
+	} else {
+		plan.DisplayName = types.StringNull()
+	}
+
+	if environment.Description != nil {
+		plan.Description = types.StringValue(*environment.Description)
+	} else {
+		plan.Description = types.StringNull()
+	}
+
+	if environment.Status != "" {
+		plan.Status = types.StringValue(string(environment.Status))
+	} else {
+		plan.Status = types.StringNull()
+	}
+
+	if environment.CreatedAt != nil {
+		plan.CreatedAt = types.StringValue(environment.CreatedAt.String())
+	}
+
+	if environment.UpdatedAt != nil {
+		plan.UpdatedAt = types.StringValue(environment.UpdatedAt.String())
+	}
 
 	diags = resp.State.Set(ctx, plan)
 	resp.Diagnostics.Append(diags...)

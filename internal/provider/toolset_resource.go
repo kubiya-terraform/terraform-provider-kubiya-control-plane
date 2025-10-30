@@ -235,7 +235,25 @@ func (r *toolsetResource) Update(ctx context.Context, req resource.UpdateRequest
 		return
 	}
 
-	plan.UpdatedAt = types.StringValue(toolset.UpdatedAt.String())
+	// Update all computed fields from response
+	plan.ID = types.StringValue(toolset.ID)
+	plan.Name = types.StringValue(toolset.Name)
+	plan.Type = types.StringValue(string(toolset.Type))
+	plan.Enabled = types.BoolValue(toolset.Enabled)
+
+	if toolset.Description != nil {
+		plan.Description = types.StringValue(*toolset.Description)
+	} else {
+		plan.Description = types.StringNull()
+	}
+
+	if toolset.CreatedAt != nil {
+		plan.CreatedAt = types.StringValue(toolset.CreatedAt.String())
+	}
+
+	if toolset.UpdatedAt != nil {
+		plan.UpdatedAt = types.StringValue(toolset.UpdatedAt.String())
+	}
 
 	diags = resp.State.Set(ctx, plan)
 	resp.Diagnostics.Append(diags...)

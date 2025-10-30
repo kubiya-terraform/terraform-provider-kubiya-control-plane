@@ -9,8 +9,9 @@ import (
 	"os"
 	"time"
 
-	"github.com/getsentry/sentry-go"
 	kubiyasentry "kubiya-control-plane/internal/sentry"
+
+	"github.com/getsentry/sentry-go"
 )
 
 type Client struct {

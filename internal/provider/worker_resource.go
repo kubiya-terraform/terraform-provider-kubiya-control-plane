@@ -135,7 +135,12 @@ func (r *workerResource) Create(ctx context.Context, req resource.CreateRequest,
 
 	plan.ID = types.StringValue(worker.ID)
 	plan.EnvironmentName = types.StringValue(worker.EnvironmentName)
-	plan.Status = types.StringValue(string(worker.Status))
+
+	if worker.Status != "" {
+		plan.Status = types.StringValue(string(worker.Status))
+	} else {
+		plan.Status = types.StringNull()
+	}
 
 	if worker.RegisteredAt != nil {
 		plan.RegisteredAt = types.StringValue(worker.RegisteredAt.String())
@@ -169,7 +174,12 @@ func (r *workerResource) Read(ctx context.Context, req resource.ReadRequest, res
 
 	state.ID = types.StringValue(worker.ID)
 	state.EnvironmentName = types.StringValue(worker.EnvironmentName)
-	state.Status = types.StringValue(string(worker.Status))
+
+	if worker.Status != "" {
+		state.Status = types.StringValue(string(worker.Status))
+	} else {
+		state.Status = types.StringNull()
+	}
 
 	if worker.LastHeartbeat != nil {
 		state.LastHeartbeat = types.StringValue(worker.LastHeartbeat.String())

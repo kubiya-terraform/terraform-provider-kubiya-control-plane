@@ -1,12 +1,12 @@
 terraform {
   required_providers {
-    kubiya_control_plane = {
+    controlplane = {
       source = "kubiya/control-plane"
     }
   }
 }
 
-provider "kubiya_control_plane" {
+provider "controlplane" {
   # Configuration is via environment variables:
   # KUBIYA_CONTROL_PLANE_API_KEY
   # KUBIYA_CONTROL_PLANE_ORG_ID
@@ -14,7 +14,7 @@ provider "kubiya_control_plane" {
 }
 
 # Create a team
-resource "kubiya_control_plane_team" "example" {
+resource "controlplane_team" "example" {
   name        = "example-team"
   description = "An example team for demonstration"
 
@@ -30,28 +30,28 @@ resource "kubiya_control_plane_team" "example" {
 }
 
 # Look up an existing team by ID
-data "kubiya_control_plane_team" "existing" {
+data "controlplane_team" "existing" {
   id = "team-uuid-here"
 }
 
 # Output team information
 output "team_id" {
-  value       = kubiya_control_plane_team.example.id
+  value       = controlplane_team.example.id
   description = "The ID of the created team"
 }
 
 output "team_status" {
-  value       = kubiya_control_plane_team.example.status
+  value       = controlplane_team.example.status
   description = "The current status of the team"
 }
 
 output "existing_team_name" {
-  value       = data.kubiya_control_plane_team.existing.name
+  value       = data.controlplane_team.existing.name
   description = "Name of the existing team"
 }
 
 output "existing_team_config" {
-  value       = data.kubiya_control_plane_team.existing.configuration
+  value       = data.controlplane_team.existing.configuration
   description = "Configuration of the existing team"
   sensitive   = true
 }

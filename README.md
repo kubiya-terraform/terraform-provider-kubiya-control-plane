@@ -40,7 +40,7 @@ export KUBIYA_CONTROL_PLANE_BASE_URL=http://localhost:7777  # Optional: override
 terraform {
   required_providers {
     kubiya_control_plane = {
-      source = "hashicorp.com/kubiya/kubiya"
+      source = "hashicorp.com/kubiya/control-plane"
     }
   }
 }

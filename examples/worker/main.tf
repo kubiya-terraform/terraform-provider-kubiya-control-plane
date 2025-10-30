@@ -1,12 +1,12 @@
 terraform {
   required_providers {
-    kubiya_control_plane = {
+    controlplane = {
       source = "kubiya/control-plane"
     }
   }
 }
 
-provider "kubiya_control_plane" {
+provider "controlplane" {
   # Configuration is via environment variables:
   # KUBIYA_CONTROL_PLANE_API_KEY
   # KUBIYA_CONTROL_PLANE_ORG_ID
@@ -15,7 +15,7 @@ provider "kubiya_control_plane" {
 
 # Register a worker
 # Note: Workers typically self-register at runtime, but can be pre-registered
-resource "kubiya_control_plane_worker" "example" {
+resource "controlplane_worker" "example" {
   environment_name = "production"
   hostname         = "worker-node-01"
 
@@ -33,17 +33,17 @@ resource "kubiya_control_plane_worker" "example" {
 
 # Output worker information
 output "worker_id" {
-  value       = kubiya_control_plane_worker.example.id
+  value       = controlplane_worker.example.id
   description = "The ID of the registered worker"
 }
 
 output "worker_status" {
-  value       = kubiya_control_plane_worker.example.status
+  value       = controlplane_worker.example.status
   description = "The current status of the worker"
 }
 
 output "worker_registered_at" {
-  value       = kubiya_control_plane_worker.example.registered_at
+  value       = controlplane_worker.example.registered_at
   description = "When the worker was registered"
 }
 

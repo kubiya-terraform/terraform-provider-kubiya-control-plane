@@ -1,12 +1,12 @@
 terraform {
   required_providers {
-    kubiya_control_plane = {
+    controlplane = {
       source = "kubiya/control-plane"
     }
   }
 }
 
-provider "kubiya_control_plane" {
+provider "controlplane" {
   # Configuration is via environment variables:
   # KUBIYA_CONTROL_PLANE_API_KEY
   # KUBIYA_CONTROL_PLANE_ORG_ID
@@ -14,7 +14,7 @@ provider "kubiya_control_plane" {
 }
 
 # Create a project
-resource "kubiya_control_plane_project" "example" {
+resource "controlplane_project" "example" {
   name        = "example-project"
   description = "An example project for demonstration"
 
@@ -27,27 +27,27 @@ resource "kubiya_control_plane_project" "example" {
 }
 
 # Look up an existing project by ID
-data "kubiya_control_plane_project" "existing" {
+data "controlplane_project" "existing" {
   id = "project-uuid-here"
 }
 
 # Output project information
 output "project_id" {
-  value       = kubiya_control_plane_project.example.id
+  value       = controlplane_project.example.id
   description = "The ID of the created project"
 }
 
 output "project_status" {
-  value       = kubiya_control_plane_project.example.status
+  value       = controlplane_project.example.status
   description = "The current status of the project"
 }
 
 output "existing_project_name" {
-  value       = data.kubiya_control_plane_project.existing.name
+  value       = data.controlplane_project.existing.name
   description = "Name of the existing project"
 }
 
 output "existing_project_metadata" {
-  value       = data.kubiya_control_plane_project.existing.metadata
+  value       = data.controlplane_project.existing.metadata
   description = "Metadata of the existing project"
 }

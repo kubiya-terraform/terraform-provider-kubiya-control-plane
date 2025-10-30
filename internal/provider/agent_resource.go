@@ -215,7 +215,27 @@ func (r *agentResource) Create(ctx context.Context, req resource.CreateRequest, 
 		plan.Description = types.StringValue(*agent.Description)
 	}
 
-	plan.Status = types.StringValue(string(agent.Status))
+	if agent.Status != "" {
+		plan.Status = types.StringValue(string(agent.Status))
+	} else {
+		plan.Status = types.StringNull()
+	}
+
+	// Set optional fields from the response if available
+	if agent.ModelID != nil {
+		plan.ModelID = types.StringValue(*agent.ModelID)
+	}
+
+	if agent.Runtime != "" {
+		plan.Runtime = types.StringValue(string(agent.Runtime))
+	}
+
+	if agent.TeamID != nil {
+		plan.TeamID = types.StringValue(*agent.TeamID)
+	}
+
+	// Keep the input values for fields not returned by API
+	// Capabilities, Configuration, and LLMConfig are preserved from plan
 
 	if agent.CreatedAt != nil {
 		plan.CreatedAt = types.StringValue(agent.CreatedAt.String())
@@ -263,7 +283,27 @@ func (r *agentResource) Read(ctx context.Context, req resource.ReadRequest, resp
 		state.Description = types.StringValue(*agent.Description)
 	}
 
-	state.Status = types.StringValue(string(agent.Status))
+	if agent.Status != "" {
+		state.Status = types.StringValue(string(agent.Status))
+	} else {
+		state.Status = types.StringNull()
+	}
+
+	// Set optional fields from the response if available
+	if agent.ModelID != nil {
+		state.ModelID = types.StringValue(*agent.ModelID)
+	}
+
+	if agent.Runtime != "" {
+		state.Runtime = types.StringValue(string(agent.Runtime))
+	}
+
+	if agent.TeamID != nil {
+		state.TeamID = types.StringValue(*agent.TeamID)
+	}
+
+	// Keep existing values for fields not returned by API
+	// Capabilities, Configuration, and LLMConfig are preserved from existing state
 
 	if agent.CreatedAt != nil {
 		state.CreatedAt = types.StringValue(agent.CreatedAt.String())
@@ -347,8 +387,41 @@ func (r *agentResource) Update(ctx context.Context, req resource.UpdateRequest, 
 	logger.Info("Successfully updated agent", "agent_id", state.ID.ValueString())
 	kubiyasentry.SetSpanStatus(span, sentry.SpanStatusOK)
 
-	// Update state
-	plan.UpdatedAt = types.StringValue(agent.UpdatedAt.String())
+	// Update all computed fields from response
+	plan.ID = types.StringValue(agent.ID)
+	plan.Name = types.StringValue(agent.Name)
+
+	if agent.Description != nil {
+		plan.Description = types.StringValue(*agent.Description)
+	} else {
+		plan.Description = types.StringNull()
+	}
+
+	if agent.Status != "" {
+		plan.Status = types.StringValue(string(agent.Status))
+	} else {
+		plan.Status = types.StringNull()
+	}
+
+	if agent.ModelID != nil {
+		plan.ModelID = types.StringValue(*agent.ModelID)
+	}
+
+	if agent.Runtime != "" {
+		plan.Runtime = types.StringValue(string(agent.Runtime))
+	}
+
+	if agent.TeamID != nil {
+		plan.TeamID = types.StringValue(*agent.TeamID)
+	}
+
+	if agent.CreatedAt != nil {
+		plan.CreatedAt = types.StringValue(agent.CreatedAt.String())
+	}
+
+	if agent.UpdatedAt != nil {
+		plan.UpdatedAt = types.StringValue(agent.UpdatedAt.String())
+	}
 
 	diags = resp.State.Set(ctx, plan)
 	resp.Diagnostics.Append(diags...)

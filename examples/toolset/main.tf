@@ -1,12 +1,12 @@
 terraform {
   required_providers {
-    kubiya_control_plane = {
+    controlplane = {
       source = "kubiya/control-plane"
     }
   }
 }
 
-provider "kubiya_control_plane" {
+provider "controlplane" {
   # Configuration is via environment variables:
   # KUBIYA_CONTROL_PLANE_API_KEY
   # KUBIYA_CONTROL_PLANE_ORG_ID
@@ -14,7 +14,7 @@ provider "kubiya_control_plane" {
 }
 
 # Create a file system toolset
-resource "kubiya_control_plane_toolset" "filesystem" {
+resource "controlplane_toolset" "filesystem" {
   name        = "example-filesystem-toolset"
   description = "File system operations toolset"
   type        = "file_system"
@@ -28,7 +28,7 @@ resource "kubiya_control_plane_toolset" "filesystem" {
 }
 
 # Create a shell toolset
-resource "kubiya_control_plane_toolset" "shell" {
+resource "controlplane_toolset" "shell" {
   name        = "example-shell-toolset"
   description = "Shell command execution toolset"
   type        = "shell"
@@ -42,7 +42,7 @@ resource "kubiya_control_plane_toolset" "shell" {
 }
 
 # Create a Docker toolset
-resource "kubiya_control_plane_toolset" "docker" {
+resource "controlplane_toolset" "docker" {
   name        = "example-docker-toolset"
   description = "Docker operations toolset"
   type        = "docker"
@@ -56,37 +56,37 @@ resource "kubiya_control_plane_toolset" "docker" {
 }
 
 # Look up an existing toolset by ID
-data "kubiya_control_plane_toolset" "existing" {
+data "controlplane_toolset" "existing" {
   id = "toolset-uuid-here"
 }
 
 # Output toolset information
 output "filesystem_toolset_id" {
-  value       = kubiya_control_plane_toolset.filesystem.id
+  value       = controlplane_toolset.filesystem.id
   description = "The ID of the filesystem toolset"
 }
 
 output "shell_toolset_id" {
-  value       = kubiya_control_plane_toolset.shell.id
+  value       = controlplane_toolset.shell.id
   description = "The ID of the shell toolset"
 }
 
 output "docker_toolset_id" {
-  value       = kubiya_control_plane_toolset.docker.id
+  value       = controlplane_toolset.docker.id
   description = "The ID of the docker toolset"
 }
 
 output "existing_toolset_name" {
-  value       = data.kubiya_control_plane_toolset.existing.name
+  value       = data.controlplane_toolset.existing.name
   description = "Name of the existing toolset"
 }
 
 output "existing_toolset_type" {
-  value       = data.kubiya_control_plane_toolset.existing.type
+  value       = data.controlplane_toolset.existing.type
   description = "Type of the existing toolset"
 }
 
 output "existing_toolset_enabled" {
-  value       = data.kubiya_control_plane_toolset.existing.enabled
+  value       = data.controlplane_toolset.existing.enabled
   description = "Whether the existing toolset is enabled"
 }

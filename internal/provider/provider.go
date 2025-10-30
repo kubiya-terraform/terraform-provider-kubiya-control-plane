@@ -54,7 +54,7 @@ func (p *kubiyaControlPlaneProvider) Schema(_ context.Context, _ provider.Schema
 }
 
 func (p *kubiyaControlPlaneProvider) Metadata(_ context.Context, _ provider.MetadataRequest, resp *provider.MetadataResponse) {
-	resp.TypeName = "kubiya_control_plane"
+	resp.TypeName = "controlplane"
 }
 
 func (p *kubiyaControlPlaneProvider) Configure(ctx context.Context, _ provider.ConfigureRequest, resp *provider.ConfigureResponse) {

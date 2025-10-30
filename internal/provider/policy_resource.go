@@ -253,8 +253,27 @@ func (r *policyResource) Update(ctx context.Context, req resource.UpdateRequest,
 		return
 	}
 
+	// Update all computed fields from response
+	plan.ID = types.StringValue(policy.ID)
+	plan.Name = types.StringValue(policy.Name)
+	plan.PolicyContent = types.StringValue(policy.PolicyContent)
+	plan.PolicyType = types.StringValue(string(policy.PolicyType))
+	plan.Enabled = types.BoolValue(policy.Enabled)
 	plan.Version = types.Int64Value(policy.Version)
-	plan.UpdatedAt = types.StringValue(policy.UpdatedAt.String())
+
+	if policy.Description != nil {
+		plan.Description = types.StringValue(*policy.Description)
+	} else {
+		plan.Description = types.StringNull()
+	}
+
+	if policy.CreatedAt != nil {
+		plan.CreatedAt = types.StringValue(policy.CreatedAt.String())
+	}
+
+	if policy.UpdatedAt != nil {
+		plan.UpdatedAt = types.StringValue(policy.UpdatedAt.String())
+	}
 
 	diags = resp.State.Set(ctx, plan)
 	resp.Diagnostics.Append(diags...)

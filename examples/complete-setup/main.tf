@@ -1,12 +1,12 @@
 terraform {
   required_providers {
-    kubiya_control_plane = {
+    controlplane = {
       source = "kubiya/control-plane"
     }
   }
 }
 
-provider "kubiya_control_plane" {
+provider "controlplane" {
   # Configuration is via environment variables:
   # KUBIYA_CONTROL_PLANE_API_KEY
   # KUBIYA_CONTROL_PLANE_ORG_ID
@@ -18,7 +18,7 @@ provider "kubiya_control_plane" {
 # ============================================================================
 
 # Create a production environment
-resource "kubiya_control_plane_environment" "production" {
+resource "controlplane_environment" "production" {
   name        = "production"
   description = "Production environment for agents"
 
@@ -38,7 +38,7 @@ resource "kubiya_control_plane_environment" "production" {
 }
 
 # Create a project
-resource "kubiya_control_plane_project" "platform" {
+resource "controlplane_project" "platform" {
   name        = "platform-automation"
   description = "Platform automation and operations project"
 
@@ -53,7 +53,7 @@ resource "kubiya_control_plane_project" "platform" {
 # ============================================================================
 
 # Create a shell toolset
-resource "kubiya_control_plane_toolset" "shell_ops" {
+resource "controlplane_toolset" "shell_ops" {
   name        = "shell-operations"
   description = "Shell command execution for operations"
   type        = "shell"
@@ -66,7 +66,7 @@ resource "kubiya_control_plane_toolset" "shell_ops" {
 }
 
 # Create a file system toolset
-resource "kubiya_control_plane_toolset" "filesystem" {
+resource "controlplane_toolset" "filesystem" {
   name        = "filesystem-access"
   description = "File system operations"
   type        = "file_system"
@@ -83,7 +83,7 @@ resource "kubiya_control_plane_toolset" "filesystem" {
 # ============================================================================
 
 # Create a security policy
-resource "kubiya_control_plane_policy" "security" {
+resource "controlplane_policy" "security" {
   name        = "production-security"
   description = "Security policy for production"
   enabled     = true
@@ -115,7 +115,7 @@ resource "kubiya_control_plane_policy" "security" {
 # ============================================================================
 
 # Create a DevOps team
-resource "kubiya_control_plane_team" "devops" {
+resource "controlplane_team" "devops" {
   name        = "devops-team"
   description = "DevOps and platform engineering team"
 
@@ -133,7 +133,7 @@ resource "kubiya_control_plane_team" "devops" {
 # ============================================================================
 
 # Create a deployment agent
-resource "kubiya_control_plane_agent" "deployer" {
+resource "controlplane_agent" "deployer" {
   name        = "production-deployer"
   description = "Agent for production deployments"
 
@@ -153,11 +153,11 @@ resource "kubiya_control_plane_agent" "deployer" {
     approval_needed = true
   })
 
-  team_id = kubiya_control_plane_team.devops.id
+  team_id = controlplane_team.devops.id
 }
 
 # Create a monitoring agent
-resource "kubiya_control_plane_agent" "monitor" {
+resource "controlplane_agent" "monitor" {
   name        = "production-monitor"
   description = "Agent for monitoring and alerting"
 
@@ -176,15 +176,15 @@ resource "kubiya_control_plane_agent" "monitor" {
     alert_channels = ["slack", "pagerduty"]
   })
 
-  team_id = kubiya_control_plane_team.devops.id
+  team_id = controlplane_team.devops.id
 }
 
 # ============================================================================
 # Step 6: Register workers (optional - typically done at runtime)
 # ============================================================================
 
-resource "kubiya_control_plane_worker" "worker_01" {
-  environment_name = kubiya_control_plane_environment.production.name
+resource "controlplane_worker" "worker_01" {
+  environment_name = controlplane_environment.production.name
   hostname         = "worker-prod-01"
 
   metadata = jsonencode({
@@ -198,41 +198,41 @@ resource "kubiya_control_plane_worker" "worker_01" {
 # ============================================================================
 
 output "environment_id" {
-  value       = kubiya_control_plane_environment.production.id
+  value       = controlplane_environment.production.id
   description = "Production environment ID"
 }
 
 output "project_id" {
-  value       = kubiya_control_plane_project.platform.id
+  value       = controlplane_project.platform.id
   description = "Platform project ID"
 }
 
 output "team_id" {
-  value       = kubiya_control_plane_team.devops.id
+  value       = controlplane_team.devops.id
   description = "DevOps team ID"
 }
 
 output "deployer_agent_id" {
-  value       = kubiya_control_plane_agent.deployer.id
+  value       = controlplane_agent.deployer.id
   description = "Deployer agent ID"
 }
 
 output "monitor_agent_id" {
-  value       = kubiya_control_plane_agent.monitor.id
+  value       = controlplane_agent.monitor.id
   description = "Monitor agent ID"
 }
 
 output "shell_toolset_id" {
-  value       = kubiya_control_plane_toolset.shell_ops.id
+  value       = controlplane_toolset.shell_ops.id
   description = "Shell operations toolset ID"
 }
 
 output "security_policy_id" {
-  value       = kubiya_control_plane_policy.security.id
+  value       = controlplane_policy.security.id
   description = "Security policy ID"
 }
 
 output "worker_id" {
-  value       = kubiya_control_plane_worker.worker_01.id
+  value       = controlplane_worker.worker_01.id
   description = "Worker ID"
 }

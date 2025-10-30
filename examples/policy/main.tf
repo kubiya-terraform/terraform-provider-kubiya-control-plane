@@ -1,12 +1,12 @@
 terraform {
   required_providers {
-    kubiya_control_plane = {
+    controlplane = {
       source = "kubiya/control-plane"
     }
   }
 }
 
-provider "kubiya_control_plane" {
+provider "controlplane" {
   # Configuration is via environment variables:
   # KUBIYA_CONTROL_PLANE_API_KEY
   # KUBIYA_CONTROL_PLANE_ORG_ID
@@ -14,7 +14,7 @@ provider "kubiya_control_plane" {
 }
 
 # Create a security policy for production environments
-resource "kubiya_control_plane_policy" "production_security" {
+resource "controlplane_policy" "production_security" {
   name        = "production-security-policy"
   description = "Security policy for production environments"
   enabled     = true
@@ -50,7 +50,7 @@ resource "kubiya_control_plane_policy" "production_security" {
 }
 
 # Create a cost control policy
-resource "kubiya_control_plane_policy" "cost_control" {
+resource "controlplane_policy" "cost_control" {
   name        = "cost-control-policy"
   description = "Policy to control infrastructure costs"
   enabled     = true
@@ -77,7 +77,7 @@ resource "kubiya_control_plane_policy" "cost_control" {
 }
 
 # Create a compliance policy
-resource "kubiya_control_plane_policy" "compliance" {
+resource "controlplane_policy" "compliance" {
   name        = "compliance-policy"
   description = "Policy for regulatory compliance"
   enabled     = true
@@ -111,32 +111,32 @@ resource "kubiya_control_plane_policy" "compliance" {
 }
 
 # Look up an existing policy by ID
-data "kubiya_control_plane_policy" "existing" {
+data "controlplane_policy" "existing" {
   id = "policy-uuid-here"
 }
 
 # Output policy information
 output "production_security_policy_id" {
-  value       = kubiya_control_plane_policy.production_security.id
+  value       = controlplane_policy.production_security.id
   description = "The ID of the production security policy"
 }
 
 output "cost_control_policy_id" {
-  value       = kubiya_control_plane_policy.cost_control.id
+  value       = controlplane_policy.cost_control.id
   description = "The ID of the cost control policy"
 }
 
 output "compliance_policy_id" {
-  value       = kubiya_control_plane_policy.compliance.id
+  value       = controlplane_policy.compliance.id
   description = "The ID of the compliance policy"
 }
 
 output "existing_policy_name" {
-  value       = data.kubiya_control_plane_policy.existing.name
+  value       = data.controlplane_policy.existing.name
   description = "Name of the existing policy"
 }
 
 output "existing_policy_enabled" {
-  value       = data.kubiya_control_plane_policy.existing.enabled
+  value       = data.controlplane_policy.existing.enabled
   description = "Whether the existing policy is enabled"
 }

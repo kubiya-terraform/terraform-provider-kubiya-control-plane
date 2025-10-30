@@ -88,6 +88,7 @@ func (r *projectResource) Schema(_ context.Context, _ resource.SchemaRequest, re
 			"visibility": schema.StringAttribute{
 				Description: "Project visibility (private or org)",
 				Optional:    true,
+				Computed:    true,
 				Default:     stringdefault.StaticString("private"),
 			},
 			"restrict_to_environment": schema.BoolAttribute{
@@ -204,7 +205,11 @@ func (r *projectResource) Create(ctx context.Context, req resource.CreateRequest
 		plan.Goals = types.StringValue(*project.Goals)
 	}
 
-	plan.Status = types.StringValue(string(project.Status))
+	if project.Status != "" {
+		plan.Status = types.StringValue(string(project.Status))
+	} else {
+		plan.Status = types.StringNull()
+	}
 	plan.Visibility = types.StringValue(project.Visibility)
 	plan.RestrictToEnvironment = types.BoolValue(project.RestrictToEnvironment)
 
@@ -246,7 +251,11 @@ func (r *projectResource) Read(ctx context.Context, req resource.ReadRequest, re
 		state.Goals = types.StringValue(*project.Goals)
 	}
 
-	state.Status = types.StringValue(string(project.Status))
+	if project.Status != "" {
+		state.Status = types.StringValue(string(project.Status))
+	} else {
+		state.Status = types.StringNull()
+	}
 	state.Visibility = types.StringValue(project.Visibility)
 	state.RestrictToEnvironment = types.BoolValue(project.RestrictToEnvironment)
 
@@ -327,8 +336,39 @@ func (r *projectResource) Update(ctx context.Context, req resource.UpdateRequest
 		return
 	}
 
-	// Update state
-	plan.UpdatedAt = types.StringValue(project.UpdatedAt.String())
+	// Update all computed fields from response
+	plan.ID = types.StringValue(project.ID)
+	plan.Name = types.StringValue(project.Name)
+	plan.Key = types.StringValue(project.Key)
+
+	if project.Description != nil {
+		plan.Description = types.StringValue(*project.Description)
+	} else {
+		plan.Description = types.StringNull()
+	}
+
+	if project.Goals != nil {
+		plan.Goals = types.StringValue(*project.Goals)
+	} else {
+		plan.Goals = types.StringNull()
+	}
+
+	if project.Status != "" {
+		plan.Status = types.StringValue(string(project.Status))
+	} else {
+		plan.Status = types.StringNull()
+	}
+
+	plan.Visibility = types.StringValue(project.Visibility)
+	plan.RestrictToEnvironment = types.BoolValue(project.RestrictToEnvironment)
+
+	if project.CreatedAt != nil {
+		plan.CreatedAt = types.StringValue(project.CreatedAt.String())
+	}
+
+	if project.UpdatedAt != nil {
+		plan.UpdatedAt = types.StringValue(project.UpdatedAt.String())
+	}
 
 	diags = resp.State.Set(ctx, plan)
 	resp.Diagnostics.Append(diags...)

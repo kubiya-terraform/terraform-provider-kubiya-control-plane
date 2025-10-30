@@ -169,7 +169,11 @@ func (r *teamResource) Create(ctx context.Context, req resource.CreateRequest, r
 		plan.Description = types.StringValue(*team.Description)
 	}
 
-	plan.Status = types.StringValue(string(team.Status))
+	if team.Status != "" {
+		plan.Status = types.StringValue(string(team.Status))
+	} else {
+		plan.Status = types.StringNull()
+	}
 
 	if team.CreatedAt != nil {
 		plan.CreatedAt = types.StringValue(team.CreatedAt.String())
@@ -204,7 +208,11 @@ func (r *teamResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 		state.Description = types.StringValue(*team.Description)
 	}
 
-	state.Status = types.StringValue(string(team.Status))
+	if team.Status != "" {
+		state.Status = types.StringValue(string(team.Status))
+	} else {
+		state.Status = types.StringNull()
+	}
 
 	if team.CreatedAt != nil {
 		state.CreatedAt = types.StringValue(team.CreatedAt.String())
@@ -258,8 +266,29 @@ func (r *teamResource) Update(ctx context.Context, req resource.UpdateRequest, r
 		return
 	}
 
-	// Update state
-	plan.UpdatedAt = types.StringValue(team.UpdatedAt.String())
+	// Update all computed fields from response
+	plan.ID = types.StringValue(team.ID)
+	plan.Name = types.StringValue(team.Name)
+
+	if team.Description != nil {
+		plan.Description = types.StringValue(*team.Description)
+	} else {
+		plan.Description = types.StringNull()
+	}
+
+	if team.Status != "" {
+		plan.Status = types.StringValue(string(team.Status))
+	} else {
+		plan.Status = types.StringNull()
+	}
+
+	if team.CreatedAt != nil {
+		plan.CreatedAt = types.StringValue(team.CreatedAt.String())
+	}
+
+	if team.UpdatedAt != nil {
+		plan.UpdatedAt = types.StringValue(team.UpdatedAt.String())
+	}
 
 	diags = resp.State.Set(ctx, plan)
 	resp.Diagnostics.Append(diags...)
