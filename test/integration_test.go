@@ -190,8 +190,8 @@ func TestKubiyaControlPlanePolicy(t *testing.T) {
 	t.Logf("Created policy with ID: %s", policyID)
 }
 
-// TestKubiyaControlPlaneWorker tests the worker resource lifecycle
-func TestKubiyaControlPlaneWorker(t *testing.T) {
+// TestKubiyaControlPlaneWorkerQueue tests the worker queue resource lifecycle
+func TestKubiyaControlPlaneWorkerQueue(t *testing.T) {
 	t.Parallel()
 
 	apiKey := os.Getenv("KUBIYA_CONTROL_PLANE_API_KEY")
@@ -205,7 +205,7 @@ func TestKubiyaControlPlaneWorker(t *testing.T) {
 	}
 
 	terraformOptions := &terraform.Options{
-		TerraformDir: "../examples/worker",
+		TerraformDir: "../examples/worker_queue",
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
 			"KUBIYA_CONTROL_PLANE_ORG_ID":  orgID,
@@ -216,8 +216,8 @@ func TestKubiyaControlPlaneWorker(t *testing.T) {
 
 	terraform.InitAndApply(t, terraformOptions)
 
-	workerID := terraform.Output(t, terraformOptions, "worker_id")
-	t.Logf("Created worker with ID: %s", workerID)
+	queueID := terraform.Output(t, terraformOptions, "queue_id")
+	t.Logf("Created worker queue with ID: %s", queueID)
 }
 
 // TestKubiyaControlPlaneCompleteSetup tests the complete setup example
