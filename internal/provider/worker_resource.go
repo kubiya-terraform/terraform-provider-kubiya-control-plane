@@ -133,8 +133,17 @@ func (r *workerResource) Create(ctx context.Context, req resource.CreateRequest,
 		return
 	}
 
-	plan.ID = types.StringValue(worker.ID)
-	plan.EnvironmentName = types.StringValue(worker.EnvironmentName)
+	// The API may return either ID or WorkerID, prefer WorkerID if available
+	if worker.WorkerID != "" {
+		plan.ID = types.StringValue(worker.WorkerID)
+	} else if worker.ID != "" {
+		plan.ID = types.StringValue(worker.ID)
+	} else {
+		resp.Diagnostics.AddError("Missing Worker ID", "The API did not return a worker ID")
+		return
+	}
+	// Keep the environment_name from the plan as it's a user input
+	// The API may return a fully qualified name (org.env) but we should preserve what the user specified
 
 	if worker.Status != "" {
 		plan.Status = types.StringValue(string(worker.Status))
@@ -144,14 +153,20 @@ func (r *workerResource) Create(ctx context.Context, req resource.CreateRequest,
 
 	if worker.RegisteredAt != nil {
 		plan.RegisteredAt = types.StringValue(worker.RegisteredAt.String())
+	} else {
+		plan.RegisteredAt = types.StringNull()
 	}
 
 	if worker.LastHeartbeat != nil {
 		plan.LastHeartbeat = types.StringValue(worker.LastHeartbeat.String())
+	} else {
+		plan.LastHeartbeat = types.StringNull()
 	}
 
 	if worker.UpdatedAt != nil {
 		plan.UpdatedAt = types.StringValue(worker.UpdatedAt.String())
+	} else {
+		plan.UpdatedAt = types.StringNull()
 	}
 
 	diags = resp.State.Set(ctx, plan)
@@ -168,12 +183,23 @@ func (r *workerResource) Read(ctx context.Context, req resource.ReadRequest, res
 
 	worker, err := r.client.GetWorker(state.ID.ValueString())
 	if err != nil {
+		// Workers are ephemeral - if not found, remove from state
+		if err.Error() == "worker not found" {
+			resp.State.RemoveResource(ctx)
+			return
+		}
 		resp.Diagnostics.AddError("Error reading worker", err.Error())
 		return
 	}
 
-	state.ID = types.StringValue(worker.ID)
-	state.EnvironmentName = types.StringValue(worker.EnvironmentName)
+	// The API may return either ID or WorkerID, prefer WorkerID if available
+	if worker.WorkerID != "" {
+		state.ID = types.StringValue(worker.WorkerID)
+	} else if worker.ID != "" {
+		state.ID = types.StringValue(worker.ID)
+	}
+	// Keep the environment_name from the state as it's a user input
+	// The API may return a fully qualified name (org.env) but we should preserve what the user specified
 
 	if worker.Status != "" {
 		state.Status = types.StringValue(string(worker.Status))
@@ -183,10 +209,20 @@ func (r *workerResource) Read(ctx context.Context, req resource.ReadRequest, res
 
 	if worker.LastHeartbeat != nil {
 		state.LastHeartbeat = types.StringValue(worker.LastHeartbeat.String())
+	} else {
+		state.LastHeartbeat = types.StringNull()
 	}
 
 	if worker.UpdatedAt != nil {
 		state.UpdatedAt = types.StringValue(worker.UpdatedAt.String())
+	} else {
+		state.UpdatedAt = types.StringNull()
+	}
+
+	if worker.RegisteredAt != nil {
+		state.RegisteredAt = types.StringValue(worker.RegisteredAt.String())
+	} else {
+		state.RegisteredAt = types.StringNull()
 	}
 
 	diags = resp.State.Set(ctx, state)
@@ -214,11 +250,10 @@ func (r *workerResource) Delete(ctx context.Context, req resource.DeleteRequest,
 		return
 	}
 
-	err := r.client.DeleteWorker(state.ID.ValueString())
-	if err != nil {
-		resp.Diagnostics.AddError("Error deleting worker", err.Error())
-		return
-	}
+	// Workers are runtime entities that self-manage their lifecycle
+	// The API does not support explicit deletion (405 Method Not Allowed)
+	// So we just remove it from Terraform state without calling the API
+	// The worker will naturally disconnect and clean up when it stops running
 }
 
 func (r *workerResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {

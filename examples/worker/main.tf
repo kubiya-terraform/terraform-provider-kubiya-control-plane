@@ -16,7 +16,7 @@ provider "controlplane" {
 # Register a worker
 # Note: Workers typically self-register at runtime, but can be pre-registered
 resource "controlplane_worker" "example" {
-  environment_name = "production"
+  environment_name = "default"
   hostname         = "worker-node-01"
 
   # Worker metadata
@@ -25,7 +25,7 @@ resource "controlplane_worker" "example" {
     datacenter = "dc1"
     capacity   = "high"
     tags = {
-      environment = "production"
+      environment = "default"
       team        = "platform"
     }
   })
