@@ -15,11 +15,12 @@ provider "controlplane" {
 
 # Create a project
 resource "controlplane_project" "example" {
-  name        = "example-project"
+  name        = "updated-example-project"
+  key         = "PROJ"
   description = "An example project for demonstration"
 
-  # Project metadata
-  metadata = jsonencode({
+  # Project settings
+  settings = jsonencode({
     owner       = "devops-team"
     environment = "production"
     cost_center = "engineering"
@@ -28,7 +29,7 @@ resource "controlplane_project" "example" {
 
 # Look up an existing project by ID
 data "controlplane_project" "existing" {
-  id = "project-uuid-here"
+  id = "65a206de-f17d-4e65-93bb-7fed5c72d567"
 }
 
 # Output project information
@@ -47,7 +48,7 @@ output "existing_project_name" {
   description = "Name of the existing project"
 }
 
-output "existing_project_metadata" {
-  value       = data.controlplane_project.existing.metadata
-  description = "Metadata of the existing project"
+output "existing_project_settings" {
+  value       = data.controlplane_project.existing.settings
+  description = "Settings of the existing project"
 }
