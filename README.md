@@ -107,7 +107,7 @@ The provider currently supports the following resources:
 - `controlplane_team` - Manage teams
 - `controlplane_project` - Manage projects
 - `controlplane_environment` - Manage execution environments
-- `controlplane_toolset` - Manage toolsets (filesystem, shell, docker)
+- `controlplane_skill` - Manage skills (filesystem, shell, docker)
 - `controlplane_policy` - Manage OPA Rego governance policies
 - `controlplane_worker` - Register and manage workers
 
@@ -119,7 +119,7 @@ The provider supports the following data sources for read-only lookups:
 - `controlplane_team` - Lookup existing teams by ID
 - `controlplane_project` - Lookup existing projects by ID
 - `controlplane_environment` - Lookup existing environments by ID
-- `controlplane_toolset` - Lookup existing toolsets by ID
+- `controlplane_skill` - Lookup existing skills by ID
 - `controlplane_policy` - Lookup existing policies by ID
 
 ### Example Data Source Usage

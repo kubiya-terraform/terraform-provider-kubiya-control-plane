@@ -118,10 +118,10 @@ func TestKubiyaControlPlaneResource(t *testing.T) {
   - Verifies environment creation
   - Tests environment destruction
 
-- **TestKubiyaControlPlaneToolSet** - Tests toolset resource lifecycle
-  - Creates toolset (shell, docker, etc.)
-  - Verifies toolset configuration
-  - Tests toolset destruction
+- **TestKubiyaControlPlaneSkill** - Tests skill resource lifecycle
+  - Creates skill (shell, docker, etc.)
+  - Verifies skill configuration
+  - Tests skill destruction
 
 - **TestKubiyaControlPlanePolicy** - Tests policy resource lifecycle
   - Creates OPA Rego policy

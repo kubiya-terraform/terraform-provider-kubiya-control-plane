@@ -19,7 +19,7 @@ testdata/
 ├── teams/          # Team resource test configuration
 ├── projects/       # Project resource test configuration
 ├── environments/   # Environment resource test configuration
-├── toolsets/       # ToolSet resource test configuration
+├── skills/       # Skill resource test configuration
 ├── policies/       # Policy resource test configuration
 └── workers/        # Worker resource test configuration
 ```
@@ -56,13 +56,13 @@ Tests the environment resource with:
 - Data source lookup of the created environment
 - Configuration output validation
 
-### toolsets/main.tf
+### skills/main.tf
 
-Tests the toolset resource with:
-- ToolSet creation (name, type, enabled)
-- Shell toolset with allowed commands
+Tests the skill resource with:
+- Skill creation (name, type, enabled)
+- Shell skill with allowed commands
 - Timeout configuration
-- Data source lookup of the created toolset
+- Data source lookup of the created skill
 - Output validation including type and enabled status
 
 ### policies/main.tf

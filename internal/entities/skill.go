@@ -43,24 +43,24 @@ func (ft *FlexibleTime) UnmarshalJSON(b []byte) error {
 	return err
 }
 
-// ToolSetType represents the type of toolset
-type ToolSetType string
+// SkillType represents the type of skill
+type SkillType string
 
 const (
-	ToolSetTypeFileSystem     ToolSetType = "file_system"
-	ToolSetTypeShell          ToolSetType = "shell"
-	ToolSetTypeDocker         ToolSetType = "docker"
-	ToolSetTypePython         ToolSetType = "python"
-	ToolSetTypeFileGeneration ToolSetType = "file_generation"
-	ToolSetTypeCustom         ToolSetType = "custom"
+	SkillTypeFileSystem     SkillType = "file_system"
+	SkillTypeShell          SkillType = "shell"
+	SkillTypeDocker         SkillType = "docker"
+	SkillTypePython         SkillType = "python"
+	SkillTypeFileGeneration SkillType = "file_generation"
+	SkillTypeCustom         SkillType = "custom"
 )
 
-// ToolSet represents a toolset in the control plane
-type ToolSet struct {
+// Skill represents a skill in the control plane
+type Skill struct {
 	ID             string                 `json:"id,omitempty"`
 	OrganizationID string                 `json:"organization_id,omitempty"`
 	Name           string                 `json:"name"`
-	Type           ToolSetType            `json:"type"`
+	Type           SkillType              `json:"type"`
 	Description    *string                `json:"description,omitempty"`
 	Icon           string                 `json:"icon,omitempty"`
 	Enabled        bool                   `json:"enabled"`
@@ -69,18 +69,18 @@ type ToolSet struct {
 	UpdatedAt      *FlexibleTime          `json:"updated_at,omitempty"`
 }
 
-// ToolSetCreateRequest represents the request to create a toolset
-type ToolSetCreateRequest struct {
+// SkillCreateRequest represents the request to create a skill
+type SkillCreateRequest struct {
 	Name          string                 `json:"name"`
-	Type          ToolSetType            `json:"type"`
+	Type          SkillType              `json:"type"`
 	Description   *string                `json:"description,omitempty"`
 	Icon          string                 `json:"icon,omitempty"`
 	Enabled       bool                   `json:"enabled"`
 	Configuration map[string]interface{} `json:"configuration,omitempty"`
 }
 
-// ToolSetUpdateRequest represents the request to update a toolset
-type ToolSetUpdateRequest struct {
+// SkillUpdateRequest represents the request to update a skill
+type SkillUpdateRequest struct {
 	Name          *string                `json:"name,omitempty"`
 	Description   *string                `json:"description,omitempty"`
 	Icon          *string                `json:"icon,omitempty"`

@@ -14,7 +14,7 @@ docs/
 │   ├── team.md                 # Team resource documentation
 │   ├── project.md              # Project resource documentation
 │   ├── environment.md          # Environment resource documentation
-│   ├── toolset.md              # ToolSet resource documentation
+│   ├── skill.md              # Skill resource documentation
 │   ├── policy.md               # Policy resource documentation
 │   └── worker.md               # Worker resource documentation
 └── data-sources/
@@ -22,7 +22,7 @@ docs/
     ├── team.md                 # Team data source documentation
     ├── project.md              # Project data source documentation
     ├── environment.md          # Environment data source documentation
-    ├── toolset.md              # ToolSet data source documentation
+    ├── skill.md              # Skill data source documentation
     └── policy.md               # Policy data source documentation
 ```
 
@@ -34,7 +34,7 @@ The provider manages the following resources:
 - **controlplane_team** - Teams for organizing agents
 - **controlplane_project** - Projects for grouping resources
 - **controlplane_environment** - Execution environments
-- **controlplane_toolset** - Toolsets (filesystem, shell, docker, etc.)
+- **controlplane_skill** - Skills (filesystem, shell, docker, etc.)
 - **controlplane_policy** - OPA Rego governance policies
 - **controlplane_worker** - Worker registration
 
@@ -46,7 +46,7 @@ Corresponding data sources for resource lookup:
 - **controlplane_team** - Look up existing teams
 - **controlplane_project** - Look up existing projects
 - **controlplane_environment** - Look up existing environments
-- **controlplane_toolset** - Look up existing toolsets
+- **controlplane_skill** - Look up existing skills
 - **controlplane_policy** - Look up existing policies
 
 ## Publishing to Terraform Registry

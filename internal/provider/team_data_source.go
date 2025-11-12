@@ -27,7 +27,7 @@ type teamDataSourceModel struct {
 	Description          types.String `tfsdk:"description"`
 	Status               types.String `tfsdk:"status"`
 	Configuration        types.String `tfsdk:"configuration"`
-	ToolsetIDs           types.List   `tfsdk:"toolset_ids"`
+	SkillIDs             types.List   `tfsdk:"skill_ids"`
 	ExecutionEnvironment types.String `tfsdk:"execution_environment"`
 	CreatedAt            types.String `tfsdk:"created_at"`
 	UpdatedAt            types.String `tfsdk:"updated_at"`
@@ -61,8 +61,8 @@ func (d *teamDataSource) Schema(_ context.Context, _ datasource.SchemaRequest, r
 				Description: "Team configuration as JSON string",
 				Computed:    true,
 			},
-			"toolset_ids": schema.ListAttribute{
-				Description: "List of toolset IDs associated with the team",
+			"skill_ids": schema.ListAttribute{
+				Description: "List of skill IDs associated with the team",
 				Computed:    true,
 				ElementType: types.StringType,
 			},
@@ -136,17 +136,17 @@ func (d *teamDataSource) Read(ctx context.Context, req datasource.ReadRequest, r
 		config.Configuration = types.StringNull()
 	}
 
-	// Convert toolset IDs to list
-	if len(team.ToolsetIDs) > 0 {
-		toolsetList := make([]types.String, len(team.ToolsetIDs))
-		for i, id := range team.ToolsetIDs {
-			toolsetList[i] = types.StringValue(id)
+	// Convert skill IDs to list
+	if len(team.SkillIDs) > 0 {
+		skillList := make([]types.String, len(team.SkillIDs))
+		for i, id := range team.SkillIDs {
+			skillList[i] = types.StringValue(id)
 		}
-		listVal, diags := types.ListValueFrom(ctx, types.StringType, toolsetList)
+		listVal, diags := types.ListValueFrom(ctx, types.StringType, skillList)
 		resp.Diagnostics.Append(diags...)
-		config.ToolsetIDs = listVal
+		config.SkillIDs = listVal
 	} else {
-		config.ToolsetIDs = types.ListNull(types.StringType)
+		config.SkillIDs = types.ListNull(types.StringType)
 	}
 
 	// Convert execution environment to JSON string

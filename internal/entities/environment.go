@@ -39,8 +39,8 @@ type Environment struct {
 	ActiveWorkers          int                      `json:"active_workers,omitempty"`
 	IdleWorkers            int                      `json:"idle_workers,omitempty"`
 	BusyWorkers            int                      `json:"busy_workers,omitempty"`
-	ToolsetIDs             []string                 `json:"toolset_ids,omitempty"`
-	Toolsets               []map[string]interface{} `json:"toolsets,omitempty"`
+	SkillIDs               []string                 `json:"skill_ids,omitempty"`
+	Skills                 []map[string]interface{} `json:"skills,omitempty"`
 	ExecutionEnvironment   map[string]interface{}   `json:"execution_environment,omitempty"`
 }
 

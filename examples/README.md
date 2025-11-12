@@ -32,7 +32,7 @@ Each directory contains examples for a specific resource type:
 - **team/** - Team resource and data source examples
 - **project/** - Project resource and data source examples
 - **environment/** - Environment resource and data source examples
-- **toolset/** - ToolSet resource and data source examples
+- **skill/** - Skill resource and data source examples
 - **policy/** - Policy resource and data source examples
 - **worker/** - Worker resource examples
 - **complete-setup/** - End-to-end example showing all resources working together

@@ -32,7 +32,7 @@ type teamResourceModel struct {
 	Description          types.String `tfsdk:"description"`
 	Status               types.String `tfsdk:"status"`
 	Configuration        types.String `tfsdk:"configuration"`
-	ToolsetIDs           types.List   `tfsdk:"toolset_ids"`
+	SkillIDs             types.List   `tfsdk:"skill_ids"`
 	ExecutionEnvironment types.String `tfsdk:"execution_environment"`
 	CreatedAt            types.String `tfsdk:"created_at"`
 	UpdatedAt            types.String `tfsdk:"updated_at"`
@@ -73,8 +73,8 @@ func (r *teamResource) Schema(_ context.Context, _ resource.SchemaRequest, resp 
 				Description: "Team configuration as JSON string",
 				Optional:    true,
 			},
-			"toolset_ids": schema.ListAttribute{
-				Description: "List of toolset IDs associated with the team",
+			"skill_ids": schema.ListAttribute{
+				Description: "List of skill IDs associated with the team",
 				Optional:    true,
 				ElementType: types.StringType,
 			},
@@ -138,14 +138,14 @@ func (r *teamResource) Create(ctx context.Context, req resource.CreateRequest, r
 		createReq.Configuration = config
 	}
 
-	if !plan.ToolsetIDs.IsNull() {
-		var toolsetIDs []string
-		diags = plan.ToolsetIDs.ElementsAs(ctx, &toolsetIDs, false)
+	if !plan.SkillIDs.IsNull() {
+		var skillIDs []string
+		diags = plan.SkillIDs.ElementsAs(ctx, &skillIDs, false)
 		resp.Diagnostics.Append(diags...)
 		if resp.Diagnostics.HasError() {
 			return
 		}
-		createReq.ToolsetIDs = toolsetIDs
+		createReq.SkillIDs = skillIDs
 	}
 
 	if !plan.ExecutionEnvironment.IsNull() {

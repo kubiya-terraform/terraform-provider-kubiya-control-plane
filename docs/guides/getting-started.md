@@ -146,11 +146,11 @@ output "agent_status" {
 
 ## Step 6: Add More Resources
 
-Expand your configuration by adding toolsets and policies:
+Expand your configuration by adding skills and policies:
 
 ```terraform
-# Add a shell toolset
-resource "controlplane_toolset" "shell" {
+# Add a shell skill
+resource "controlplane_skill" "shell" {
   name    = "shell-commands"
   type    = "shell"
   enabled = true

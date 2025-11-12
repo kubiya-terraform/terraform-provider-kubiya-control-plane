@@ -15,18 +15,18 @@ import (
 	"kubiya-control-plane/internal/entities"
 )
 
-var _ resource.Resource = (*toolsetResource)(nil)
-var _ resource.ResourceWithImportState = (*toolsetResource)(nil)
+var _ resource.Resource = (*skillResource)(nil)
+var _ resource.ResourceWithImportState = (*skillResource)(nil)
 
-func NewToolSetResource() resource.Resource {
-	return &toolsetResource{}
+func NewSkillResource() resource.Resource {
+	return &skillResource{}
 }
 
-type toolsetResource struct {
+type skillResource struct {
 	client *clients.Client
 }
 
-type toolsetResourceModel struct {
+type skillResourceModel struct {
 	ID            types.String `tfsdk:"id"`
 	Name          types.String `tfsdk:"name"`
 	Type          types.String `tfsdk:"type"`
@@ -38,31 +38,31 @@ type toolsetResourceModel struct {
 	UpdatedAt     types.String `tfsdk:"updated_at"`
 }
 
-func (r *toolsetResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_toolset"
+func (r *skillResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_skill"
 }
 
-func (r *toolsetResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *skillResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Manages a ToolSet in the Control Plane.",
+		Description: "Manages a Skill in the Control Plane.",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Description: "ToolSet ID",
+				Description: "Skill ID",
 				Computed:    true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"name": schema.StringAttribute{
-				Description: "ToolSet name",
+				Description: "Skill name",
 				Required:    true,
 			},
 			"type": schema.StringAttribute{
-				Description: "ToolSet type (file_system, shell, docker, python, file_generation, custom)",
+				Description: "Skill type (file_system, shell, docker, python, file_generation, custom)",
 				Required:    true,
 			},
 			"description": schema.StringAttribute{
-				Description: "ToolSet description",
+				Description: "Skill description",
 				Optional:    true,
 			},
 			"icon": schema.StringAttribute{
@@ -70,26 +70,26 @@ func (r *toolsetResource) Schema(_ context.Context, _ resource.SchemaRequest, re
 				Optional:    true,
 			},
 			"enabled": schema.BoolAttribute{
-				Description: "Whether the toolset is enabled",
+				Description: "Whether the skill is enabled",
 				Optional:    true,
 			},
 			"configuration": schema.StringAttribute{
-				Description: "ToolSet configuration as JSON string",
+				Description: "Skill configuration as JSON string",
 				Optional:    true,
 			},
 			"created_at": schema.StringAttribute{
-				Description: "Timestamp when the toolset was created",
+				Description: "Timestamp when the skill was created",
 				Computed:    true,
 			},
 			"updated_at": schema.StringAttribute{
-				Description: "Timestamp when the toolset was last updated",
+				Description: "Timestamp when the skill was last updated",
 				Computed:    true,
 			},
 		},
 	}
 }
 
-func (r *toolsetResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+func (r *skillResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -106,17 +106,17 @@ func (r *toolsetResource) Configure(_ context.Context, req resource.ConfigureReq
 	r.client = client
 }
 
-func (r *toolsetResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var plan toolsetResourceModel
+func (r *skillResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var plan skillResourceModel
 	diags := req.Plan.Get(ctx, &plan)
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
 
-	createReq := &entities.ToolSetCreateRequest{
+	createReq := &entities.SkillCreateRequest{
 		Name:    plan.Name.ValueString(),
-		Type:    entities.ToolSetType(plan.Type.ValueString()),
+		Type:    entities.SkillType(plan.Type.ValueString()),
 		Enabled: plan.Enabled.ValueBool(),
 	}
 
@@ -138,76 +138,76 @@ func (r *toolsetResource) Create(ctx context.Context, req resource.CreateRequest
 		createReq.Configuration = config
 	}
 
-	toolset, err := r.client.CreateToolSet(createReq)
+	skill, err := r.client.CreateSkill(createReq)
 	if err != nil {
-		resp.Diagnostics.AddError("Error creating toolset", err.Error())
+		resp.Diagnostics.AddError("Error creating skill", err.Error())
 		return
 	}
 
-	plan.ID = types.StringValue(toolset.ID)
-	plan.Name = types.StringValue(toolset.Name)
-	plan.Type = types.StringValue(string(toolset.Type))
+	plan.ID = types.StringValue(skill.ID)
+	plan.Name = types.StringValue(skill.Name)
+	plan.Type = types.StringValue(string(skill.Type))
 
-	if toolset.Description != nil {
-		plan.Description = types.StringValue(*toolset.Description)
+	if skill.Description != nil {
+		plan.Description = types.StringValue(*skill.Description)
 	}
 
-	if toolset.CreatedAt != nil {
-		plan.CreatedAt = types.StringValue(toolset.CreatedAt.String())
+	if skill.CreatedAt != nil {
+		plan.CreatedAt = types.StringValue(skill.CreatedAt.String())
 	}
 
-	if toolset.UpdatedAt != nil {
-		plan.UpdatedAt = types.StringValue(toolset.UpdatedAt.String())
+	if skill.UpdatedAt != nil {
+		plan.UpdatedAt = types.StringValue(skill.UpdatedAt.String())
 	}
 
 	diags = resp.State.Set(ctx, plan)
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *toolsetResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var state toolsetResourceModel
+func (r *skillResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state skillResourceModel
 	diags := req.State.Get(ctx, &state)
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
 
-	toolset, err := r.client.GetToolSet(state.ID.ValueString())
+	skill, err := r.client.GetSkill(state.ID.ValueString())
 	if err != nil {
-		resp.Diagnostics.AddError("Error reading toolset", err.Error())
+		resp.Diagnostics.AddError("Error reading skill", err.Error())
 		return
 	}
 
-	state.ID = types.StringValue(toolset.ID)
-	state.Name = types.StringValue(toolset.Name)
-	state.Type = types.StringValue(string(toolset.Type))
-	state.Enabled = types.BoolValue(toolset.Enabled)
+	state.ID = types.StringValue(skill.ID)
+	state.Name = types.StringValue(skill.Name)
+	state.Type = types.StringValue(string(skill.Type))
+	state.Enabled = types.BoolValue(skill.Enabled)
 
-	if toolset.Description != nil {
-		state.Description = types.StringValue(*toolset.Description)
+	if skill.Description != nil {
+		state.Description = types.StringValue(*skill.Description)
 	}
 
-	if toolset.CreatedAt != nil {
-		state.CreatedAt = types.StringValue(toolset.CreatedAt.String())
+	if skill.CreatedAt != nil {
+		state.CreatedAt = types.StringValue(skill.CreatedAt.String())
 	}
 
-	if toolset.UpdatedAt != nil {
-		state.UpdatedAt = types.StringValue(toolset.UpdatedAt.String())
+	if skill.UpdatedAt != nil {
+		state.UpdatedAt = types.StringValue(skill.UpdatedAt.String())
 	}
 
 	diags = resp.State.Set(ctx, state)
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *toolsetResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan toolsetResourceModel
+func (r *skillResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var plan skillResourceModel
 	diags := req.Plan.Get(ctx, &plan)
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
 
-	updateReq := &entities.ToolSetUpdateRequest{}
+	updateReq := &entities.SkillUpdateRequest{}
 
 	name := plan.Name.ValueString()
 	updateReq.Name = &name
@@ -229,51 +229,51 @@ func (r *toolsetResource) Update(ctx context.Context, req resource.UpdateRequest
 		updateReq.Configuration = config
 	}
 
-	toolset, err := r.client.UpdateToolSet(plan.ID.ValueString(), updateReq)
+	skill, err := r.client.UpdateSkill(plan.ID.ValueString(), updateReq)
 	if err != nil {
-		resp.Diagnostics.AddError("Error updating toolset", err.Error())
+		resp.Diagnostics.AddError("Error updating skill", err.Error())
 		return
 	}
 
 	// Update all computed fields from response
-	plan.ID = types.StringValue(toolset.ID)
-	plan.Name = types.StringValue(toolset.Name)
-	plan.Type = types.StringValue(string(toolset.Type))
-	plan.Enabled = types.BoolValue(toolset.Enabled)
+	plan.ID = types.StringValue(skill.ID)
+	plan.Name = types.StringValue(skill.Name)
+	plan.Type = types.StringValue(string(skill.Type))
+	plan.Enabled = types.BoolValue(skill.Enabled)
 
-	if toolset.Description != nil {
-		plan.Description = types.StringValue(*toolset.Description)
+	if skill.Description != nil {
+		plan.Description = types.StringValue(*skill.Description)
 	} else {
 		plan.Description = types.StringNull()
 	}
 
-	if toolset.CreatedAt != nil {
-		plan.CreatedAt = types.StringValue(toolset.CreatedAt.String())
+	if skill.CreatedAt != nil {
+		plan.CreatedAt = types.StringValue(skill.CreatedAt.String())
 	}
 
-	if toolset.UpdatedAt != nil {
-		plan.UpdatedAt = types.StringValue(toolset.UpdatedAt.String())
+	if skill.UpdatedAt != nil {
+		plan.UpdatedAt = types.StringValue(skill.UpdatedAt.String())
 	}
 
 	diags = resp.State.Set(ctx, plan)
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *toolsetResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var state toolsetResourceModel
+func (r *skillResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var state skillResourceModel
 	diags := req.State.Get(ctx, &state)
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
 
-	err := r.client.DeleteToolSet(state.ID.ValueString())
+	err := r.client.DeleteSkill(state.ID.ValueString())
 	if err != nil {
-		resp.Diagnostics.AddError("Error deleting toolset", err.Error())
+		resp.Diagnostics.AddError("Error deleting skill", err.Error())
 		return
 	}
 }
 
-func (r *toolsetResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+func (r *skillResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 }

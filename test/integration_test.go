@@ -130,8 +130,8 @@ func TestKubiyaControlPlaneEnvironment(t *testing.T) {
 	t.Logf("Created environment with ID: %s", environmentID)
 }
 
-// TestKubiyaControlPlaneToolSet tests the toolset resource lifecycle
-func TestKubiyaControlPlaneToolSet(t *testing.T) {
+// TestKubiyaControlPlaneSkill tests the skill resource lifecycle
+func TestKubiyaControlPlaneSkill(t *testing.T) {
 	t.Parallel()
 
 	apiKey := os.Getenv("KUBIYA_CONTROL_PLANE_API_KEY")
@@ -145,7 +145,7 @@ func TestKubiyaControlPlaneToolSet(t *testing.T) {
 	}
 
 	terraformOptions := &terraform.Options{
-		TerraformDir: "../examples/toolset",
+		TerraformDir: "../examples/skill",
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
 			"KUBIYA_CONTROL_PLANE_ORG_ID":  orgID,
@@ -156,8 +156,8 @@ func TestKubiyaControlPlaneToolSet(t *testing.T) {
 
 	terraform.InitAndApply(t, terraformOptions)
 
-	toolsetID := terraform.Output(t, terraformOptions, "toolset_id")
-	t.Logf("Created toolset with ID: %s", toolsetID)
+	skillID := terraform.Output(t, terraformOptions, "skill_id")
+	t.Logf("Created skill with ID: %s", skillID)
 }
 
 // TestKubiyaControlPlanePolicy tests the policy resource lifecycle

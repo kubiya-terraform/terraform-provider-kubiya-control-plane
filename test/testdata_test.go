@@ -158,8 +158,8 @@ func TestEnvironmentConfiguration(t *testing.T) {
 	t.Logf("Created environment: ID=%s, Name=%s", environmentID, environmentName)
 }
 
-// TestToolSetConfiguration tests the toolset configuration from testdata
-func TestToolSetConfiguration(t *testing.T) {
+// TestSkillConfiguration tests the skill configuration from testdata
+func TestSkillConfiguration(t *testing.T) {
 	t.Parallel()
 
 	apiKey := os.Getenv("KUBIYA_CONTROL_PLANE_API_KEY")
@@ -173,7 +173,7 @@ func TestToolSetConfiguration(t *testing.T) {
 	}
 
 	terraformOptions := &terraform.Options{
-		TerraformDir: "../testdata/toolsets",
+		TerraformDir: "../testdata/skills",
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
 			"KUBIYA_CONTROL_PLANE_ORG_ID":  orgID,
@@ -185,19 +185,19 @@ func TestToolSetConfiguration(t *testing.T) {
 	terraform.InitAndApply(t, terraformOptions)
 
 	// Test outputs
-	toolsetID := terraform.Output(t, terraformOptions, "toolset_id")
-	assert.NotEmpty(t, toolsetID, "Toolset ID should not be empty")
+	skillID := terraform.Output(t, terraformOptions, "skill_id")
+	assert.NotEmpty(t, skillID, "Skill ID should not be empty")
 
-	toolsetName := terraform.Output(t, terraformOptions, "toolset_name")
-	assert.Equal(t, "test-toolset", toolsetName, "Toolset name should match")
+	skillName := terraform.Output(t, terraformOptions, "skill_name")
+	assert.Equal(t, "test-skill", skillName, "Skill name should match")
 
-	toolsetType := terraform.Output(t, terraformOptions, "toolset_type")
-	assert.Equal(t, "shell", toolsetType, "Toolset type should be shell")
+	skillType := terraform.Output(t, terraformOptions, "skill_type")
+	assert.Equal(t, "shell", skillType, "Skill type should be shell")
 
-	toolsetEnabled := terraform.Output(t, terraformOptions, "toolset_enabled")
-	assert.Equal(t, "true", toolsetEnabled, "Toolset should be enabled")
+	skillEnabled := terraform.Output(t, terraformOptions, "skill_enabled")
+	assert.Equal(t, "true", skillEnabled, "Skill should be enabled")
 
-	t.Logf("Created toolset: ID=%s, Name=%s, Type=%s", toolsetID, toolsetName, toolsetType)
+	t.Logf("Created skill: ID=%s, Name=%s, Type=%s", skillID, skillName, skillType)
 }
 
 // TestPolicyConfiguration tests the policy configuration from testdata

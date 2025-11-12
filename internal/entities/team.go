@@ -19,7 +19,7 @@ type Team struct {
 	Description          *string                `json:"description,omitempty"`
 	Status               TeamStatus             `json:"status,omitempty"`
 	Configuration        map[string]interface{} `json:"configuration,omitempty"`
-	ToolsetIDs           []string               `json:"toolset_ids,omitempty"`
+	SkillIDs             []string               `json:"skill_ids,omitempty"`
 	ExecutionEnvironment map[string]interface{} `json:"execution_environment,omitempty"`
 	CreatedAt            *time.Time             `json:"created_at,omitempty"`
 	UpdatedAt            *time.Time             `json:"updated_at,omitempty"`
@@ -30,7 +30,7 @@ type TeamCreateRequest struct {
 	Name                 string                 `json:"name"`
 	Description          *string                `json:"description,omitempty"`
 	Configuration        map[string]interface{} `json:"configuration,omitempty"`
-	ToolsetIDs           []string               `json:"toolset_ids,omitempty"`
+	SkillIDs             []string               `json:"skill_ids,omitempty"`
 	ExecutionEnvironment map[string]interface{} `json:"execution_environment,omitempty"`
 }
 
@@ -40,6 +40,6 @@ type TeamUpdateRequest struct {
 	Description          *string                `json:"description,omitempty"`
 	Status               *TeamStatus            `json:"status,omitempty"`
 	Configuration        map[string]interface{} `json:"configuration,omitempty"`
-	ToolsetIDs           []string               `json:"toolset_ids,omitempty"`
+	SkillIDs             []string               `json:"skill_ids,omitempty"`
 	ExecutionEnvironment map[string]interface{} `json:"execution_environment,omitempty"`
 }

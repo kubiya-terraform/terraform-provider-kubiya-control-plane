@@ -49,11 +49,11 @@ resource "controlplane_project" "platform" {
 }
 
 # ============================================================================
-# Step 2: Create toolsets
+# Step 2: Create skills
 # ============================================================================
 
-# Create a shell toolset
-resource "controlplane_toolset" "shell_ops" {
+# Create a shell skill
+resource "controlplane_skill" "shell_ops" {
   name        = "shell-operations"
   description = "Shell command execution for operations"
   type        = "shell"
@@ -65,8 +65,8 @@ resource "controlplane_toolset" "shell_ops" {
   })
 }
 
-# Create a file system toolset
-resource "controlplane_toolset" "filesystem" {
+# Create a file system skill
+resource "controlplane_skill" "filesystem" {
   name        = "filesystem-access"
   description = "File system operations"
   type        = "file_system"
@@ -222,9 +222,9 @@ output "monitor_agent_id" {
   description = "Monitor agent ID"
 }
 
-output "shell_toolset_id" {
-  value       = controlplane_toolset.shell_ops.id
-  description = "Shell operations toolset ID"
+output "shell_skill_id" {
+  value       = controlplane_skill.shell_ops.id
+  description = "Shell operations skill ID"
 }
 
 output "security_policy_id" {

@@ -2,12 +2,12 @@
 page_title: "Kubiya Control Plane Provider"
 subcategory: ""
 description: |-
-  Terraform provider for managing Kubiya Control Plane resources including agents, teams, projects, environments, toolsets, and policies.
+  Terraform provider for managing Kubiya Control Plane resources including agents, teams, projects, environments, skills, and policies.
 ---
 
 # Kubiya Control Plane Provider
 
-The Kubiya Control Plane provider allows you to manage Kubiya platform resources using Terraform. This includes AI agents, teams, projects, execution environments, toolsets, and governance policies.
+The Kubiya Control Plane provider allows you to manage Kubiya platform resources using Terraform. This includes AI agents, teams, projects, execution environments, skills, and governance policies.
 
 ## Features
 
@@ -15,7 +15,7 @@ The Kubiya Control Plane provider allows you to manage Kubiya platform resources
 - **Team Organization**: Organize agents into teams with shared configuration
 - **Project Management**: Group resources into projects for better organization
 - **Environment Configuration**: Manage execution environments with custom settings
-- **ToolSet Integration**: Configure various toolsets (filesystem, shell, docker, etc.)
+- **Skill Integration**: Configure various skills (filesystem, shell, docker, etc.)
 - **Policy Governance**: Implement OPA Rego policies for security and compliance
 - **Worker Registration**: Register and manage workers for agent execution
 

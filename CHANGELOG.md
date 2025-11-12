@@ -19,7 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Features
 - **Resources**
   - `controlplane_agent` - Manage AI agents with Claude Code and default runtimes
-  - `controlplane_team` - Manage teams with toolset associations
+  - `controlplane_team` - Manage teams with skill associations
   - `controlplane_project` - Manage projects with policy controls
   - `controlplane_environment` - Manage execution environments
 

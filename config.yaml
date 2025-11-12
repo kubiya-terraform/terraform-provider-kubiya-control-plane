@@ -128,20 +128,20 @@ resources:
         - created_at
         - updated_at
 
-  toolset:
-    description: Toolsets (filesystem, shell, docker, etc.)
+  skill:
+    description: Skills (filesystem, shell, docker, etc.)
     endpoints:
       read:
-        path: /api/v1/toolsets/{id}
+        path: /api/v1/skills/{id}
         method: GET
       create:
-        path: /api/v1/toolsets
+        path: /api/v1/skills
         method: POST
       update:
-        path: /api/v1/toolsets/{id}
+        path: /api/v1/skills/{id}
         method: PATCH
       delete:
-        path: /api/v1/toolsets/{id}
+        path: /api/v1/skills/{id}
         method: DELETE
     attributes:
       required:
@@ -282,10 +282,10 @@ data_sources:
         - created_at
         - updated_at
 
-  toolset:
-    description: Look up existing toolsets
+  skill:
+    description: Look up existing skills
     endpoint:
-      path: /api/v1/toolsets/{id}
+      path: /api/v1/skills/{id}
       method: GET
     attributes:
       required:
@@ -338,7 +338,7 @@ examples:
     - team
     - project
     - environment
-    - toolset
+    - skill
     - policy
     - worker
     - complete-setup

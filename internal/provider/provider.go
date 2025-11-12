@@ -32,9 +32,10 @@ func (p *kubiyaControlPlaneProvider) Resources(context.Context) []func() resourc
 		NewTeamResource,
 		NewProjectResource,
 		NewEnvironmentResource,
-		NewToolSetResource,
+		NewSkillResource,
 		NewWorkerQueueResource,
 		NewPolicyResource,
+		NewJobResource,
 	}
 }
 
@@ -44,10 +45,11 @@ func (p *kubiyaControlPlaneProvider) DataSources(context.Context) []func() datas
 		NewTeamDataSource,
 		NewProjectDataSource,
 		NewEnvironmentDataSource,
-		NewToolSetDataSource,
+		NewSkillDataSource,
 		NewPolicyDataSource,
 		NewWorkerQueueDataSource,
 		NewWorkerQueuesDataSource,
+		NewJobDataSource,
 	}
 }
 

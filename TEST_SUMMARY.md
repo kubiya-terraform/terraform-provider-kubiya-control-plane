@@ -18,7 +18,7 @@ kubiya-control-plane-terraform-provider/
 │   ├── teams/main.tf                  # Team test configuration
 │   ├── projects/main.tf               # Project test configuration
 │   ├── environments/main.tf           # Environment test configuration
-│   ├── toolsets/main.tf               # ToolSet test configuration
+│   ├── skills/main.tf               # Skill test configuration
 │   ├── policies/main.tf               # Policy test configuration
 │   └── workers/main.tf                # Worker test configuration
 ├── TESTING.md                         # Comprehensive testing guide
@@ -34,7 +34,7 @@ Created comprehensive integration tests for all resources:
 - ✅ `TestKubiyaControlPlaneTeam` - Team resource lifecycle
 - ✅ `TestKubiyaControlPlaneProject` - Project resource lifecycle
 - ✅ `TestKubiyaControlPlaneEnvironment` - Environment resource lifecycle
-- ✅ `TestKubiyaControlPlaneToolSet` - ToolSet resource lifecycle
+- ✅ `TestKubiyaControlPlaneSkill` - Skill resource lifecycle
 - ✅ `TestKubiyaControlPlanePolicy` - Policy resource lifecycle
 - ✅ `TestKubiyaControlPlaneWorker` - Worker resource lifecycle
 
@@ -52,7 +52,7 @@ Created focused tests using testdata configurations with assertions:
 - ✅ `TestTeamConfiguration` - Team creation and validation
 - ✅ `TestProjectConfiguration` - Project creation and validation
 - ✅ `TestEnvironmentConfiguration` - Environment with JSON config validation
-- ✅ `TestToolSetConfiguration` - ToolSet with type and enabled status checks
+- ✅ `TestSkillConfiguration` - Skill with type and enabled status checks
 - ✅ `TestPolicyConfiguration` - Policy with sensitive output handling
 - ✅ `TestWorkerConfiguration` - Worker registration and status
 
@@ -88,10 +88,10 @@ Created focused test configurations for each resource:
 - Data source lookup
 - Outputs: environment_id, environment_name, environment_configuration
 
-**toolsets/main.tf**:
-- Shell toolset with allowed_commands config
+**skills/main.tf**:
+- Shell skill with allowed_commands config
 - Data source lookup
-- Outputs: toolset_id, toolset_name, toolset_type, toolset_enabled
+- Outputs: skill_id, skill_name, skill_type, skill_enabled
 
 **policies/main.tf**:
 - OPA Rego policy with approval rules
@@ -192,7 +192,7 @@ require (
 | Team | ✅ | ✅ | ✅ | ✅ |
 | Project | ✅ | ✅ | ✅ | ✅ |
 | Environment | ✅ | ✅ | ✅ | ✅ |
-| ToolSet | ✅ | ✅ | ✅ | ✅ |
+| Skill | ✅ | ✅ | ✅ | ✅ |
 | Policy | ✅ | ✅ | ✅ | ✅ |
 | Worker | ✅ | ✅ | - | ✅ |
 | Complete Setup | ✅ | - | - | - |
@@ -368,7 +368,7 @@ This test structure closely follows the patterns from `terraform-provider-kubiya
 - ✅ `testdata/teams/main.tf` (35 lines) - Team test configuration
 - ✅ `testdata/projects/main.tf` (35 lines) - Project test configuration
 - ✅ `testdata/environments/main.tf` (42 lines) - Environment test configuration
-- ✅ `testdata/toolsets/main.tf` (47 lines) - ToolSet test configuration
+- ✅ `testdata/skills/main.tf` (47 lines) - Skill test configuration
 - ✅ `testdata/policies/main.tf` (60 lines) - Policy test configuration
 - ✅ `testdata/workers/main.tf` (30 lines) - Worker test configuration
 - ✅ `TESTING.md` (450+ lines) - Comprehensive testing guide
