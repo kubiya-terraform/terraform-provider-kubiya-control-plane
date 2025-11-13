@@ -220,6 +220,39 @@ func TestKubiyaControlPlaneWorkerQueue(t *testing.T) {
 	t.Logf("Created worker queue with ID: %s", queueID)
 }
 
+// TestKubiyaControlPlaneJob tests the job resource lifecycle
+func TestKubiyaControlPlaneJob(t *testing.T) {
+	t.Parallel()
+
+	apiKey := os.Getenv("KUBIYA_CONTROL_PLANE_API_KEY")
+	if apiKey == "" {
+		t.Fatal("KUBIYA_CONTROL_PLANE_API_KEY environment variable is not set")
+	}
+
+	orgID := os.Getenv("KUBIYA_CONTROL_PLANE_ORG_ID")
+	if orgID == "" {
+		t.Fatal("KUBIYA_CONTROL_PLANE_ORG_ID environment variable is not set")
+	}
+
+	terraformOptions := &terraform.Options{
+		TerraformDir: "../examples/job",
+		EnvVars: map[string]string{
+			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
+			"KUBIYA_CONTROL_PLANE_ORG_ID":  orgID,
+		},
+	}
+
+	defer terraform.Destroy(t, terraformOptions)
+
+	terraform.InitAndApply(t, terraformOptions)
+
+	jobID := terraform.Output(t, terraformOptions, "daily_report_job_id")
+	t.Logf("Created job with ID: %s", jobID)
+
+	webhookURL := terraform.Output(t, terraformOptions, "webhook_url")
+	t.Logf("Webhook URL: %s", webhookURL)
+}
+
 // TestKubiyaControlPlaneCompleteSetup tests the complete setup example
 func TestKubiyaControlPlaneCompleteSetup(t *testing.T) {
 	apiKey := os.Getenv("KUBIYA_CONTROL_PLANE_API_KEY")

@@ -180,7 +180,77 @@ resource "controlplane_agent" "monitor" {
 }
 
 # ============================================================================
-# Step 6: Register workers (optional - typically done at runtime)
+# Step 6: Create jobs
+# ============================================================================
+
+# Create a cron job for daily health checks
+resource "controlplane_job" "health_check" {
+  name         = "daily-health-check"
+  description  = "Daily health check at 9am UTC"
+  enabled      = true
+  trigger_type = "cron"
+  cron_schedule = "0 9 * * *"  # 9 AM UTC daily
+  cron_timezone = "UTC"
+
+  planning_mode   = "predefined_agent"
+  entity_type     = "agent"
+  entity_id       = controlplane_agent.monitor.id
+  prompt_template = "Run daily health check for all services"
+  system_prompt   = "Check the health of all production services and report any issues"
+
+  executor_type = "auto"
+
+  execution_env_vars = {
+    CHECK_TYPE = "comprehensive"
+    ALERT_ON_FAILURE = "true"
+  }
+}
+
+# Create a webhook job for deployment events
+resource "controlplane_job" "deployment_webhook" {
+  name         = "deployment-handler"
+  description  = "Handle deployment webhook events"
+  enabled      = true
+  trigger_type = "webhook"
+
+  planning_mode   = "predefined_agent"
+  entity_type     = "agent"
+  entity_id       = controlplane_agent.deployer.id
+  prompt_template = "Process deployment request: {{service_name}} version {{version}} to {{environment}}"
+  system_prompt   = "You are a deployment agent. Process deployment requests carefully and verify all prerequisites."
+
+  executor_type = "environment"
+  environment_name = controlplane_environment.production.name
+
+  config = jsonencode({
+    timeout = 1800  # 30 minutes
+    retry_policy = {
+      max_attempts = 3
+      backoff      = "exponential"
+    }
+  })
+}
+
+# Create a manual job for incident response
+resource "controlplane_job" "incident_response" {
+  name         = "incident-response"
+  description  = "Manual incident response job"
+  enabled      = true
+  trigger_type = "manual"
+
+  planning_mode   = "predefined_team"
+  entity_type     = "team"
+  entity_id       = controlplane_team.devops.id
+  prompt_template = "Handle incident: {{incident_id}} - {{description}}"
+  system_prompt   = "You are an incident response team. Coordinate efforts to resolve the incident quickly."
+
+  executor_type = "auto"
+
+  execution_secrets = ["pagerduty_token", "slack_webhook"]
+}
+
+# ============================================================================
+# Step 7: Register workers (optional - typically done at runtime)
 # ============================================================================
 
 resource "controlplane_worker" "worker_01" {
@@ -235,4 +305,19 @@ output "security_policy_id" {
 output "worker_id" {
   value       = controlplane_worker.worker_01.id
   description = "Worker ID"
+}
+
+output "health_check_job_id" {
+  value       = controlplane_job.health_check.id
+  description = "Health check job ID"
+}
+
+output "deployment_webhook_url" {
+  value       = controlplane_job.deployment_webhook.webhook_url
+  description = "Deployment webhook URL"
+}
+
+output "incident_response_job_id" {
+  value       = controlplane_job.incident_response.id
+  description = "Incident response job ID"
 }

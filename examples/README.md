@@ -34,7 +34,8 @@ Each directory contains examples for a specific resource type:
 - **environment/** - Environment resource and data source examples
 - **skill/** - Skill resource and data source examples
 - **policy/** - Policy resource and data source examples
-- **worker/** - Worker resource examples
+- **worker_queue/** - Worker Queue resource and data source examples
+- **job/** - Job resource and data sources (job, jobs) examples
 - **complete-setup/** - End-to-end example showing all resources working together
 
 ## Usage

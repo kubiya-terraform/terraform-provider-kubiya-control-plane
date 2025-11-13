@@ -14,16 +14,21 @@ docs/
 │   ├── team.md                 # Team resource documentation
 │   ├── project.md              # Project resource documentation
 │   ├── environment.md          # Environment resource documentation
-│   ├── skill.md              # Skill resource documentation
+│   ├── skill.md                # Skill resource documentation
 │   ├── policy.md               # Policy resource documentation
-│   └── worker.md               # Worker resource documentation
+│   ├── worker_queue.md         # Worker Queue resource documentation
+│   └── job.md                  # Job resource documentation
 └── data-sources/
     ├── agent.md                # Agent data source documentation
     ├── team.md                 # Team data source documentation
     ├── project.md              # Project data source documentation
     ├── environment.md          # Environment data source documentation
-    ├── skill.md              # Skill data source documentation
-    └── policy.md               # Policy data source documentation
+    ├── skill.md                # Skill data source documentation
+    ├── policy.md               # Policy data source documentation
+    ├── worker_queue.md         # Worker Queue data source documentation
+    ├── worker_queues.md        # Worker Queues (list) data source documentation
+    ├── job.md                  # Job data source documentation
+    └── jobs.md                 # Jobs (list) data source documentation
 ```
 
 ## Resources
@@ -36,7 +41,8 @@ The provider manages the following resources:
 - **controlplane_environment** - Execution environments
 - **controlplane_skill** - Skills (filesystem, shell, docker, etc.)
 - **controlplane_policy** - OPA Rego governance policies
-- **controlplane_worker** - Worker registration
+- **controlplane_worker_queue** - Worker queue configuration and management
+- **controlplane_job** - Scheduled, webhook-triggered, and manual jobs
 
 ## Data Sources
 
@@ -48,6 +54,10 @@ Corresponding data sources for resource lookup:
 - **controlplane_environment** - Look up existing environments
 - **controlplane_skill** - Look up existing skills
 - **controlplane_policy** - Look up existing policies
+- **controlplane_worker_queue** - Look up a worker queue
+- **controlplane_worker_queues** - List all worker queues in an environment
+- **controlplane_job** - Look up a job
+- **controlplane_jobs** - List all jobs
 
 ## Publishing to Terraform Registry
 

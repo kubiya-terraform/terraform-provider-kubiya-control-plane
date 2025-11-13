@@ -50,6 +50,7 @@ func (p *kubiyaControlPlaneProvider) DataSources(context.Context) []func() datas
 		NewWorkerQueueDataSource,
 		NewWorkerQueuesDataSource,
 		NewJobDataSource,
+		NewJobsDataSource,
 	}
 }
 

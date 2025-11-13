@@ -17,7 +17,8 @@ The Kubiya Control Plane provider allows you to manage Kubiya platform resources
 - **Environment Configuration**: Manage execution environments with custom settings
 - **Skill Integration**: Configure various skills (filesystem, shell, docker, etc.)
 - **Policy Governance**: Implement OPA Rego policies for security and compliance
-- **Worker Registration**: Register and manage workers for agent execution
+- **Worker Queue Management**: Configure and manage worker queues for task execution
+- **Job Scheduling**: Create and manage scheduled, webhook-triggered, and manual jobs
 
 ## Authentication
 
