@@ -16,22 +16,24 @@ provider "controlplane" {
 # Example 1: Using all defaults
 # ============================================================================
 
-module "engineering_org_defaults" {
-  source = "../../modules/engineering-org"
-
-  # This will create:
-  # - 1 production environment
-  # - 1 platform project
-  # - 1 devops team
-  # - 2 agents (deployer, monitor)
-  # - 2 skills (shell, filesystem)
-  # - 1 security policy
-  # - 1 worker queue
-  # - 1 health check job
-}
+# Commented out to avoid conflicts with existing resources
+# Uncomment if you want to test the defaults module separately
+# module "engineering_org_defaults" {
+#   source = "../../modules/engineering-org"
+#
+#   # This will create:
+#   # - 1 production environment
+#   # - 1 platform project
+#   # - 1 devops team
+#   # - 2 agents (deployer, monitor)
+#   # - 2 skills (shell, filesystem)
+#   # - 1 security policy
+#   # - 1 worker queue
+#   # - 1 health check job
+# }
 
 # ============================================================================
-# Example 2: Custom configuration with multiple items
+# Example 2: Custom configuration with multiple items (with unique names)
 # ============================================================================
 
 module "engineering_org_custom" {
@@ -39,8 +41,8 @@ module "engineering_org_custom" {
 
   # Multiple environments
   environments = {
-    production = {
-      description = "Production environment"
+    prod_example = {
+      description = "Production environment (example)"
       settings = jsonencode({
         region         = "us-east-1"
         max_workers    = 20
@@ -54,8 +56,8 @@ module "engineering_org_custom" {
         }
       })
     }
-    staging = {
-      description = "Staging environment"
+    staging_example = {
+      description = "Staging environment (example)"
       settings = jsonencode({
         region         = "us-west-2"
         max_workers    = 10
@@ -69,8 +71,8 @@ module "engineering_org_custom" {
         }
       })
     }
-    development = {
-      description = "Development environment"
+    dev_example = {
+      description = "Development environment (example)"
       settings = jsonencode({
         region         = "us-west-2"
         max_workers    = 5
@@ -88,25 +90,25 @@ module "engineering_org_custom" {
 
   # Multiple projects
   projects = {
-    platform = {
-      key         = "PLAT"
-      description = "Platform engineering project"
+    platform_example = {
+      key         = "PLATEX"
+      description = "Platform engineering project (example)"
       settings = jsonencode({
         owner       = "platform-team"
         cost_center = "engineering"
       })
     }
-    data = {
-      key         = "DATA"
-      description = "Data engineering project"
+    data_example = {
+      key         = "DATAEX"
+      description = "Data engineering project (example)"
       settings = jsonencode({
         owner       = "data-team"
         cost_center = "data"
       })
     }
-    security = {
-      key         = "SEC"
-      description = "Security and compliance project"
+    security_example = {
+      key         = "SECEX"
+      description = "Security and compliance project (example)"
       settings = jsonencode({
         owner       = "security-team"
         cost_center = "security"
@@ -116,24 +118,24 @@ module "engineering_org_custom" {
 
   # Multiple teams
   teams = {
-    devops = {
-      description = "DevOps and platform engineering team"
+    devops_example = {
+      description = "DevOps and platform engineering team (example)"
       runtime     = "default"
       configuration = jsonencode({
         max_agents        = 15
         enable_monitoring = true
       })
     }
-    sre = {
-      description = "Site reliability engineering team"
+    sre_example = {
+      description = "Site reliability engineering team (example)"
       runtime     = "default"
       configuration = jsonencode({
         max_agents        = 10
         enable_monitoring = true
       })
     }
-    data_engineering = {
-      description = "Data engineering team"
+    data_eng_example = {
+      description = "Data engineering team (example)"
       runtime     = "default"
       configuration = jsonencode({
         max_agents = 8
@@ -143,8 +145,8 @@ module "engineering_org_custom" {
 
   # Multiple skills
   skills = {
-    shell = {
-      description = "Shell command execution"
+    shell_example = {
+      description = "Shell command execution (example)"
       type        = "shell"
       enabled     = true
       configuration = jsonencode({
@@ -153,8 +155,8 @@ module "engineering_org_custom" {
         working_dir      = "/app"
       })
     }
-    filesystem = {
-      description = "File system operations"
+    filesystem_example = {
+      description = "File system operations (example)"
       type        = "file_system"
       enabled     = true
       configuration = jsonencode({
@@ -163,8 +165,8 @@ module "engineering_org_custom" {
         operations    = ["read", "write", "list", "delete"]
       })
     }
-    docker = {
-      description = "Docker operations"
+    docker_example = {
+      description = "Docker operations (example)"
       type        = "docker"
       enabled     = true
       configuration = jsonencode({
@@ -173,9 +175,9 @@ module "engineering_org_custom" {
         network_mode       = "bridge"
       })
     }
-    api = {
-      description = "API integrations"
-      type        = "api"
+    api_example = {
+      description = "API integrations (example)"
+      type        = "custom"
       enabled     = true
       configuration = jsonencode({
         allowed_domains = ["api.github.com", "api.slack.com", "hooks.slack.com"]
@@ -271,7 +273,7 @@ module "engineering_org_custom" {
         timeout         = 900
         approval_needed = true
       })
-      team_name = "devops"
+      team_name = "devops_example"
     }
     monitor = {
       description = "Monitoring and alerting agent"
@@ -286,7 +288,7 @@ module "engineering_org_custom" {
         check_interval = 60
         alert_channels = ["slack", "pagerduty"]
       })
-      team_name = "sre"
+      team_name = "sre_example"
     }
     incident_responder = {
       description = "Incident response agent"
@@ -300,7 +302,7 @@ module "engineering_org_custom" {
       configuration = jsonencode({
         escalation_timeout = 600
       })
-      team_name = "sre"
+      team_name = "sre_example"
     }
     data_pipeline = {
       description = "Data pipeline management agent"
@@ -314,14 +316,14 @@ module "engineering_org_custom" {
       configuration = jsonencode({
         max_retries = 5
       })
-      team_name = "data_engineering"
+      team_name = "data_eng_example"
     }
   }
 
   # Multiple worker queues
   worker_queues = {
     production-primary = {
-      environment_name   = "production"
+      environment_name   = "prod_example"
       display_name       = "Production Primary Queue"
       description        = "Primary worker queue for production workloads"
       heartbeat_interval = 60
@@ -334,7 +336,7 @@ module "engineering_org_custom" {
       }
     }
     production-secondary = {
-      environment_name   = "production"
+      environment_name   = "prod_example"
       display_name       = "Production Secondary Queue"
       description        = "Secondary worker queue for batch jobs"
       heartbeat_interval = 120
@@ -347,7 +349,7 @@ module "engineering_org_custom" {
       }
     }
     staging-default = {
-      environment_name   = "staging"
+      environment_name   = "staging_example"
       display_name       = "Staging Default Queue"
       description        = "Default worker queue for staging"
       heartbeat_interval = 60
@@ -359,7 +361,7 @@ module "engineering_org_custom" {
       }
     }
     development-default = {
-      environment_name   = "development"
+      environment_name   = "dev_example"
       display_name       = "Development Default Queue"
       description        = "Default worker queue for development"
       heartbeat_interval = 120
@@ -399,11 +401,11 @@ module "engineering_org_custom" {
       cron_timezone = "UTC"
       planning_mode = "predefined_team"
       entity_type   = "team"
-      entity_name   = "devops"
+      entity_name   = "devops_example"
       prompt_template = "Perform nightly backup of all production databases"
       system_prompt = "Execute database backup procedures and verify completion"
       executor_type = "environment"
-      environment_name = "production"
+      environment_name = "prod_example"
       execution_env_vars = {
         BACKUP_TYPE       = "full"
         RETENTION_DAYS    = "30"
@@ -421,7 +423,7 @@ module "engineering_org_custom" {
       prompt_template = "Process deployment: {{service_name}} version {{version}} to {{environment}}"
       system_prompt = "Process deployment requests and verify prerequisites"
       executor_type = "environment"
-      environment_name = "production"
+      environment_name = "prod_example"
       config = jsonencode({
         timeout = 1800 # 30 minutes
         retry_policy = {
@@ -466,10 +468,11 @@ module "engineering_org_custom" {
 # Outputs
 # ============================================================================
 
-output "defaults_summary" {
-  description = "Summary of resources created with defaults"
-  value       = module.engineering_org_defaults.summary
-}
+# Commented out since defaults module is commented out
+# output "defaults_summary" {
+#   description = "Summary of resources created with defaults"
+#   value       = module.engineering_org_defaults.summary
+# }
 
 output "custom_summary" {
   description = "Summary of resources created with custom config"

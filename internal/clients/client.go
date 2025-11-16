@@ -70,16 +70,21 @@ func getBaseURL() string {
 
 // DoRequest performs an HTTP request with proper headers
 func (c *Client) DoRequest(method, path string, body interface{}) (*http.Response, error) {
+	logger := kubiyasentry.GetLogger()
 	var bodyReader io.Reader
+	var jsonBody []byte
+
 	if body != nil {
-		jsonBody, err := json.Marshal(body)
+		var err error
+		jsonBody, err = json.Marshal(body)
 		if err != nil {
 			return nil, fmt.Errorf("failed to marshal request body: %w", err)
 		}
 		bodyReader = bytes.NewBuffer(jsonBody)
 	}
 
-	req, err := http.NewRequest(method, c.BaseURL+path, bodyReader)
+	fullURL := c.BaseURL + path
+	req, err := http.NewRequest(method, fullURL, bodyReader)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create request: %w", err)
 	}
@@ -88,9 +93,55 @@ func (c *Client) DoRequest(method, path string, body interface{}) (*http.Respons
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Authorization", "Bearer "+c.APIKey)
 
+	startTime := time.Now()
 	resp, err := c.HTTPClient.Do(req)
+	duration := time.Since(startTime)
+
 	if err != nil {
+		logger.Error("HTTP request failed",
+			"method", method,
+			"url", fullURL,
+			"error", err.Error(),
+		)
 		return nil, fmt.Errorf("request failed: %w", err)
+	}
+
+	// Log request details if there's an error response
+	if resp.StatusCode >= 400 {
+		logFile := os.Getenv("KUBIYA_API_LOG_FILE")
+		if logFile == "" {
+			logFile = "/tmp/kubiya_api_errors.log"
+		}
+
+		f, err := os.OpenFile(logFile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+		if err == nil {
+			defer f.Close()
+			fmt.Fprintf(f, "\n========== API ERROR ==========\n")
+			fmt.Fprintf(f, "Time: %s\n", time.Now().Format(time.RFC3339))
+			fmt.Fprintf(f, "Method: %s\n", method)
+			fmt.Fprintf(f, "URL: %s\n", fullURL)
+			fmt.Fprintf(f, "Status Code: %d\n", resp.StatusCode)
+			fmt.Fprintf(f, "Duration: %dms\n", duration.Milliseconds())
+			fmt.Fprintf(f, "\n--- Request Headers ---\n")
+			for k, v := range req.Header {
+				if k != "Authorization" { // Don't log auth token
+					fmt.Fprintf(f, "%s: %v\n", k, v)
+				}
+			}
+			if len(jsonBody) > 0 {
+				fmt.Fprintf(f, "\n--- Request Body ---\n%s\n", string(jsonBody))
+			}
+			fmt.Fprintf(f, "===============================\n\n")
+		}
+
+		logger.Error("API Error - Full Request Details",
+			"method", method,
+			"url", fullURL,
+			"status_code", resp.StatusCode,
+			"duration_ms", duration.Milliseconds(),
+			"request_body", string(jsonBody),
+			"log_file", logFile,
+		)
 	}
 
 	return resp, nil
@@ -98,6 +149,7 @@ func (c *Client) DoRequest(method, path string, body interface{}) (*http.Respons
 
 // ParseResponse parses the HTTP response into the provided interface
 func ParseResponse(resp *http.Response, target interface{}) error {
+	logger := kubiyasentry.GetLogger()
 	defer func() { _ = resp.Body.Close() }()
 
 	bodyBytes, err := io.ReadAll(resp.Body)
@@ -106,11 +158,40 @@ func ParseResponse(resp *http.Response, target interface{}) error {
 	}
 
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
+		logFile := os.Getenv("KUBIYA_API_LOG_FILE")
+		if logFile == "" {
+			logFile = "/tmp/kubiya_api_errors.log"
+		}
+
+		f, err := os.OpenFile(logFile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+		if err == nil {
+			defer f.Close()
+			fmt.Fprintf(f, "--- Response Status ---\n")
+			fmt.Fprintf(f, "Status Code: %d\n", resp.StatusCode)
+			fmt.Fprintf(f, "\n--- Response Headers ---\n")
+			for k, v := range resp.Header {
+				fmt.Fprintf(f, "%s: %v\n", k, v)
+			}
+			fmt.Fprintf(f, "\n--- Response Body ---\n%s\n", string(bodyBytes))
+			fmt.Fprintf(f, "===============================\n\n")
+		}
+
+		logger.Error("API Error - Full Response Details",
+			"status_code", resp.StatusCode,
+			"response_body", string(bodyBytes),
+			"response_headers", fmt.Sprintf("%v", resp.Header),
+			"content_type", resp.Header.Get("Content-Type"),
+			"log_file", logFile,
+		)
 		return fmt.Errorf("API error (status %d): %s", resp.StatusCode, string(bodyBytes))
 	}
 
 	if target != nil && len(bodyBytes) > 0 {
 		if err := json.Unmarshal(bodyBytes, target); err != nil {
+			logger.Error("Failed to parse response body",
+				"error", err.Error(),
+				"response_body", string(bodyBytes),
+			)
 			return fmt.Errorf("failed to parse response: %w", err)
 		}
 	}
