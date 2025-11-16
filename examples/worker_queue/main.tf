@@ -26,7 +26,7 @@ resource "controlplane_worker_queue" "example" {
   name               = "default-queue"
   display_name       = "Default Worker Queue"
   description        = "Main worker queue for production"
-  heartbeat_interval = 30
+  heartbeat_interval = 60 # Default changed from 30 to 60 (lightweight heartbeats)
   max_workers        = 10
 
   tags = ["production", "primary"]

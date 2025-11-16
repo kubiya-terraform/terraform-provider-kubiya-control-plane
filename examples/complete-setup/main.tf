@@ -119,10 +119,12 @@ resource "controlplane_team" "devops" {
   name        = "devops-team"
   description = "DevOps and platform engineering team"
 
+  # Runtime type: "default" (Agno) or "claude_code" (Claude Code SDK)
+  runtime = "default"
+
   configuration = jsonencode({
-    max_agents      = 5
-    default_runtime = "default"
-    slack_webhook   = "https://hooks.slack.com/services/YOUR/WEBHOOK/URL"
+    max_agents    = 5
+    slack_webhook = "https://hooks.slack.com/services/YOUR/WEBHOOK/URL"
   })
 
   capabilities = ["deployment", "monitoring", "incident_response"]
@@ -185,11 +187,11 @@ resource "controlplane_agent" "monitor" {
 
 # Create a cron job for daily health checks
 resource "controlplane_job" "health_check" {
-  name         = "daily-health-check"
-  description  = "Daily health check at 9am UTC"
-  enabled      = true
-  trigger_type = "cron"
-  cron_schedule = "0 9 * * *"  # 9 AM UTC daily
+  name          = "daily-health-check"
+  description   = "Daily health check at 9am UTC"
+  enabled       = true
+  trigger_type  = "cron"
+  cron_schedule = "0 9 * * *" # 9 AM UTC daily
   cron_timezone = "UTC"
 
   planning_mode   = "predefined_agent"
@@ -201,7 +203,7 @@ resource "controlplane_job" "health_check" {
   executor_type = "auto"
 
   execution_env_vars = {
-    CHECK_TYPE = "comprehensive"
+    CHECK_TYPE       = "comprehensive"
     ALERT_ON_FAILURE = "true"
   }
 }
@@ -219,11 +221,11 @@ resource "controlplane_job" "deployment_webhook" {
   prompt_template = "Process deployment request: {{service_name}} version {{version}} to {{environment}}"
   system_prompt   = "You are a deployment agent. Process deployment requests carefully and verify all prerequisites."
 
-  executor_type = "environment"
+  executor_type    = "environment"
   environment_name = controlplane_environment.production.name
 
   config = jsonencode({
-    timeout = 1800  # 30 minutes
+    timeout = 1800 # 30 minutes
     retry_policy = {
       max_attempts = 3
       backoff      = "exponential"

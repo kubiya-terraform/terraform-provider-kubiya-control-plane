@@ -17,22 +17,28 @@ provider "controlplane" {
 resource "controlplane_agent" "example" {
   name        = "example-job-agent"
   description = "Agent for job examples"
-  runner      = "kubiya"
-  model       = "azure/gpt-4"
-  image       = "kubiya/agent:stable"
+  model_id    = "kubiya/claude-sonnet-4"
+  runtime     = "default"
 
-  environment_variables = {
-    LOG_LEVEL = "info"
-  }
+  llm_config = jsonencode({
+    temperature = 0.7
+    max_tokens  = 4096
+  })
+
+  configuration = jsonencode({
+    environment_variables = {
+      LOG_LEVEL = "info"
+    }
+  })
 }
 
 # Create a cron-triggered job
 resource "controlplane_job" "daily_report" {
-  name         = "daily-report-job"
-  description  = "Generate daily report at 5pm Eastern Time"
-  enabled      = true
-  trigger_type = "cron"
-  cron_schedule = "0 17 * * *"       # 5 PM daily
+  name          = "daily-report-job"
+  description   = "Generate daily report at 5pm Eastern Time"
+  enabled       = true
+  trigger_type  = "cron"
+  cron_schedule = "0 17 * * *" # 5 PM daily
   cron_timezone = "America/New_York"
 
   planning_mode   = "predefined_agent"

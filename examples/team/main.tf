@@ -18,10 +18,12 @@ resource "controlplane_team" "example" {
   name        = "test-team"
   description = "A test team for demonstration"
 
+  # Runtime type: "default" (Agno) or "claude_code" (Claude Code SDK)
+  runtime = "default"
+
   # Team configuration
   configuration = jsonencode({
     max_agents        = 10
-    default_runtime   = "default"
     enable_monitoring = true
   })
 }

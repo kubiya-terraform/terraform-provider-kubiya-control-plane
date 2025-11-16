@@ -41,6 +41,10 @@ resource "controlplane_environment" "staging" {
 resource "controlplane_team" "ml_team" {
   name        = "ml-team"
   description = "Machine Learning Team"
+
+  # Runtime type: "default" (Agno) or "claude_code" (Claude Code SDK)
+  runtime = "default"
+
   configuration = jsonencode({
     slack_channel = "#ml-team"
     timezone      = "UTC"
@@ -83,6 +87,9 @@ resource "controlplane_agent" "model_trainer" {
 resource "controlplane_team" "ops_team" {
   name        = "ops-team"
   description = "Operations Team"
+
+  # Runtime type: "default" (Agno) or "claude_code" (Claude Code SDK)
+  runtime = "claude_code"
 }
 
 resource "controlplane_agent" "ops_assistant" {
@@ -111,9 +118,9 @@ output "ml_team_id" {
 
 output "agents" {
   value = {
-    data_analyst   = controlplane_agent.data_analyst.id
-    model_trainer  = controlplane_agent.model_trainer.id
-    ops_assistant  = controlplane_agent.ops_assistant.id
+    data_analyst  = controlplane_agent.data_analyst.id
+    model_trainer = controlplane_agent.model_trainer.id
+    ops_assistant = controlplane_agent.ops_assistant.id
   }
   description = "Agent IDs"
 }
