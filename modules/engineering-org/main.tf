@@ -22,24 +22,24 @@ resource "controlplane_environment" "this" {
   name        = each.key
   description = each.value.description
 
-  settings = jsonencode(merge(
-    {
+  settings = coalesce(
+    each.value.settings,
+    jsonencode({
       region         = "us-east-1"
       max_workers    = 10
       auto_scaling   = true
       retention_days = 30
-    },
-    each.value.settings
-  ))
+    })
+  )
 
-  execution_environment = jsonencode(merge(
-    {
+  execution_environment = coalesce(
+    each.value.execution_environment,
+    jsonencode({
       env_vars = {
         LOG_LEVEL = "info"
       }
-    },
-    each.value.execution_environment
-  ))
+    })
+  )
 }
 
 # ============================================================================
@@ -53,13 +53,13 @@ resource "controlplane_project" "this" {
   key         = each.value.key
   description = each.value.description
 
-  settings = jsonencode(merge(
-    {
+  settings = coalesce(
+    each.value.settings,
+    jsonencode({
       owner       = "engineering"
       environment = "production"
-    },
-    each.value.settings
-  ))
+    })
+  )
 }
 
 # ============================================================================
@@ -73,14 +73,12 @@ resource "controlplane_team" "this" {
   description = each.value.description
   runtime     = each.value.runtime
 
-  configuration = jsonencode(merge(
-    {
+  configuration = coalesce(
+    each.value.configuration,
+    jsonencode({
       max_agents = 10
-    },
-    each.value.configuration
-  ))
-
-  capabilities = each.value.capabilities
+    })
+  )
 }
 
 # ============================================================================
@@ -95,7 +93,7 @@ resource "controlplane_skill" "this" {
   type        = each.value.type
   enabled     = each.value.enabled
 
-  configuration = jsonencode(each.value.configuration)
+  configuration = coalesce(each.value.configuration, jsonencode({}))
 }
 
 # ============================================================================
@@ -124,23 +122,23 @@ resource "controlplane_agent" "this" {
   model_id    = each.value.model_id
   runtime     = each.value.runtime
 
-  llm_config = jsonencode(merge(
-    {
+  llm_config = coalesce(
+    each.value.llm_config,
+    jsonencode({
       temperature = 0.7
       max_tokens  = 2000
-    },
-    each.value.llm_config
-  ))
+    })
+  )
 
   capabilities = each.value.capabilities
 
-  configuration = jsonencode(merge(
-    {
+  configuration = coalesce(
+    each.value.configuration,
+    jsonencode({
       max_retries = 3
       timeout     = 300
-    },
-    each.value.configuration
-  ))
+    })
+  )
 
   team_id = each.value.team_name != null ? controlplane_team.this[each.value.team_name].id : null
 
@@ -198,7 +196,7 @@ resource "controlplane_job" "this" {
   execution_env_vars = each.value.execution_env_vars
   execution_secrets  = each.value.execution_secrets
 
-  config = each.value.config != null ? jsonencode(each.value.config) : null
+  config = each.value.config
 
   depends_on = [
     controlplane_agent.this,

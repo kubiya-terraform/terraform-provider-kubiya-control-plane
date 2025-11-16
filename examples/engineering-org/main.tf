@@ -41,48 +41,48 @@ module "engineering_org_custom" {
   environments = {
     production = {
       description = "Production environment"
-      settings = {
+      settings = jsonencode({
         region         = "us-east-1"
         max_workers    = 20
         auto_scaling   = true
         retention_days = 90
-      }
-      execution_environment = {
+      })
+      execution_environment = jsonencode({
         env_vars = {
           LOG_LEVEL = "info"
           APP_ENV   = "production"
         }
-      }
+      })
     }
     staging = {
       description = "Staging environment"
-      settings = {
+      settings = jsonencode({
         region         = "us-west-2"
         max_workers    = 10
         auto_scaling   = true
         retention_days = 30
-      }
-      execution_environment = {
+      })
+      execution_environment = jsonencode({
         env_vars = {
           LOG_LEVEL = "debug"
           APP_ENV   = "staging"
         }
-      }
+      })
     }
     development = {
       description = "Development environment"
-      settings = {
+      settings = jsonencode({
         region         = "us-west-2"
         max_workers    = 5
         auto_scaling   = false
         retention_days = 7
-      }
-      execution_environment = {
+      })
+      execution_environment = jsonencode({
         env_vars = {
           LOG_LEVEL = "debug"
           APP_ENV   = "development"
         }
-      }
+      })
     }
   }
 
@@ -91,26 +91,26 @@ module "engineering_org_custom" {
     platform = {
       key         = "PLAT"
       description = "Platform engineering project"
-      settings = {
+      settings = jsonencode({
         owner       = "platform-team"
         cost_center = "engineering"
-      }
+      })
     }
     data = {
       key         = "DATA"
       description = "Data engineering project"
-      settings = {
+      settings = jsonencode({
         owner       = "data-team"
         cost_center = "data"
-      }
+      })
     }
     security = {
       key         = "SEC"
       description = "Security and compliance project"
-      settings = {
+      settings = jsonencode({
         owner       = "security-team"
         cost_center = "security"
-      }
+      })
     }
   }
 
@@ -119,28 +119,25 @@ module "engineering_org_custom" {
     devops = {
       description = "DevOps and platform engineering team"
       runtime     = "default"
-      configuration = {
+      configuration = jsonencode({
         max_agents        = 15
         enable_monitoring = true
-      }
-      capabilities = ["deployment", "monitoring", "incident_response"]
+      })
     }
     sre = {
       description = "Site reliability engineering team"
       runtime     = "default"
-      configuration = {
+      configuration = jsonencode({
         max_agents        = 10
         enable_monitoring = true
-      }
-      capabilities = ["monitoring", "incident_response", "performance_tuning"]
+      })
     }
     data_engineering = {
       description = "Data engineering team"
       runtime     = "default"
-      configuration = {
+      configuration = jsonencode({
         max_agents = 8
-      }
-      capabilities = ["data_pipeline", "etl", "analytics"]
+      })
     }
   }
 
@@ -150,40 +147,40 @@ module "engineering_org_custom" {
       description = "Shell command execution"
       type        = "shell"
       enabled     = true
-      configuration = {
+      configuration = jsonencode({
         allowed_commands = ["kubectl", "helm", "aws", "terraform", "ansible"]
         timeout          = 600
         working_dir      = "/app"
-      }
+      })
     }
     filesystem = {
       description = "File system operations"
       type        = "file_system"
       enabled     = true
-      configuration = {
+      configuration = jsonencode({
         allowed_paths = ["/app/configs", "/app/data", "/tmp"]
         max_file_size = 52428800 # 50MB
         operations    = ["read", "write", "list", "delete"]
-      }
+      })
     }
     docker = {
       description = "Docker operations"
       type        = "docker"
       enabled     = true
-      configuration = {
+      configuration = jsonencode({
         allowed_registries = ["docker.io", "gcr.io", "ghcr.io"]
         max_containers     = 20
         network_mode       = "bridge"
-      }
+      })
     }
     api = {
       description = "API integrations"
       type        = "api"
       enabled     = true
-      configuration = {
+      configuration = jsonencode({
         allowed_domains = ["api.github.com", "api.slack.com", "hooks.slack.com"]
         timeout         = 30
-      }
+      })
     }
   }
 
@@ -264,59 +261,59 @@ module "engineering_org_custom" {
       description = "Production deployment agent"
       model_id    = "gpt-4"
       runtime     = "default"
-      llm_config = {
+      llm_config = jsonencode({
         temperature = 0.3
         max_tokens  = 4000
-      }
+      })
       capabilities = ["kubernetes_deploy", "helm_deploy", "rollback"]
-      configuration = {
+      configuration = jsonencode({
         max_retries     = 3
         timeout         = 900
         approval_needed = true
-      }
+      })
       team_name = "devops"
     }
     monitor = {
       description = "Monitoring and alerting agent"
       model_id    = "gpt-4"
       runtime     = "default"
-      llm_config = {
+      llm_config = jsonencode({
         temperature = 0.5
         max_tokens  = 2000
-      }
+      })
       capabilities = ["metrics_collection", "alerting", "log_analysis"]
-      configuration = {
+      configuration = jsonencode({
         check_interval = 60
         alert_channels = ["slack", "pagerduty"]
-      }
+      })
       team_name = "sre"
     }
     incident_responder = {
       description = "Incident response agent"
       model_id    = "gpt-4"
       runtime     = "default"
-      llm_config = {
+      llm_config = jsonencode({
         temperature = 0.4
         max_tokens  = 3000
-      }
+      })
       capabilities = ["incident_management", "root_cause_analysis", "remediation"]
-      configuration = {
+      configuration = jsonencode({
         escalation_timeout = 600
-      }
+      })
       team_name = "sre"
     }
     data_pipeline = {
       description = "Data pipeline management agent"
       model_id    = "gpt-4"
       runtime     = "default"
-      llm_config = {
+      llm_config = jsonencode({
         temperature = 0.6
         max_tokens  = 2500
-      }
+      })
       capabilities = ["etl", "data_quality", "pipeline_monitoring"]
-      configuration = {
+      configuration = jsonencode({
         max_retries = 5
-      }
+      })
       team_name = "data_engineering"
     }
   }
@@ -425,13 +422,13 @@ module "engineering_org_custom" {
       system_prompt = "Process deployment requests and verify prerequisites"
       executor_type = "environment"
       environment_name = "production"
-      config = {
+      config = jsonencode({
         timeout = 1800 # 30 minutes
         retry_policy = {
           max_attempts = 3
           backoff      = "exponential"
         }
-      }
+      })
     }
     incident_response = {
       description  = "Manual incident response"

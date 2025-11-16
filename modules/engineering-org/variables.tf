@@ -6,24 +6,14 @@ variable "environments" {
   description = "Map of environments to create"
   type = map(object({
     description           = string
-    settings              = optional(map(any), {})
-    execution_environment = optional(map(any), {})
+    settings              = optional(string, null) # JSON-encoded settings
+    execution_environment = optional(string, null) # JSON-encoded execution environment
   }))
   default = {
     production = {
-      description = "Production environment"
-      settings = {
-        region         = "us-east-1"
-        max_workers    = 10
-        auto_scaling   = true
-        retention_days = 90
-      }
-      execution_environment = {
-        env_vars = {
-          LOG_LEVEL = "info"
-          APP_ENV   = "production"
-        }
-      }
+      description           = "Production environment"
+      settings              = "{\"region\":\"us-east-1\",\"max_workers\":10,\"auto_scaling\":true,\"retention_days\":90}"
+      execution_environment = "{\"env_vars\":{\"LOG_LEVEL\":\"info\",\"APP_ENV\":\"production\"}}"
     }
   }
 }
@@ -37,16 +27,13 @@ variable "projects" {
   type = map(object({
     key         = string
     description = string
-    settings    = optional(map(any), {})
+    settings    = optional(string, null) # JSON-encoded settings
   }))
   default = {
     platform = {
       key         = "PLAT"
       description = "Platform engineering project"
-      settings = {
-        owner       = "platform-team"
-        cost_center = "engineering"
-      }
+      settings    = "{\"owner\":\"platform-team\",\"cost_center\":\"engineering\"}"
     }
   }
 }
@@ -60,18 +47,13 @@ variable "teams" {
   type = map(object({
     description   = string
     runtime       = optional(string, "default")
-    configuration = optional(map(any), {})
-    capabilities  = optional(list(string), [])
+    configuration = optional(string, null) # JSON-encoded configuration
   }))
   default = {
     devops = {
-      description = "DevOps and platform engineering team"
-      runtime     = "default"
-      configuration = {
-        max_agents        = 10
-        enable_monitoring = true
-      }
-      capabilities = ["deployment", "monitoring", "incident_response"]
+      description   = "DevOps and platform engineering team"
+      runtime       = "default"
+      configuration = "{\"max_agents\":10,\"enable_monitoring\":true}"
     }
   }
 }
@@ -86,27 +68,20 @@ variable "skills" {
     description   = string
     type          = string
     enabled       = optional(bool, true)
-    configuration = optional(map(any), {})
+    configuration = optional(string, null) # JSON-encoded configuration
   }))
   default = {
     shell = {
-      description = "Shell command execution"
-      type        = "shell"
-      enabled     = true
-      configuration = {
-        allowed_commands = ["kubectl", "helm", "aws", "terraform"]
-        timeout          = 300
-      }
+      description   = "Shell command execution"
+      type          = "shell"
+      enabled       = true
+      configuration = "{\"allowed_commands\":[\"kubectl\",\"helm\",\"aws\",\"terraform\"],\"timeout\":300}"
     }
     filesystem = {
-      description = "File system operations"
-      type        = "file_system"
-      enabled     = true
-      configuration = {
-        allowed_paths = ["/app/configs", "/app/data"]
-        max_file_size = 10485760 # 10MB
-        operations    = ["read", "write", "list"]
-      }
+      description   = "File system operations"
+      type          = "file_system"
+      enabled       = true
+      configuration = "{\"allowed_paths\":[\"/app/configs\",\"/app/data\"],\"max_file_size\":10485760,\"operations\":[\"read\",\"write\",\"list\"]}"
     }
   }
 }
@@ -160,42 +135,29 @@ variable "agents" {
     description   = string
     model_id      = optional(string, "gpt-4")
     runtime       = optional(string, "default")
-    llm_config    = optional(map(any), {})
+    llm_config    = optional(string, null)       # JSON-encoded LLM configuration
     capabilities  = optional(list(string), [])
-    configuration = optional(map(any), {})
+    configuration = optional(string, null)       # JSON-encoded configuration
     team_name     = optional(string, null)
   }))
   default = {
     deployer = {
-      description = "Deployment agent"
-      model_id    = "gpt-4"
-      runtime     = "default"
-      llm_config = {
-        temperature = 0.3
-        max_tokens  = 4000
-      }
-      capabilities = ["kubernetes_deploy", "helm_deploy", "rollback"]
-      configuration = {
-        max_retries     = 3
-        timeout         = 600
-        approval_needed = true
-      }
-      team_name = "devops"
+      description   = "Deployment agent"
+      model_id      = "gpt-4"
+      runtime       = "default"
+      llm_config    = "{\"temperature\":0.3,\"max_tokens\":4000}"
+      capabilities  = ["kubernetes_deploy", "helm_deploy", "rollback"]
+      configuration = "{\"max_retries\":3,\"timeout\":600,\"approval_needed\":true}"
+      team_name     = "devops"
     }
     monitor = {
-      description = "Monitoring and alerting agent"
-      model_id    = "gpt-4"
-      runtime     = "default"
-      llm_config = {
-        temperature = 0.5
-        max_tokens  = 2000
-      }
-      capabilities = ["metrics_collection", "alerting", "log_analysis"]
-      configuration = {
-        check_interval = 60
-        alert_channels = ["slack", "pagerduty"]
-      }
-      team_name = "devops"
+      description   = "Monitoring and alerting agent"
+      model_id      = "gpt-4"
+      runtime       = "default"
+      llm_config    = "{\"temperature\":0.5,\"max_tokens\":2000}"
+      capabilities  = ["metrics_collection", "alerting", "log_analysis"]
+      configuration = "{\"check_interval\":60,\"alert_channels\":[\"slack\",\"pagerduty\"]}"
+      team_name     = "devops"
     }
   }
 }
@@ -252,7 +214,7 @@ variable "jobs" {
     environment_name   = optional(string, null)
     execution_env_vars = optional(map(string), {})
     execution_secrets  = optional(list(string), [])
-    config             = optional(map(any), null)
+    config             = optional(string, null) # JSON-encoded config
   }))
   default = {
     health_check = {
