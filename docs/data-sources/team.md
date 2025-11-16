@@ -37,7 +37,9 @@ output "team_config" {
 - `name` (String) The name of the team
 - `description` (String) Description of the team
 - `status` (String) Current status of the team
-- `capabilities` (List of String) List of team capabilities
+- `runtime` (String) Runtime type for team leader: 'default' (Agno) or 'claude_code' (Claude Code SDK)
 - `configuration` (String) Team configuration as JSON string
+- `skill_ids` (List of String) List of skill IDs associated with the team
+- `execution_environment` (String) Execution environment configuration as JSON string
 - `created_at` (String) Creation timestamp
 - `updated_at` (String) Last update timestamp

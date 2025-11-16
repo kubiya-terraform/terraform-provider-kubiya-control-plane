@@ -15,6 +15,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Import support for all resources
 - Environment variable configuration (`KUBIYA_CONTROL_PLANE_*`)
 - Comprehensive documentation and examples
+- **Team Resource**: Added `runtime` field to specify team leader runtime type
+  - Values: 'default' (Agno) or 'claude_code' (Claude Code SDK)
+  - Default: "default"
+  - Available in both resource and data source
+
+### Changed
+- **Worker Queue Resource**: Updated `heartbeat_interval` default from 30 to 60 seconds
+  - Description updated to note "lightweight" heartbeats
+  - Backward compatible (explicit values preserved)
 
 ### Features
 - **Resources**

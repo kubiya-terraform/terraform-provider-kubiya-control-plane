@@ -15,11 +15,17 @@ Manages a team in the Kubiya Control Plane. Teams are used to organize agents an
 resource "controlplane_team" "devops" {
   name        = "devops-team"
   description = "DevOps automation team"
+  runtime     = "default"  # or "claude_code"
 
   configuration = jsonencode({
     max_agents        = 10
-    default_runtime   = "default"
     enable_monitoring = true
+  })
+
+  skill_ids = ["skill-id-1", "skill-id-2"]
+
+  execution_environment = jsonencode({
+    ENV_VAR = "value"
   })
 }
 ```
@@ -33,7 +39,10 @@ resource "controlplane_team" "devops" {
 ### Optional
 
 - `description` (String) Description of the team's purpose
+- `runtime` (String) Runtime type for team leader: 'default' (Agno) or 'claude_code' (Claude Code SDK). Defaults to 'default'.
 - `configuration` (String) Team configuration as JSON string
+- `skill_ids` (List of String) List of skill IDs associated with the team
+- `execution_environment` (String) Execution environment configuration as JSON string
 
 ### Read-Only
 

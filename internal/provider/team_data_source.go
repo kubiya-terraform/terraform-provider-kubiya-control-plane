@@ -26,6 +26,7 @@ type teamDataSourceModel struct {
 	Name                 types.String `tfsdk:"name"`
 	Description          types.String `tfsdk:"description"`
 	Status               types.String `tfsdk:"status"`
+	Runtime              types.String `tfsdk:"runtime"`
 	Configuration        types.String `tfsdk:"configuration"`
 	SkillIDs             types.List   `tfsdk:"skill_ids"`
 	ExecutionEnvironment types.String `tfsdk:"execution_environment"`
@@ -55,6 +56,10 @@ func (d *teamDataSource) Schema(_ context.Context, _ datasource.SchemaRequest, r
 			},
 			"status": schema.StringAttribute{
 				Description: "Team status (active, inactive, archived)",
+				Computed:    true,
+			},
+			"runtime": schema.StringAttribute{
+				Description: "Runtime type for team leader: 'default' (Agno) or 'claude_code' (Claude Code SDK)",
 				Computed:    true,
 			},
 			"configuration": schema.StringAttribute{
@@ -123,6 +128,12 @@ func (d *teamDataSource) Read(ctx context.Context, req datasource.ReadRequest, r
 	}
 
 	config.Status = types.StringValue(string(team.Status))
+
+	if team.Runtime != nil {
+		config.Runtime = types.StringValue(*team.Runtime)
+	} else {
+		config.Runtime = types.StringNull()
+	}
 
 	// Convert configuration to JSON string
 	if len(team.Configuration) > 0 {

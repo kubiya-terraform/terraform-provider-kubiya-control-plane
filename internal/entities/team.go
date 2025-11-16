@@ -18,6 +18,7 @@ type Team struct {
 	Name                 string                 `json:"name"`
 	Description          *string                `json:"description,omitempty"`
 	Status               TeamStatus             `json:"status,omitempty"`
+	Runtime              *string                `json:"runtime,omitempty"`
 	Configuration        map[string]interface{} `json:"configuration,omitempty"`
 	SkillIDs             []string               `json:"skill_ids,omitempty"`
 	ExecutionEnvironment map[string]interface{} `json:"execution_environment,omitempty"`
@@ -29,6 +30,7 @@ type Team struct {
 type TeamCreateRequest struct {
 	Name                 string                 `json:"name"`
 	Description          *string                `json:"description,omitempty"`
+	Runtime              *string                `json:"runtime,omitempty"`
 	Configuration        map[string]interface{} `json:"configuration,omitempty"`
 	SkillIDs             []string               `json:"skill_ids,omitempty"`
 	ExecutionEnvironment map[string]interface{} `json:"execution_environment,omitempty"`
@@ -39,6 +41,7 @@ type TeamUpdateRequest struct {
 	Name                 *string                `json:"name,omitempty"`
 	Description          *string                `json:"description,omitempty"`
 	Status               *TeamStatus            `json:"status,omitempty"`
+	Runtime              *string                `json:"runtime,omitempty"`
 	Configuration        map[string]interface{} `json:"configuration,omitempty"`
 	SkillIDs             []string               `json:"skill_ids,omitempty"`
 	ExecutionEnvironment map[string]interface{} `json:"execution_environment,omitempty"`

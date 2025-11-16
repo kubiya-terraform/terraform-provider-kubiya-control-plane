@@ -98,10 +98,10 @@ func (r *workerQueueResource) Schema(_ context.Context, _ resource.SchemaRequest
 				Optional:    true,
 			},
 			"heartbeat_interval": schema.Int64Attribute{
-				Description: "Seconds between heartbeats (10-300)",
+				Description: "Seconds between heartbeats (lightweight) (10-300)",
 				Optional:    true,
 				Computed:    true,
-				Default:     int64default.StaticInt64(30),
+				Default:     int64default.StaticInt64(60),
 			},
 			"tags": schema.ListAttribute{
 				Description: "Tags for the worker queue",

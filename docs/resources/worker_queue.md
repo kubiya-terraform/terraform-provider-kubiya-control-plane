@@ -23,7 +23,7 @@ resource "controlplane_worker_queue" "default" {
   name               = "default-queue"
   display_name       = "Default Worker Queue"
   description        = "Main worker queue for production"
-  heartbeat_interval = 30
+  heartbeat_interval = 60
   max_workers        = 10
 
   tags = ["production", "primary"]
@@ -48,7 +48,7 @@ resource "controlplane_worker_queue" "default" {
 - `description` (String) Queue description
 - `status` (String) Worker queue status (active, inactive, paused). Default: "active"
 - `max_workers` (Number) Maximum number of workers allowed (null = unlimited)
-- `heartbeat_interval` (Number) Seconds between heartbeats (10-300). Default: 30
+- `heartbeat_interval` (Number) Seconds between heartbeats (lightweight) (10-300). Default: 60
 - `tags` (List of String) Tags for the worker queue
 - `settings` (Map of String) Additional settings as key-value pairs
 

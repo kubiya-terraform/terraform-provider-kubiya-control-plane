@@ -31,6 +31,7 @@ type teamResourceModel struct {
 	Name                 types.String `tfsdk:"name"`
 	Description          types.String `tfsdk:"description"`
 	Status               types.String `tfsdk:"status"`
+	Runtime              types.String `tfsdk:"runtime"`
 	Configuration        types.String `tfsdk:"configuration"`
 	SkillIDs             types.List   `tfsdk:"skill_ids"`
 	ExecutionEnvironment types.String `tfsdk:"execution_environment"`
@@ -65,6 +66,14 @@ func (r *teamResource) Schema(_ context.Context, _ resource.SchemaRequest, resp 
 				Description: "Team status (active, inactive, archived)",
 				Computed:    true,
 				Optional:    true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"runtime": schema.StringAttribute{
+				Description: "Runtime type for team leader: 'default' (Agno) or 'claude_code' (Claude Code SDK). Defaults to 'default'.",
+				Optional:    true,
+				Computed:    true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -129,6 +138,11 @@ func (r *teamResource) Create(ctx context.Context, req resource.CreateRequest, r
 		createReq.Description = &desc
 	}
 
+	if !plan.Runtime.IsNull() {
+		runtime := plan.Runtime.ValueString()
+		createReq.Runtime = &runtime
+	}
+
 	if !plan.Configuration.IsNull() {
 		config, err := parseJSON(plan.Configuration.ValueString())
 		if err != nil {
@@ -178,6 +192,12 @@ func (r *teamResource) Create(ctx context.Context, req resource.CreateRequest, r
 		plan.Status = types.StringNull()
 	}
 
+	if team.Runtime != nil {
+		plan.Runtime = types.StringValue(*team.Runtime)
+	} else {
+		plan.Runtime = types.StringNull()
+	}
+
 	if team.CreatedAt != nil {
 		plan.CreatedAt = types.StringValue(team.CreatedAt.String())
 	}
@@ -215,6 +235,12 @@ func (r *teamResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 		state.Status = types.StringValue(string(team.Status))
 	} else {
 		state.Status = types.StringNull()
+	}
+
+	if team.Runtime != nil {
+		state.Runtime = types.StringValue(*team.Runtime)
+	} else {
+		state.Runtime = types.StringNull()
 	}
 
 	if team.CreatedAt != nil {
@@ -262,6 +288,11 @@ func (r *teamResource) Update(ctx context.Context, req resource.UpdateRequest, r
 		updateReq.Status = &status
 	}
 
+	if !plan.Runtime.Equal(state.Runtime) {
+		runtime := plan.Runtime.ValueString()
+		updateReq.Runtime = &runtime
+	}
+
 	// Update team
 	team, err := r.client.UpdateTeam(state.ID.ValueString(), updateReq)
 	if err != nil {
@@ -283,6 +314,12 @@ func (r *teamResource) Update(ctx context.Context, req resource.UpdateRequest, r
 		plan.Status = types.StringValue(string(team.Status))
 	} else {
 		plan.Status = types.StringNull()
+	}
+
+	if team.Runtime != nil {
+		plan.Runtime = types.StringValue(*team.Runtime)
+	} else {
+		plan.Runtime = types.StringNull()
 	}
 
 	if team.CreatedAt != nil {
