@@ -13,14 +13,13 @@ This guide will walk you through setting up and using the Kubiya Control Plane T
 
 - Terraform 1.0 or later installed
 - A Kubiya Control Plane account
-- API credentials (API Key and Organization ID)
+- API credentials (API Key)
 
 ## Step 1: Obtain Credentials
 
 1. Log in to your Kubiya Control Plane account
 2. Navigate to **Settings** → **API Keys**
 3. Generate a new API key
-4. Copy your Organization ID from the account settings
 
 ## Step 2: Configure Environment
 
@@ -28,7 +27,6 @@ Set the required environment variables:
 
 ```bash
 export KUBIYA_CONTROL_PLANE_API_KEY="your-api-key-here"
-export KUBIYA_CONTROL_PLANE_ORG_ID="your-org-id-here"
 # Optional: Override the default API URL
 # export KUBIYA_CONTROL_PLANE_BASE_URL="https://custom-url.example.com"
 ```
@@ -50,7 +48,6 @@ terraform {
 provider "controlplane" {
   # Configuration via environment variables:
   # KUBIYA_CONTROL_PLANE_API_KEY
-  # KUBIYA_CONTROL_PLANE_ORG_ID
   # KUBIYA_CONTROL_PLANE_BASE_URL (optional)
 }
 

@@ -15,10 +15,9 @@ import (
 )
 
 type Client struct {
-	APIKey         string
-	BaseURL        string
-	HTTPClient     *http.Client
-	OrganizationID string
+	APIKey     string
+	BaseURL    string
+	HTTPClient *http.Client
 }
 
 // New creates a new Control Plane API client
@@ -33,13 +32,6 @@ func New(apiKey string) (*Client, error) {
 
 	baseURL := getBaseURL()
 
-	// Get organization ID from environment variable
-	orgID := os.Getenv("KUBIYA_CONTROL_PLANE_ORG_ID")
-	if orgID == "" {
-		logger.Error("Failed to create client", "error", "KUBIYA_CONTROL_PLANE_ORG_ID is missing")
-		return nil, fmt.Errorf("KUBIYA_CONTROL_PLANE_ORG_ID environment variable is required")
-	}
-
 	// Create HTTP client with Sentry tracing transport
 	httpClient := &http.Client{
 		Timeout:   60 * time.Second,
@@ -47,20 +39,17 @@ func New(apiKey string) (*Client, error) {
 	}
 
 	client := &Client{
-		APIKey:         apiKey,
-		BaseURL:        baseURL,
-		OrganizationID: orgID,
-		HTTPClient:     httpClient,
+		APIKey:     apiKey,
+		BaseURL:    baseURL,
+		HTTPClient: httpClient,
 	}
 
 	logger.Info("Created Kubiya Control Plane client",
 		"base_url", baseURL,
-		"organization_id", orgID,
 	)
 
 	kubiyasentry.AddBreadcrumb("client", "Kubiya Control Plane client created", sentry.LevelInfo, map[string]interface{}{
-		"base_url":        baseURL,
-		"organization_id": orgID,
+		"base_url": baseURL,
 	})
 
 	return client, nil
@@ -98,7 +87,6 @@ func (c *Client) DoRequest(method, path string, body interface{}) (*http.Respons
 	// Set headers
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Authorization", "Bearer "+c.APIKey)
-	req.Header.Set("X-Organization-ID", c.OrganizationID)
 
 	resp, err := c.HTTPClient.Do(req)
 	if err != nil {

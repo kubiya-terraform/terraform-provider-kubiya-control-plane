@@ -46,7 +46,6 @@ func TestKubiyaControlPlaneAgent(t *testing.T) {
         TerraformDir: "../examples/agent",
         EnvVars: map[string]string{
             "KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
-            "KUBIYA_CONTROL_PLANE_ORG_ID":  orgID,
         },
     }
     defer terraform.Destroy(t, terraformOptions)
@@ -82,7 +81,6 @@ Integration tests require:
 2. Environment variables set:
    ```bash
    export KUBIYA_CONTROL_PLANE_API_KEY="your-api-key"
-   export KUBIYA_CONTROL_PLANE_ORG_ID="your-org-id"
    ```
 
 ## Test Organization
@@ -286,7 +284,6 @@ jobs:
       - name: Run integration tests
         env:
           KUBIYA_CONTROL_PLANE_API_KEY: ${{ secrets.KUBIYA_API_KEY }}
-          KUBIYA_CONTROL_PLANE_ORG_ID: ${{ secrets.KUBIYA_ORG_ID }}
         run: make test-integration
 ```
 
@@ -385,7 +382,6 @@ When adding a new resource:
 **"API key is not set"**
 ```bash
 export KUBIYA_CONTROL_PLANE_API_KEY="your-key"
-export KUBIYA_CONTROL_PLANE_ORG_ID="your-org-id"
 ```
 
 **"Test timeout"**

@@ -18,7 +18,6 @@ Set the required environment variables:
 
 ```bash
 export KUBIYA_CONTROL_PLANE_API_KEY="your-api-key-here"
-export KUBIYA_CONTROL_PLANE_ORG_ID="your-org-id-here"
 
 # Optional: Override the default API URL
 # export KUBIYA_CONTROL_PLANE_BASE_URL="https://custom-url.example.com"
@@ -78,7 +77,6 @@ func TestKubiyaControlPlaneResource(t *testing.T) {
         TerraformDir: "../examples/resource",
         EnvVars: map[string]string{
             "KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
-            "KUBIYA_CONTROL_PLANE_ORG_ID":  orgID,
         },
     }
 
@@ -200,7 +198,6 @@ To run integration tests in CI/CD:
 - name: Run Integration Tests
   env:
     KUBIYA_CONTROL_PLANE_API_KEY: ${{ secrets.KUBIYA_API_KEY }}
-    KUBIYA_CONTROL_PLANE_ORG_ID: ${{ secrets.KUBIYA_ORG_ID }}
   run: make test-integration
 ```
 
@@ -211,14 +208,12 @@ To run integration tests in CI/CD:
 Make sure you've exported the required environment variables:
 ```bash
 export KUBIYA_CONTROL_PLANE_API_KEY="your-key"
-export KUBIYA_CONTROL_PLANE_ORG_ID="your-org-id"
 ```
 
 ### "Organization ID is required" Error
 
 Both API key and Organization ID must be set:
 ```bash
-export KUBIYA_CONTROL_PLANE_ORG_ID="your-org-id"
 ```
 
 ### Test Timeout

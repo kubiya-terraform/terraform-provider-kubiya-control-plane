@@ -23,15 +23,11 @@ test-unit:
 	@echo "Running unit tests..."
 	go test $$(go list ./... | grep -v '/test$$') -v
 
-# Run integration tests (requires KUBIYA_CONTROL_PLANE_API_KEY and KUBIYA_CONTROL_PLANE_ORG_ID)
+# Run integration tests (requires KUBIYA_CONTROL_PLANE_API_KEY)
 test-integration:
 	@echo "Running integration tests..."
 	@if [ -z "$$KUBIYA_CONTROL_PLANE_API_KEY" ]; then \
 		echo "Error: KUBIYA_CONTROL_PLANE_API_KEY environment variable is not set"; \
-		exit 1; \
-	fi
-	@if [ -z "$$KUBIYA_CONTROL_PLANE_ORG_ID" ]; then \
-		echo "Error: KUBIYA_CONTROL_PLANE_ORG_ID environment variable is not set"; \
 		exit 1; \
 	fi
 	go test ./test -v -timeout 30m

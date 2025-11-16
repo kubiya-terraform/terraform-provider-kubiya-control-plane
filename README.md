@@ -26,11 +26,10 @@ go install
 
 ### Authentication
 
-The provider requires an API key and organization ID to authenticate with the Kubiya Control Plane API. Set the following environment variables:
+The provider requires an API key to authenticate with the Kubiya Control Plane API. Set the following environment variables:
 
 ```shell
 export KUBIYA_CONTROL_PLANE_API_KEY=your_api_key_here
-export KUBIYA_CONTROL_PLANE_ORG_ID=your_organization_id_here
 export KUBIYA_CONTROL_PLANE_BASE_URL=http://localhost:7777  # Optional: override base URL (defaults to https://control-plane.kubiya.ai)
 ```
 
@@ -48,7 +47,6 @@ terraform {
 provider "controlplane" {
   # Configuration is read from environment variables:
   # - KUBIYA_CONTROL_PLANE_API_KEY (required)
-  # - KUBIYA_CONTROL_PLANE_ORG_ID (required)
   # - KUBIYA_CONTROL_PLANE_BASE_URL (optional, defaults to https://control-plane.kubiya.ai)
 }
 

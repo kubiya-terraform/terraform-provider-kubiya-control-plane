@@ -83,13 +83,9 @@ func (p *kubiyaControlPlaneProvider) Configure(ctx context.Context, _ provider.C
 
 	const (
 		apiKeyEnvVar         = "KUBIYA_CONTROL_PLANE_API_KEY"
-		orgIDEnvVar          = "KUBIYA_CONTROL_PLANE_ORG_ID"
 		missingAPIKey        = "Kubiya Control Plane API Key Not Configured"
 		missingAPIKeyDetails = "Please set the Kubiya Control Plane API Key using the environment variable 'KUBIYA_CONTROL_PLANE_API_KEY'. " +
 			"Use the command below:\n> export KUBIYA_CONTROL_PLANE_API_KEY=YOUR_API_KEY"
-		missingOrgID        = "Kubiya Control Plane Organization ID Not Configured"
-		missingOrgIDDetails = "Please set the Organization ID using the environment variable 'KUBIYA_CONTROL_PLANE_ORG_ID'. " +
-			"Use the command below:\n> export KUBIYA_CONTROL_PLANE_ORG_ID=YOUR_ORG_ID"
 	)
 
 	apiKey := os.Getenv(apiKeyEnvVar)
@@ -100,18 +96,9 @@ func (p *kubiyaControlPlaneProvider) Configure(ctx context.Context, _ provider.C
 		return
 	}
 
-	orgID := os.Getenv(orgIDEnvVar)
-	if orgID == "" {
-		logger.Error("Organization ID not configured", "env_var", orgIDEnvVar)
-		kubiyasentry.SetSpanStatus(span, sentry.SpanStatusInvalidArgument)
-		resp.Diagnostics.AddError(missingOrgID, missingOrgIDDetails)
-		return
-	}
-
 	// Set Sentry tags
 	sentry.ConfigureScope(func(scope *sentry.Scope) {
 		scope.SetTag("provider.version", p.version)
-		scope.SetTag("organization_id", orgID)
 	})
 
 	// Log client creation attempt

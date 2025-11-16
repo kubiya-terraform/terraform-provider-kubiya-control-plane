@@ -9,7 +9,6 @@ Before running any examples, ensure you have:
 1. **Terraform installed** (version 1.0 or later)
 2. **Kubiya Control Plane credentials**:
    - API Key
-   - Organization ID
 
 ## Configuration
 
@@ -17,7 +16,6 @@ Set the required environment variables:
 
 ```bash
 export KUBIYA_CONTROL_PLANE_API_KEY="your-api-key"
-export KUBIYA_CONTROL_PLANE_ORG_ID="your-org-id"
 # Optional: Override the default API URL
 # export KUBIYA_CONTROL_PLANE_BASE_URL="https://custom-url.example.com"
 ```

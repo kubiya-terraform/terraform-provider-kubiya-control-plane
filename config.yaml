@@ -8,7 +8,6 @@ authentication:
   type: bearer_token
   environment_variables:
     - KUBIYA_CONTROL_PLANE_API_KEY
-    - KUBIYA_CONTROL_PLANE_ORG_ID
     - KUBIYA_CONTROL_PLANE_BASE_URL  # Optional override
 
 resources:
@@ -321,7 +320,6 @@ testing:
     count: 8
     requires:
       - KUBIYA_CONTROL_PLANE_API_KEY
-      - KUBIYA_CONTROL_PLANE_ORG_ID
 
   testdata_tests:
     location: test/testdata_test.go
@@ -329,7 +327,6 @@ testing:
     configurations: testdata/
     requires:
       - KUBIYA_CONTROL_PLANE_API_KEY
-      - KUBIYA_CONTROL_PLANE_ORG_ID
 
 examples:
   location: examples/

@@ -16,16 +16,10 @@ func TestKubiyaControlPlaneAgent(t *testing.T) {
 		t.Fatal("KUBIYA_CONTROL_PLANE_API_KEY environment variable is not set")
 	}
 
-	orgID := os.Getenv("KUBIYA_CONTROL_PLANE_ORG_ID")
-	if orgID == "" {
-		t.Fatal("KUBIYA_CONTROL_PLANE_ORG_ID environment variable is not set")
-	}
-
 	terraformOptions := &terraform.Options{
 		TerraformDir: "../examples/agent",
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
-			"KUBIYA_CONTROL_PLANE_ORG_ID":  orgID,
 		},
 	}
 
@@ -49,16 +43,10 @@ func TestKubiyaControlPlaneTeam(t *testing.T) {
 		t.Fatal("KUBIYA_CONTROL_PLANE_API_KEY environment variable is not set")
 	}
 
-	orgID := os.Getenv("KUBIYA_CONTROL_PLANE_ORG_ID")
-	if orgID == "" {
-		t.Fatal("KUBIYA_CONTROL_PLANE_ORG_ID environment variable is not set")
-	}
-
 	terraformOptions := &terraform.Options{
 		TerraformDir: "../examples/team",
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
-			"KUBIYA_CONTROL_PLANE_ORG_ID":  orgID,
 		},
 	}
 
@@ -79,16 +67,10 @@ func TestKubiyaControlPlaneProject(t *testing.T) {
 		t.Fatal("KUBIYA_CONTROL_PLANE_API_KEY environment variable is not set")
 	}
 
-	orgID := os.Getenv("KUBIYA_CONTROL_PLANE_ORG_ID")
-	if orgID == "" {
-		t.Fatal("KUBIYA_CONTROL_PLANE_ORG_ID environment variable is not set")
-	}
-
 	terraformOptions := &terraform.Options{
 		TerraformDir: "../examples/project",
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
-			"KUBIYA_CONTROL_PLANE_ORG_ID":  orgID,
 		},
 	}
 
@@ -109,16 +91,10 @@ func TestKubiyaControlPlaneEnvironment(t *testing.T) {
 		t.Fatal("KUBIYA_CONTROL_PLANE_API_KEY environment variable is not set")
 	}
 
-	orgID := os.Getenv("KUBIYA_CONTROL_PLANE_ORG_ID")
-	if orgID == "" {
-		t.Fatal("KUBIYA_CONTROL_PLANE_ORG_ID environment variable is not set")
-	}
-
 	terraformOptions := &terraform.Options{
 		TerraformDir: "../examples/environment",
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
-			"KUBIYA_CONTROL_PLANE_ORG_ID":  orgID,
 		},
 	}
 
@@ -139,16 +115,10 @@ func TestKubiyaControlPlaneSkill(t *testing.T) {
 		t.Fatal("KUBIYA_CONTROL_PLANE_API_KEY environment variable is not set")
 	}
 
-	orgID := os.Getenv("KUBIYA_CONTROL_PLANE_ORG_ID")
-	if orgID == "" {
-		t.Fatal("KUBIYA_CONTROL_PLANE_ORG_ID environment variable is not set")
-	}
-
 	terraformOptions := &terraform.Options{
 		TerraformDir: "../examples/skill",
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
-			"KUBIYA_CONTROL_PLANE_ORG_ID":  orgID,
 		},
 	}
 
@@ -169,16 +139,10 @@ func TestKubiyaControlPlanePolicy(t *testing.T) {
 		t.Fatal("KUBIYA_CONTROL_PLANE_API_KEY environment variable is not set")
 	}
 
-	orgID := os.Getenv("KUBIYA_CONTROL_PLANE_ORG_ID")
-	if orgID == "" {
-		t.Fatal("KUBIYA_CONTROL_PLANE_ORG_ID environment variable is not set")
-	}
-
 	terraformOptions := &terraform.Options{
 		TerraformDir: "../examples/policy",
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
-			"KUBIYA_CONTROL_PLANE_ORG_ID":  orgID,
 		},
 	}
 
@@ -199,16 +163,10 @@ func TestKubiyaControlPlaneWorkerQueue(t *testing.T) {
 		t.Fatal("KUBIYA_CONTROL_PLANE_API_KEY environment variable is not set")
 	}
 
-	orgID := os.Getenv("KUBIYA_CONTROL_PLANE_ORG_ID")
-	if orgID == "" {
-		t.Fatal("KUBIYA_CONTROL_PLANE_ORG_ID environment variable is not set")
-	}
-
 	terraformOptions := &terraform.Options{
 		TerraformDir: "../examples/worker_queue",
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
-			"KUBIYA_CONTROL_PLANE_ORG_ID":  orgID,
 		},
 	}
 
@@ -229,16 +187,10 @@ func TestKubiyaControlPlaneJob(t *testing.T) {
 		t.Fatal("KUBIYA_CONTROL_PLANE_API_KEY environment variable is not set")
 	}
 
-	orgID := os.Getenv("KUBIYA_CONTROL_PLANE_ORG_ID")
-	if orgID == "" {
-		t.Fatal("KUBIYA_CONTROL_PLANE_ORG_ID environment variable is not set")
-	}
-
 	terraformOptions := &terraform.Options{
 		TerraformDir: "../examples/job",
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
-			"KUBIYA_CONTROL_PLANE_ORG_ID":  orgID,
 		},
 	}
 
@@ -260,16 +212,10 @@ func TestKubiyaControlPlaneCompleteSetup(t *testing.T) {
 		t.Fatal("KUBIYA_CONTROL_PLANE_API_KEY environment variable is not set")
 	}
 
-	orgID := os.Getenv("KUBIYA_CONTROL_PLANE_ORG_ID")
-	if orgID == "" {
-		t.Fatal("KUBIYA_CONTROL_PLANE_ORG_ID environment variable is not set")
-	}
-
 	terraformOptions := &terraform.Options{
 		TerraformDir: "../examples/complete-setup",
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
-			"KUBIYA_CONTROL_PLANE_ORG_ID":  orgID,
 		},
 	}
 

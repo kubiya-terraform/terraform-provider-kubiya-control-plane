@@ -9,7 +9,6 @@ terraform {
 provider "controlplane" {
   # Configuration will be read from environment variables:
   # - KUBIYA_CONTROL_PLANE_API_KEY (required)
-  # - KUBIYA_CONTROL_PLANE_ORG_ID (required)
   # - KUBIYA_CONTROL_PLANE_BASE_URL (optional, defaults to https://control-plane.kubiya.ai)
 }
 

@@ -87,7 +87,6 @@ Tests the worker resource with:
 Set environment variables:
 ```bash
 export KUBIYA_CONTROL_PLANE_API_KEY="your-api-key"
-export KUBIYA_CONTROL_PLANE_ORG_ID="your-org-id"
 ```
 
 ### Run All Testdata Tests
@@ -244,7 +243,6 @@ When adding a new resource type:
 Make sure environment variables are set:
 ```bash
 export KUBIYA_CONTROL_PLANE_API_KEY="your-key"
-export KUBIYA_CONTROL_PLANE_ORG_ID="your-org-id"
 ```
 
 ### Resources not cleaned up

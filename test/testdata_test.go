@@ -17,16 +17,10 @@ func TestAgentConfiguration(t *testing.T) {
 		t.Skip("KUBIYA_CONTROL_PLANE_API_KEY not set, skipping testdata test")
 	}
 
-	orgID := os.Getenv("KUBIYA_CONTROL_PLANE_ORG_ID")
-	if orgID == "" {
-		t.Skip("KUBIYA_CONTROL_PLANE_ORG_ID not set, skipping testdata test")
-	}
-
 	terraformOptions := &terraform.Options{
 		TerraformDir: "../testdata/agents",
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
-			"KUBIYA_CONTROL_PLANE_ORG_ID":  orgID,
 		},
 	}
 
@@ -56,16 +50,10 @@ func TestTeamConfiguration(t *testing.T) {
 		t.Skip("KUBIYA_CONTROL_PLANE_API_KEY not set, skipping testdata test")
 	}
 
-	orgID := os.Getenv("KUBIYA_CONTROL_PLANE_ORG_ID")
-	if orgID == "" {
-		t.Skip("KUBIYA_CONTROL_PLANE_ORG_ID not set, skipping testdata test")
-	}
-
 	terraformOptions := &terraform.Options{
 		TerraformDir: "../testdata/teams",
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
-			"KUBIYA_CONTROL_PLANE_ORG_ID":  orgID,
 		},
 	}
 
@@ -92,16 +80,10 @@ func TestProjectConfiguration(t *testing.T) {
 		t.Skip("KUBIYA_CONTROL_PLANE_API_KEY not set, skipping testdata test")
 	}
 
-	orgID := os.Getenv("KUBIYA_CONTROL_PLANE_ORG_ID")
-	if orgID == "" {
-		t.Skip("KUBIYA_CONTROL_PLANE_ORG_ID not set, skipping testdata test")
-	}
-
 	terraformOptions := &terraform.Options{
 		TerraformDir: "../testdata/projects",
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
-			"KUBIYA_CONTROL_PLANE_ORG_ID":  orgID,
 		},
 	}
 
@@ -128,16 +110,10 @@ func TestEnvironmentConfiguration(t *testing.T) {
 		t.Skip("KUBIYA_CONTROL_PLANE_API_KEY not set, skipping testdata test")
 	}
 
-	orgID := os.Getenv("KUBIYA_CONTROL_PLANE_ORG_ID")
-	if orgID == "" {
-		t.Skip("KUBIYA_CONTROL_PLANE_ORG_ID not set, skipping testdata test")
-	}
-
 	terraformOptions := &terraform.Options{
 		TerraformDir: "../testdata/environments",
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
-			"KUBIYA_CONTROL_PLANE_ORG_ID":  orgID,
 		},
 	}
 
@@ -167,16 +143,10 @@ func TestSkillConfiguration(t *testing.T) {
 		t.Skip("KUBIYA_CONTROL_PLANE_API_KEY not set, skipping testdata test")
 	}
 
-	orgID := os.Getenv("KUBIYA_CONTROL_PLANE_ORG_ID")
-	if orgID == "" {
-		t.Skip("KUBIYA_CONTROL_PLANE_ORG_ID not set, skipping testdata test")
-	}
-
 	terraformOptions := &terraform.Options{
 		TerraformDir: "../testdata/skills",
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
-			"KUBIYA_CONTROL_PLANE_ORG_ID":  orgID,
 		},
 	}
 
@@ -209,16 +179,10 @@ func TestPolicyConfiguration(t *testing.T) {
 		t.Skip("KUBIYA_CONTROL_PLANE_API_KEY not set, skipping testdata test")
 	}
 
-	orgID := os.Getenv("KUBIYA_CONTROL_PLANE_ORG_ID")
-	if orgID == "" {
-		t.Skip("KUBIYA_CONTROL_PLANE_ORG_ID not set, skipping testdata test")
-	}
-
 	terraformOptions := &terraform.Options{
 		TerraformDir: "../testdata/policies",
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
-			"KUBIYA_CONTROL_PLANE_ORG_ID":  orgID,
 		},
 	}
 
@@ -248,16 +212,10 @@ func TestWorkerConfiguration(t *testing.T) {
 		t.Skip("KUBIYA_CONTROL_PLANE_API_KEY not set, skipping testdata test")
 	}
 
-	orgID := os.Getenv("KUBIYA_CONTROL_PLANE_ORG_ID")
-	if orgID == "" {
-		t.Skip("KUBIYA_CONTROL_PLANE_ORG_ID not set, skipping testdata test")
-	}
-
 	terraformOptions := &terraform.Options{
 		TerraformDir: "../testdata/workers",
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
-			"KUBIYA_CONTROL_PLANE_ORG_ID":  orgID,
 		},
 	}
 
