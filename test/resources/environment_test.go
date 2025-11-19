@@ -148,3 +148,122 @@ func TestEnvironmentComprehensive(t *testing.T) {
 
 	t.Logf("✓ Comprehensive environment tests passed")
 }
+
+// ============================================================================
+// STATE MANAGEMENT TESTS - Update Lifecycle & Import
+// ============================================================================
+
+// TestEnvironmentUpdate_Fields tests updating environment fields
+func TestEnvironmentUpdate_Fields(t *testing.T) {
+	t.Parallel()
+
+	apiKey := os.Getenv("KUBIYA_CONTROL_PLANE_API_KEY")
+	if apiKey == "" {
+		t.Skip("KUBIYA_CONTROL_PLANE_API_KEY not set, skipping test")
+	}
+
+	terraformOptions := &terraform.Options{
+		TerraformDir: "../../testdata/environments/update_fields",
+		EnvVars: map[string]string{
+			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
+		},
+	}
+
+	defer terraform.Destroy(t, terraformOptions)
+
+	terraform.InitAndApply(t, terraformOptions)
+
+	environmentID := terraform.Output(t, terraformOptions, "environment_id")
+	require.NotEmpty(t, environmentID)
+
+	// Update description
+	terraformOptions.Vars = map[string]interface{}{
+		"description": "Updated environment description",
+	}
+	terraform.Apply(t, terraformOptions)
+
+	// Verify in-place update
+	updatedEnvironmentID := terraform.Output(t, terraformOptions, "environment_id")
+	assert.Equal(t, environmentID, updatedEnvironmentID)
+
+	updatedDescription := terraform.Output(t, terraformOptions, "environment_description")
+	assert.Equal(t, "Updated environment description", updatedDescription)
+
+	t.Logf("✓ Environment update test passed: ID=%s remained stable", environmentID)
+}
+
+// TestEnvironmentImport tests importing an existing environment
+func TestEnvironmentImport(t *testing.T) {
+	t.Parallel()
+
+	apiKey := os.Getenv("KUBIYA_CONTROL_PLANE_API_KEY")
+	if apiKey == "" {
+		t.Skip("KUBIYA_CONTROL_PLANE_API_KEY not set, skipping test")
+	}
+
+	createOptions := &terraform.Options{
+		TerraformDir: "../../testdata/environments/minimal",
+		EnvVars: map[string]string{
+			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
+		},
+	}
+
+	terraform.InitAndApply(t, createOptions)
+	environmentID := terraform.Output(t, createOptions, "environment_id")
+	environmentName := terraform.Output(t, createOptions, "environment_name")
+	require.NotEmpty(t, environmentID)
+
+	terraform.RunTerraformCommand(t, createOptions, "state", "rm", "controlplane_environment.minimal")
+
+	importOptions := &terraform.Options{
+		TerraformDir: "../../testdata/environments/import",
+		EnvVars: map[string]string{
+			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
+		},
+		Vars: map[string]interface{}{
+			"environment_id":   environmentID,
+			"environment_name": environmentName,
+		},
+	}
+
+	defer terraform.Destroy(t, importOptions)
+
+	terraform.Init(t, importOptions)
+	terraform.RunTerraformCommand(t, importOptions, "import", "controlplane_environment.imported", environmentID)
+
+	importedID := terraform.Output(t, importOptions, "imported_environment_id")
+	assert.Equal(t, environmentID, importedID)
+
+	t.Logf("✓ Environment import test passed: Successfully imported environment %s", environmentID)
+}
+
+// TestEnvironmentStateRefresh tests terraform refresh
+func TestEnvironmentStateRefresh(t *testing.T) {
+	t.Parallel()
+
+	apiKey := os.Getenv("KUBIYA_CONTROL_PLANE_API_KEY")
+	if apiKey == "" {
+		t.Skip("KUBIYA_CONTROL_PLANE_API_KEY not set, skipping test")
+	}
+
+	terraformOptions := &terraform.Options{
+		TerraformDir: "../../testdata/environments/minimal",
+		EnvVars: map[string]string{
+			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
+		},
+	}
+
+	defer terraform.Destroy(t, terraformOptions)
+
+	terraform.InitAndApply(t, terraformOptions)
+
+	environmentID := terraform.Output(t, terraformOptions, "environment_id")
+	require.NotEmpty(t, environmentID)
+
+	terraform.RunTerraformCommand(t, terraformOptions, "refresh")
+
+	refreshedID := terraform.Output(t, terraformOptions, "environment_id")
+	assert.Equal(t, environmentID, refreshedID)
+
+	t.Logf("✓ State refresh test passed for environment %s", environmentID)
+}

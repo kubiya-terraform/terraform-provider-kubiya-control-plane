@@ -154,3 +154,125 @@ func TestJobComprehensive(t *testing.T) {
 
 	t.Logf("✓ Comprehensive job tests passed")
 }
+
+// ============================================================================
+// STATE MANAGEMENT TESTS - Update Lifecycle & Import
+// ============================================================================
+
+// TestJobUpdate_Fields tests updating job fields
+func TestJobUpdate_Fields(t *testing.T) {
+	t.Parallel()
+
+	apiKey := os.Getenv("KUBIYA_CONTROL_PLANE_API_KEY")
+	if apiKey == "" {
+		t.Skip("KUBIYA_CONTROL_PLANE_API_KEY not set, skipping test")
+	}
+
+	terraformOptions := &terraform.Options{
+		TerraformDir: "../../testdata/jobs/update_fields",
+		EnvVars: map[string]string{
+			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
+		},
+	}
+
+	defer terraform.Destroy(t, terraformOptions)
+
+	terraform.InitAndApply(t, terraformOptions)
+
+	jobID := terraform.Output(t, terraformOptions, "job_id")
+	require.NotEmpty(t, jobID)
+
+	// Update description
+	terraformOptions.Vars = map[string]interface{}{
+		"description": "Updated job description",
+	}
+	terraform.Apply(t, terraformOptions)
+
+	// Verify in-place update
+	updatedJobID := terraform.Output(t, terraformOptions, "job_id")
+	assert.Equal(t, jobID, updatedJobID)
+
+	updatedDescription := terraform.Output(t, terraformOptions, "job_description")
+	assert.Equal(t, "Updated job description", updatedDescription)
+
+	t.Logf("✓ Job update test passed: ID=%s remained stable", jobID)
+}
+
+// TestJobImport tests importing an existing job
+func TestJobImport(t *testing.T) {
+	t.Parallel()
+
+	apiKey := os.Getenv("KUBIYA_CONTROL_PLANE_API_KEY")
+	if apiKey == "" {
+		t.Skip("KUBIYA_CONTROL_PLANE_API_KEY not set, skipping test")
+	}
+
+	createOptions := &terraform.Options{
+		TerraformDir: "../../testdata/jobs/minimal",
+		EnvVars: map[string]string{
+			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
+		},
+	}
+
+	terraform.InitAndApply(t, createOptions)
+	jobID := terraform.Output(t, createOptions, "job_id")
+	jobName := terraform.Output(t, createOptions, "job_name")
+	require.NotEmpty(t, jobID)
+
+	terraform.RunTerraformCommand(t, createOptions, "state", "rm", "controlplane_job.minimal")
+
+	importOptions := &terraform.Options{
+		TerraformDir: "../../testdata/jobs/import",
+		EnvVars: map[string]string{
+			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
+		},
+		Vars: map[string]interface{}{
+			"job_id":   jobID,
+			"job_name": jobName,
+		},
+	}
+
+	defer terraform.Destroy(t, importOptions)
+
+	terraform.Init(t, importOptions)
+	terraform.RunTerraformCommand(t, importOptions, "import", "controlplane_job.imported", jobID)
+
+	importedID := terraform.Output(t, importOptions, "imported_job_id")
+	assert.Equal(t, jobID, importedID)
+
+	importedName := terraform.Output(t, importOptions, "imported_job_name")
+	assert.Equal(t, jobName, importedName)
+
+	t.Logf("✓ Job import test passed: Successfully imported job %s", jobID)
+}
+
+// TestJobStateRefresh tests terraform refresh
+func TestJobStateRefresh(t *testing.T) {
+	t.Parallel()
+
+	apiKey := os.Getenv("KUBIYA_CONTROL_PLANE_API_KEY")
+	if apiKey == "" {
+		t.Skip("KUBIYA_CONTROL_PLANE_API_KEY not set, skipping test")
+	}
+
+	terraformOptions := &terraform.Options{
+		TerraformDir: "../../testdata/jobs/minimal",
+		EnvVars: map[string]string{
+			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
+		},
+	}
+
+	defer terraform.Destroy(t, terraformOptions)
+
+	terraform.InitAndApply(t, terraformOptions)
+
+	jobID := terraform.Output(t, terraformOptions, "job_id")
+	require.NotEmpty(t, jobID)
+
+	terraform.RunTerraformCommand(t, terraformOptions, "refresh")
+
+	refreshedID := terraform.Output(t, terraformOptions, "job_id")
+	assert.Equal(t, jobID, refreshedID)
+
+	t.Logf("✓ State refresh test passed for job %s", jobID)
+}

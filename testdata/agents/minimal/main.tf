@@ -12,9 +12,14 @@ provider "controlplane" {
   # KUBIYA_CONTROL_PLANE_BASE_URL (optional, defaults to https://control-plane.kubiya.ai)
 }
 
+variable "agent_name" {
+  type    = string
+  default = "test-agent-minimal"
+}
+
 # Minimal agent (required fields only)
 resource "controlplane_agent" "minimal" {
-  name = "test-agent-minimal"
+  name = var.agent_name
 }
 
 # Data source test
@@ -33,6 +38,10 @@ output "agent_name" {
 
 output "agent_created_at" {
   value = controlplane_agent.minimal.created_at
+}
+
+output "agent_updated_at" {
+  value = controlplane_agent.minimal.updated_at
 }
 
 output "data_agent_name" {

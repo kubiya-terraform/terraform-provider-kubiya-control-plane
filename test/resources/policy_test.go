@@ -142,3 +142,125 @@ func TestPolicyComprehensive(t *testing.T) {
 
 	t.Logf("✓ Comprehensive policy tests passed")
 }
+
+// ============================================================================
+// STATE MANAGEMENT TESTS - Update Lifecycle & Import
+// ============================================================================
+
+// TestPolicyUpdate_Fields tests updating policy fields
+func TestPolicyUpdate_Fields(t *testing.T) {
+	t.Parallel()
+
+	apiKey := os.Getenv("KUBIYA_CONTROL_PLANE_API_KEY")
+	if apiKey == "" {
+		t.Skip("KUBIYA_CONTROL_PLANE_API_KEY not set, skipping test")
+	}
+
+	terraformOptions := &terraform.Options{
+		TerraformDir: "../../testdata/policies/update_fields",
+		EnvVars: map[string]string{
+			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
+		},
+	}
+
+	defer terraform.Destroy(t, terraformOptions)
+
+	terraform.InitAndApply(t, terraformOptions)
+
+	policyID := terraform.Output(t, terraformOptions, "policy_id")
+	require.NotEmpty(t, policyID)
+
+	// Update description
+	terraformOptions.Vars = map[string]interface{}{
+		"description": "Updated policy description",
+	}
+	terraform.Apply(t, terraformOptions)
+
+	// Verify in-place update
+	updatedPolicyID := terraform.Output(t, terraformOptions, "policy_id")
+	assert.Equal(t, policyID, updatedPolicyID)
+
+	updatedDescription := terraform.Output(t, terraformOptions, "policy_description")
+	assert.Equal(t, "Updated policy description", updatedDescription)
+
+	t.Logf("✓ Policy update test passed: ID=%s remained stable", policyID)
+}
+
+// TestPolicyImport tests importing an existing policy
+func TestPolicyImport(t *testing.T) {
+	t.Parallel()
+
+	apiKey := os.Getenv("KUBIYA_CONTROL_PLANE_API_KEY")
+	if apiKey == "" {
+		t.Skip("KUBIYA_CONTROL_PLANE_API_KEY not set, skipping test")
+	}
+
+	createOptions := &terraform.Options{
+		TerraformDir: "../../testdata/policies/minimal",
+		EnvVars: map[string]string{
+			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
+		},
+	}
+
+	terraform.InitAndApply(t, createOptions)
+	policyID := terraform.Output(t, createOptions, "policy_id")
+	policyName := terraform.Output(t, createOptions, "policy_name")
+	require.NotEmpty(t, policyID)
+
+	terraform.RunTerraformCommand(t, createOptions, "state", "rm", "controlplane_policy.minimal")
+
+	importOptions := &terraform.Options{
+		TerraformDir: "../../testdata/policies/import",
+		EnvVars: map[string]string{
+			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
+		},
+		Vars: map[string]interface{}{
+			"policy_id":   policyID,
+			"policy_name": policyName,
+		},
+	}
+
+	defer terraform.Destroy(t, importOptions)
+
+	terraform.Init(t, importOptions)
+	terraform.RunTerraformCommand(t, importOptions, "import", "controlplane_policy.imported", policyID)
+
+	importedID := terraform.Output(t, importOptions, "imported_policy_id")
+	assert.Equal(t, policyID, importedID)
+
+	importedName := terraform.Output(t, importOptions, "imported_policy_name")
+	assert.Equal(t, policyName, importedName)
+
+	t.Logf("✓ Policy import test passed: Successfully imported policy %s", policyID)
+}
+
+// TestPolicyStateRefresh tests terraform refresh
+func TestPolicyStateRefresh(t *testing.T) {
+	t.Parallel()
+
+	apiKey := os.Getenv("KUBIYA_CONTROL_PLANE_API_KEY")
+	if apiKey == "" {
+		t.Skip("KUBIYA_CONTROL_PLANE_API_KEY not set, skipping test")
+	}
+
+	terraformOptions := &terraform.Options{
+		TerraformDir: "../../testdata/policies/minimal",
+		EnvVars: map[string]string{
+			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
+		},
+	}
+
+	defer terraform.Destroy(t, terraformOptions)
+
+	terraform.InitAndApply(t, terraformOptions)
+
+	policyID := terraform.Output(t, terraformOptions, "policy_id")
+	require.NotEmpty(t, policyID)
+
+	terraform.RunTerraformCommand(t, terraformOptions, "refresh")
+
+	refreshedID := terraform.Output(t, terraformOptions, "policy_id")
+	assert.Equal(t, policyID, refreshedID)
+
+	t.Logf("✓ State refresh test passed for policy %s", policyID)
+}

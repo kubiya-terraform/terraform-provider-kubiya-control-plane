@@ -145,3 +145,125 @@ func TestWorkerQueueComprehensive(t *testing.T) {
 
 	t.Logf("✓ Comprehensive worker queue tests passed")
 }
+
+// ============================================================================
+// STATE MANAGEMENT TESTS - Update Lifecycle & Import
+// ============================================================================
+
+// TestWorkerQueueUpdate_Fields tests updating worker queue fields
+func TestWorkerQueueUpdate_Fields(t *testing.T) {
+	t.Parallel()
+
+	apiKey := os.Getenv("KUBIYA_CONTROL_PLANE_API_KEY")
+	if apiKey == "" {
+		t.Skip("KUBIYA_CONTROL_PLANE_API_KEY not set, skipping test")
+	}
+
+	terraformOptions := &terraform.Options{
+		TerraformDir: "../../testdata/worker_queues/update_fields",
+		EnvVars: map[string]string{
+			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
+		},
+	}
+
+	defer terraform.Destroy(t, terraformOptions)
+
+	terraform.InitAndApply(t, terraformOptions)
+
+	workerQueueID := terraform.Output(t, terraformOptions, "worker_queue_id")
+	require.NotEmpty(t, workerQueueID)
+
+	// Update description
+	terraformOptions.Vars = map[string]interface{}{
+		"description": "Updated worker queue description",
+	}
+	terraform.Apply(t, terraformOptions)
+
+	// Verify in-place update
+	updatedWorkerQueueID := terraform.Output(t, terraformOptions, "worker_queue_id")
+	assert.Equal(t, workerQueueID, updatedWorkerQueueID)
+
+	updatedDescription := terraform.Output(t, terraformOptions, "worker_queue_description")
+	assert.Equal(t, "Updated worker queue description", updatedDescription)
+
+	t.Logf("✓ Worker queue update test passed: ID=%s remained stable", workerQueueID)
+}
+
+// TestWorkerQueueImport tests importing an existing worker queue
+func TestWorkerQueueImport(t *testing.T) {
+	t.Parallel()
+
+	apiKey := os.Getenv("KUBIYA_CONTROL_PLANE_API_KEY")
+	if apiKey == "" {
+		t.Skip("KUBIYA_CONTROL_PLANE_API_KEY not set, skipping test")
+	}
+
+	createOptions := &terraform.Options{
+		TerraformDir: "../../testdata/workers/minimal",
+		EnvVars: map[string]string{
+			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
+		},
+	}
+
+	terraform.InitAndApply(t, createOptions)
+	workerQueueID := terraform.Output(t, createOptions, "worker_queue_id")
+	workerQueueName := terraform.Output(t, createOptions, "worker_queue_name")
+	require.NotEmpty(t, workerQueueID)
+
+	terraform.RunTerraformCommand(t, createOptions, "state", "rm", "controlplane_worker_queue.minimal")
+
+	importOptions := &terraform.Options{
+		TerraformDir: "../../testdata/worker_queues/import",
+		EnvVars: map[string]string{
+			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
+		},
+		Vars: map[string]interface{}{
+			"worker_queue_id":   workerQueueID,
+			"worker_queue_name": workerQueueName,
+		},
+	}
+
+	defer terraform.Destroy(t, importOptions)
+
+	terraform.Init(t, importOptions)
+	terraform.RunTerraformCommand(t, importOptions, "import", "controlplane_worker_queue.imported", workerQueueID)
+
+	importedID := terraform.Output(t, importOptions, "imported_worker_queue_id")
+	assert.Equal(t, workerQueueID, importedID)
+
+	importedName := terraform.Output(t, importOptions, "imported_worker_queue_name")
+	assert.Equal(t, workerQueueName, importedName)
+
+	t.Logf("✓ Worker queue import test passed: Successfully imported worker queue %s", workerQueueID)
+}
+
+// TestWorkerQueueStateRefresh tests terraform refresh
+func TestWorkerQueueStateRefresh(t *testing.T) {
+	t.Parallel()
+
+	apiKey := os.Getenv("KUBIYA_CONTROL_PLANE_API_KEY")
+	if apiKey == "" {
+		t.Skip("KUBIYA_CONTROL_PLANE_API_KEY not set, skipping test")
+	}
+
+	terraformOptions := &terraform.Options{
+		TerraformDir: "../../testdata/workers/minimal",
+		EnvVars: map[string]string{
+			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
+		},
+	}
+
+	defer terraform.Destroy(t, terraformOptions)
+
+	terraform.InitAndApply(t, terraformOptions)
+
+	workerQueueID := terraform.Output(t, terraformOptions, "worker_queue_id")
+	require.NotEmpty(t, workerQueueID)
+
+	terraform.RunTerraformCommand(t, terraformOptions, "refresh")
+
+	refreshedID := terraform.Output(t, terraformOptions, "worker_queue_id")
+	assert.Equal(t, workerQueueID, refreshedID)
+
+	t.Logf("✓ State refresh test passed for worker queue %s", workerQueueID)
+}

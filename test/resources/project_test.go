@@ -166,3 +166,138 @@ func TestProjectComprehensive(t *testing.T) {
 
 	t.Logf("✓ Comprehensive project tests passed")
 }
+
+// ============================================================================
+// STATE MANAGEMENT TESTS - Update Lifecycle & Import
+// ============================================================================
+
+// TestProjectUpdate_Fields tests updating project fields
+func TestProjectUpdate_Fields(t *testing.T) {
+	t.Parallel()
+
+	apiKey := os.Getenv("KUBIYA_CONTROL_PLANE_API_KEY")
+	if apiKey == "" {
+		t.Skip("KUBIYA_CONTROL_PLANE_API_KEY not set, skipping test")
+	}
+
+	terraformOptions := &terraform.Options{
+		TerraformDir: "../../testdata/projects/update_fields",
+		EnvVars: map[string]string{
+			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
+		},
+	}
+
+	defer terraform.Destroy(t, terraformOptions)
+
+	// Initial create
+	terraform.InitAndApply(t, terraformOptions)
+
+	projectID := terraform.Output(t, terraformOptions, "project_id")
+	require.NotEmpty(t, projectID)
+
+	// Update fields
+	terraformOptions.Vars = map[string]interface{}{
+		"description": "Updated project description",
+		"visibility":  "private",
+	}
+	terraform.Apply(t, terraformOptions)
+
+	// Verify in-place update
+	updatedProjectID := terraform.Output(t, terraformOptions, "project_id")
+	assert.Equal(t, projectID, updatedProjectID)
+
+	updatedDescription := terraform.Output(t, terraformOptions, "project_description")
+	assert.Equal(t, "Updated project description", updatedDescription)
+
+	updatedVisibility := terraform.Output(t, terraformOptions, "project_visibility")
+	assert.Equal(t, "private", updatedVisibility)
+
+	t.Logf("✓ Project update test passed: ID=%s remained stable", projectID)
+}
+
+// TestProjectImport tests importing an existing project
+func TestProjectImport(t *testing.T) {
+	t.Parallel()
+
+	apiKey := os.Getenv("KUBIYA_CONTROL_PLANE_API_KEY")
+	if apiKey == "" {
+		t.Skip("KUBIYA_CONTROL_PLANE_API_KEY not set, skipping test")
+	}
+
+	// Create project
+	createOptions := &terraform.Options{
+		TerraformDir: "../../testdata/projects/minimal",
+		EnvVars: map[string]string{
+			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
+		},
+	}
+
+	terraform.InitAndApply(t, createOptions)
+	projectID := terraform.Output(t, createOptions, "project_id")
+	projectName := terraform.Output(t, createOptions, "project_name")
+	projectKey := terraform.Output(t, createOptions, "project_key")
+	require.NotEmpty(t, projectID)
+
+	// Remove from state
+	terraform.RunTerraformCommand(t, createOptions, "state", "rm", "controlplane_project.minimal")
+
+	// Import
+	importOptions := &terraform.Options{
+		TerraformDir: "../../testdata/projects/import",
+		EnvVars: map[string]string{
+			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
+		},
+		Vars: map[string]interface{}{
+			"project_id":   projectID,
+			"project_name": projectName,
+			"project_key":  projectKey,
+		},
+	}
+
+	defer terraform.Destroy(t, importOptions)
+
+	terraform.Init(t, importOptions)
+	terraform.RunTerraformCommand(t, importOptions, "import", "controlplane_project.imported", projectID)
+
+	// Verify import
+	importedID := terraform.Output(t, importOptions, "imported_project_id")
+	assert.Equal(t, projectID, importedID)
+
+	importedName := terraform.Output(t, importOptions, "imported_project_name")
+	assert.Equal(t, projectName, importedName)
+
+	t.Logf("✓ Project import test passed: Successfully imported project %s", projectID)
+}
+
+// TestProjectStateRefresh tests terraform refresh
+func TestProjectStateRefresh(t *testing.T) {
+	t.Parallel()
+
+	apiKey := os.Getenv("KUBIYA_CONTROL_PLANE_API_KEY")
+	if apiKey == "" {
+		t.Skip("KUBIYA_CONTROL_PLANE_API_KEY not set, skipping test")
+	}
+
+	terraformOptions := &terraform.Options{
+		TerraformDir: "../../testdata/projects/minimal",
+		EnvVars: map[string]string{
+			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
+		},
+	}
+
+	defer terraform.Destroy(t, terraformOptions)
+
+	terraform.InitAndApply(t, terraformOptions)
+
+	projectID := terraform.Output(t, terraformOptions, "project_id")
+	require.NotEmpty(t, projectID)
+
+	// Run refresh
+	terraform.RunTerraformCommand(t, terraformOptions, "refresh")
+
+	// Verify state is still valid
+	refreshedID := terraform.Output(t, terraformOptions, "project_id")
+	assert.Equal(t, projectID, refreshedID)
+
+	t.Logf("✓ State refresh test passed for project %s", projectID)
+}

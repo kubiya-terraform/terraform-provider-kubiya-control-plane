@@ -27,6 +27,14 @@ output "team_name" {
   value = controlplane_team.minimal.name
 }
 
+output "team_created_at" {
+  value = controlplane_team.minimal.created_at
+}
+
+output "team_updated_at" {
+  value = controlplane_team.minimal.updated_at
+}
+
 output "data_team_name" {
   value = data.controlplane_team.minimal_lookup.name
 }
