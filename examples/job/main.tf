@@ -24,7 +24,7 @@ resource "controlplane_agent" "example" {
     max_tokens  = 4096
   })
 
-  configuration = jsonencode({
+  settings = jsonencode({
     environment_variables = {
       LOG_LEVEL = "info"
     }

@@ -22,6 +22,9 @@ func TestAgentBasic(t *testing.T) {
 		TerraformDir: "../../examples/agent",
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
+			"TF_CLI_CONFIG_FILE":           os.Getenv("TF_CLI_CONFIG_FILE"),
+			"HOME":                    os.Getenv("HOME"),
+			"TF_SKIP_PROVIDER_VERIFY": "1",
 		},
 	}
 
@@ -46,6 +49,9 @@ func TestAgentMinimal(t *testing.T) {
 		TerraformDir: "../../testdata/agents/minimal",
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
+			"TF_CLI_CONFIG_FILE":           os.Getenv("TF_CLI_CONFIG_FILE"),
+			"HOME":                    os.Getenv("HOME"),
+			"TF_SKIP_PROVIDER_VERIFY": "1",
 		},
 	}
 
@@ -79,6 +85,9 @@ func TestAgentFull(t *testing.T) {
 		TerraformDir: "../../testdata/agents/full",
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
+			"TF_CLI_CONFIG_FILE":           os.Getenv("TF_CLI_CONFIG_FILE"),
+			"HOME":                    os.Getenv("HOME"),
+			"TF_SKIP_PROVIDER_VERIFY": "1",
 		},
 	}
 
@@ -121,6 +130,9 @@ func TestAgentClaudeCode(t *testing.T) {
 		TerraformDir: "../../testdata/agents/claude_code",
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
+			"TF_CLI_CONFIG_FILE":           os.Getenv("TF_CLI_CONFIG_FILE"),
+			"HOME":                    os.Getenv("HOME"),
+			"TF_SKIP_PROVIDER_VERIFY": "1",
 		},
 	}
 
@@ -157,6 +169,9 @@ func TestAgentWithTeam(t *testing.T) {
 		TerraformDir: "../../testdata/agents/with_team",
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
+			"TF_CLI_CONFIG_FILE":           os.Getenv("TF_CLI_CONFIG_FILE"),
+			"HOME":                    os.Getenv("HOME"),
+			"TF_SKIP_PROVIDER_VERIFY": "1",
 		},
 	}
 
@@ -194,6 +209,9 @@ func TestAgentComprehensive(t *testing.T) {
 		TerraformDir: "../../testdata/agents/comprehensive",
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
+			"TF_CLI_CONFIG_FILE":           os.Getenv("TF_CLI_CONFIG_FILE"),
+			"HOME":                    os.Getenv("HOME"),
+			"TF_SKIP_PROVIDER_VERIFY": "1",
 		},
 	}
 
@@ -249,6 +267,9 @@ func TestAgentUpdate_Name(t *testing.T) {
 		TerraformDir: "../../testdata/agents/minimal",
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
+			"TF_CLI_CONFIG_FILE":           os.Getenv("TF_CLI_CONFIG_FILE"),
+			"HOME":                    os.Getenv("HOME"),
+			"TF_SKIP_PROVIDER_VERIFY": "1",
 		},
 	}
 
@@ -297,6 +318,9 @@ func TestAgentUpdate_MultipleFields(t *testing.T) {
 		TerraformDir: "../../testdata/agents/update_multiple",
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
+			"TF_CLI_CONFIG_FILE":           os.Getenv("TF_CLI_CONFIG_FILE"),
+			"HOME":                    os.Getenv("HOME"),
+			"TF_SKIP_PROVIDER_VERIFY": "1",
 		},
 	}
 
@@ -347,6 +371,9 @@ func TestAgentUpdate_Runtime(t *testing.T) {
 		TerraformDir: "../../testdata/agents/update_runtime",
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
+			"TF_CLI_CONFIG_FILE":           os.Getenv("TF_CLI_CONFIG_FILE"),
+			"HOME":                    os.Getenv("HOME"),
+			"TF_SKIP_PROVIDER_VERIFY": "1",
 		},
 	}
 
@@ -391,6 +418,9 @@ func TestAgentUpdate_TeamAssignment(t *testing.T) {
 		TerraformDir: "../../testdata/agents/update_team",
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
+			"TF_CLI_CONFIG_FILE":           os.Getenv("TF_CLI_CONFIG_FILE"),
+			"HOME":                    os.Getenv("HOME"),
+			"TF_SKIP_PROVIDER_VERIFY": "1",
 		},
 	}
 
@@ -438,6 +468,9 @@ func TestAgentImport(t *testing.T) {
 		TerraformDir: "../../testdata/agents/minimal",
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
+			"TF_CLI_CONFIG_FILE":           os.Getenv("TF_CLI_CONFIG_FILE"),
+			"HOME":                    os.Getenv("HOME"),
+			"TF_SKIP_PROVIDER_VERIFY": "1",
 		},
 	}
 
@@ -454,6 +487,9 @@ func TestAgentImport(t *testing.T) {
 		TerraformDir: "../../testdata/agents/import",
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
+			"TF_CLI_CONFIG_FILE":           os.Getenv("TF_CLI_CONFIG_FILE"),
+			"HOME":                    os.Getenv("HOME"),
+			"TF_SKIP_PROVIDER_VERIFY": "1",
 		},
 		Vars: map[string]interface{}{
 			"agent_id":   agentID,
@@ -495,6 +531,9 @@ func TestAgentImport_FullConfiguration(t *testing.T) {
 		TerraformDir: "../../testdata/agents/full",
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
+			"TF_CLI_CONFIG_FILE":           os.Getenv("TF_CLI_CONFIG_FILE"),
+			"HOME":                    os.Getenv("HOME"),
+			"TF_SKIP_PROVIDER_VERIFY": "1",
 		},
 	}
 
@@ -516,6 +555,9 @@ func TestAgentImport_FullConfiguration(t *testing.T) {
 		TerraformDir: "../../testdata/agents/import_full",
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
+			"TF_CLI_CONFIG_FILE":           os.Getenv("TF_CLI_CONFIG_FILE"),
+			"HOME":                    os.Getenv("HOME"),
+			"TF_SKIP_PROVIDER_VERIFY": "1",
 		},
 		Vars: map[string]interface{}{
 			"agent_id": agentID,
@@ -563,6 +605,9 @@ func TestAgentStateRefresh(t *testing.T) {
 		TerraformDir: "../../testdata/agents/minimal",
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
+			"TF_CLI_CONFIG_FILE":           os.Getenv("TF_CLI_CONFIG_FILE"),
+			"HOME":                    os.Getenv("HOME"),
+			"TF_SKIP_PROVIDER_VERIFY": "1",
 		},
 	}
 
@@ -604,6 +649,9 @@ func TestAgentComputedAttributes(t *testing.T) {
 		TerraformDir: "../../testdata/agents/minimal",
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
+			"TF_CLI_CONFIG_FILE":           os.Getenv("TF_CLI_CONFIG_FILE"),
+			"HOME":                    os.Getenv("HOME"),
+			"TF_SKIP_PROVIDER_VERIFY": "1",
 		},
 	}
 

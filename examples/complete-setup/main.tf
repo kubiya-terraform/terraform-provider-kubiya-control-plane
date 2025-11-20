@@ -21,7 +21,7 @@ resource "controlplane_environment" "production" {
   name        = "production"
   description = "Production environment for agents"
 
-  configuration = jsonencode({
+  settings = jsonencode({
     region         = "us-east-1"
     max_workers    = 10
     auto_scaling   = true
@@ -39,9 +39,10 @@ resource "controlplane_environment" "production" {
 # Create a project
 resource "controlplane_project" "platform" {
   name        = "platform-automation"
+  key         = "PLAT"
   description = "Platform automation and operations project"
 
-  metadata = jsonencode({
+  settings = jsonencode({
     owner       = "platform-team"
     cost_center = "engineering"
   })
@@ -58,7 +59,7 @@ resource "controlplane_skill" "shell_ops" {
   type        = "shell"
   enabled     = true
 
-  configuration = jsonencode({
+  settings = jsonencode({
     allowed_commands = ["kubectl", "helm", "aws", "gcloud"]
     timeout          = 300
   })
@@ -71,7 +72,7 @@ resource "controlplane_skill" "filesystem" {
   type        = "file_system"
   enabled     = true
 
-  configuration = jsonencode({
+  settings = jsonencode({
     allowed_paths = ["/app/configs", "/app/data"]
     max_file_size = 10485760
   })
@@ -121,12 +122,10 @@ resource "controlplane_team" "devops" {
   # Runtime type: "default" (Agno) or "claude_code" (Claude Code SDK)
   runtime = "default"
 
-  configuration = jsonencode({
+  settings = jsonencode({
     max_agents    = 5
     slack_webhook = "https://hooks.slack.com/services/YOUR/WEBHOOK/URL"
   })
-
-  capabilities = ["deployment", "monitoring", "incident_response"]
 }
 
 # ============================================================================
@@ -148,7 +147,7 @@ resource "controlplane_agent" "deployer" {
 
   capabilities = ["kubernetes_deploy", "helm_deploy", "rollback"]
 
-  configuration = jsonencode({
+  settings = jsonencode({
     max_retries     = 3
     timeout         = 600
     approval_needed = true
@@ -172,7 +171,7 @@ resource "controlplane_agent" "monitor" {
 
   capabilities = ["metrics_collection", "alerting", "log_analysis"]
 
-  configuration = jsonencode({
+  settings = jsonencode({
     check_interval = 60
     alert_channels = ["slack", "pagerduty"]
   })
@@ -254,14 +253,15 @@ resource "controlplane_job" "incident_response" {
 # Step 7: Register workers (optional - typically done at runtime)
 # ============================================================================
 
-resource "controlplane_worker" "worker_01" {
-  environment_name = controlplane_environment.production.name
-  hostname         = "worker-prod-01"
+resource "controlplane_worker_queue" "worker_01" {
+  environment_id = controlplane_environment.production.id
+  name           = "worker-prod-01"
+  description    = "Production worker queue in us-east-1"
 
-  metadata = jsonencode({
+  settings = {
     region = "us-east-1"
     zone   = "us-east-1a"
-  })
+  }
 }
 
 # ============================================================================
@@ -304,7 +304,7 @@ output "security_policy_id" {
 }
 
 output "worker_id" {
-  value       = controlplane_worker.worker_01.id
+  value       = controlplane_worker_queue.worker_01.id
   description = "Worker ID"
 }
 

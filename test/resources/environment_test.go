@@ -22,6 +22,9 @@ func TestEnvironmentBasic(t *testing.T) {
 		TerraformDir: "../../examples/environment",
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
+			"TF_CLI_CONFIG_FILE":           os.Getenv("TF_CLI_CONFIG_FILE"),
+			"HOME":                    os.Getenv("HOME"),
+			"TF_SKIP_PROVIDER_VERIFY": "1",
 		},
 	}
 
@@ -46,6 +49,9 @@ func TestEnvironmentMinimal(t *testing.T) {
 		TerraformDir: "../../testdata/environments/minimal",
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
+			"TF_CLI_CONFIG_FILE":           os.Getenv("TF_CLI_CONFIG_FILE"),
+			"HOME":                    os.Getenv("HOME"),
+			"TF_SKIP_PROVIDER_VERIFY": "1",
 		},
 	}
 
@@ -82,6 +88,9 @@ func TestEnvironmentFull(t *testing.T) {
 		TerraformDir: "../../testdata/environments/full",
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
+			"TF_CLI_CONFIG_FILE":           os.Getenv("TF_CLI_CONFIG_FILE"),
+			"HOME":                    os.Getenv("HOME"),
+			"TF_SKIP_PROVIDER_VERIFY": "1",
 		},
 	}
 
@@ -121,6 +130,9 @@ func TestEnvironmentComprehensive(t *testing.T) {
 		TerraformDir: "../../testdata/environments/comprehensive",
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
+			"TF_CLI_CONFIG_FILE":           os.Getenv("TF_CLI_CONFIG_FILE"),
+			"HOME":                    os.Getenv("HOME"),
+			"TF_SKIP_PROVIDER_VERIFY": "1",
 		},
 	}
 
@@ -166,6 +178,9 @@ func TestEnvironmentUpdate_Fields(t *testing.T) {
 		TerraformDir: "../../testdata/environments/update_fields",
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
+			"TF_CLI_CONFIG_FILE":           os.Getenv("TF_CLI_CONFIG_FILE"),
+			"HOME":                    os.Getenv("HOME"),
+			"TF_SKIP_PROVIDER_VERIFY": "1",
 		},
 	}
 
@@ -205,6 +220,9 @@ func TestEnvironmentImport(t *testing.T) {
 		TerraformDir: "../../testdata/environments/minimal",
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
+			"TF_CLI_CONFIG_FILE":           os.Getenv("TF_CLI_CONFIG_FILE"),
+			"HOME":                    os.Getenv("HOME"),
+			"TF_SKIP_PROVIDER_VERIFY": "1",
 		},
 	}
 
@@ -219,6 +237,9 @@ func TestEnvironmentImport(t *testing.T) {
 		TerraformDir: "../../testdata/environments/import",
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
+			"TF_CLI_CONFIG_FILE":           os.Getenv("TF_CLI_CONFIG_FILE"),
+			"HOME":                    os.Getenv("HOME"),
+			"TF_SKIP_PROVIDER_VERIFY": "1",
 		},
 		Vars: map[string]interface{}{
 			"environment_id":   environmentID,
@@ -250,6 +271,9 @@ func TestEnvironmentStateRefresh(t *testing.T) {
 		TerraformDir: "../../testdata/environments/minimal",
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
+			"TF_CLI_CONFIG_FILE":           os.Getenv("TF_CLI_CONFIG_FILE"),
+			"HOME":                    os.Getenv("HOME"),
+			"TF_SKIP_PROVIDER_VERIFY": "1",
 		},
 	}
 

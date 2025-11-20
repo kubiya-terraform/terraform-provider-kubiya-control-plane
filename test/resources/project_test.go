@@ -22,6 +22,9 @@ func TestProjectBasic(t *testing.T) {
 		TerraformDir: "../../examples/project",
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
+			"TF_CLI_CONFIG_FILE":           os.Getenv("TF_CLI_CONFIG_FILE"),
+			"HOME":                    os.Getenv("HOME"),
+			"TF_SKIP_PROVIDER_VERIFY": "1",
 		},
 	}
 
@@ -46,6 +49,9 @@ func TestProjectMinimal(t *testing.T) {
 		TerraformDir: "../../testdata/projects/minimal",
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
+			"TF_CLI_CONFIG_FILE":           os.Getenv("TF_CLI_CONFIG_FILE"),
+			"HOME":                    os.Getenv("HOME"),
+			"TF_SKIP_PROVIDER_VERIFY": "1",
 		},
 	}
 
@@ -82,6 +88,9 @@ func TestProjectFull(t *testing.T) {
 		TerraformDir: "../../testdata/projects/full",
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
+			"TF_CLI_CONFIG_FILE":           os.Getenv("TF_CLI_CONFIG_FILE"),
+			"HOME":                    os.Getenv("HOME"),
+			"TF_SKIP_PROVIDER_VERIFY": "1",
 		},
 	}
 
@@ -127,6 +136,9 @@ func TestProjectComprehensive(t *testing.T) {
 		TerraformDir: "../../testdata/projects/comprehensive",
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
+			"TF_CLI_CONFIG_FILE":           os.Getenv("TF_CLI_CONFIG_FILE"),
+			"HOME":                    os.Getenv("HOME"),
+			"TF_SKIP_PROVIDER_VERIFY": "1",
 		},
 	}
 
@@ -184,6 +196,9 @@ func TestProjectUpdate_Fields(t *testing.T) {
 		TerraformDir: "../../testdata/projects/update_fields",
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
+			"TF_CLI_CONFIG_FILE":           os.Getenv("TF_CLI_CONFIG_FILE"),
+			"HOME":                    os.Getenv("HOME"),
+			"TF_SKIP_PROVIDER_VERIFY": "1",
 		},
 	}
 
@@ -229,6 +244,9 @@ func TestProjectImport(t *testing.T) {
 		TerraformDir: "../../testdata/projects/minimal",
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
+			"TF_CLI_CONFIG_FILE":           os.Getenv("TF_CLI_CONFIG_FILE"),
+			"HOME":                    os.Getenv("HOME"),
+			"TF_SKIP_PROVIDER_VERIFY": "1",
 		},
 	}
 
@@ -246,6 +264,9 @@ func TestProjectImport(t *testing.T) {
 		TerraformDir: "../../testdata/projects/import",
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
+			"TF_CLI_CONFIG_FILE":           os.Getenv("TF_CLI_CONFIG_FILE"),
+			"HOME":                    os.Getenv("HOME"),
+			"TF_SKIP_PROVIDER_VERIFY": "1",
 		},
 		Vars: map[string]interface{}{
 			"project_id":   projectID,
@@ -282,6 +303,9 @@ func TestProjectStateRefresh(t *testing.T) {
 		TerraformDir: "../../testdata/projects/minimal",
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
+			"TF_CLI_CONFIG_FILE":           os.Getenv("TF_CLI_CONFIG_FILE"),
+			"HOME":                    os.Getenv("HOME"),
+			"TF_SKIP_PROVIDER_VERIFY": "1",
 		},
 	}
 

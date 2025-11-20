@@ -18,6 +18,9 @@ func TestCompleteSetup(t *testing.T) {
 		TerraformDir: "../../examples/complete-setup",
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
+			"TF_CLI_CONFIG_FILE":           os.Getenv("TF_CLI_CONFIG_FILE"),
+			"HOME":                    os.Getenv("HOME"),
+			"TF_SKIP_PROVIDER_VERIFY": "1",
 		},
 	}
 

@@ -19,7 +19,7 @@ resource "controlplane_skill" "filesystem" {
   type        = "file_system"
   enabled     = true
 
-  configuration = jsonencode({
+  settings = jsonencode({
     allowed_paths = ["/tmp", "/var/app"]
     max_file_size = 10485760 # 10MB
     operations    = ["read", "write", "list"]
@@ -33,7 +33,7 @@ resource "controlplane_skill" "shell" {
   type        = "shell"
   enabled     = true
 
-  configuration = jsonencode({
+  settings = jsonencode({
     allowed_commands = ["ls", "cat", "grep", "find"]
     timeout          = 30
     working_dir      = "/app"
@@ -47,7 +47,7 @@ resource "controlplane_skill" "docker" {
   type        = "docker"
   enabled     = true
 
-  configuration = jsonencode({
+  settings = jsonencode({
     allowed_registries = ["docker.io", "gcr.io"]
     max_containers     = 10
     network_mode       = "bridge"

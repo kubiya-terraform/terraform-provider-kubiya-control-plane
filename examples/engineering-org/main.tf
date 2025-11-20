@@ -121,7 +121,7 @@ module "engineering_org_custom" {
     devops_example = {
       description = "DevOps and platform engineering team (example)"
       runtime     = "default"
-      configuration = jsonencode({
+      settings = jsonencode({
         max_agents        = 15
         enable_monitoring = true
       })
@@ -129,7 +129,7 @@ module "engineering_org_custom" {
     sre_example = {
       description = "Site reliability engineering team (example)"
       runtime     = "default"
-      configuration = jsonencode({
+      settings = jsonencode({
         max_agents        = 10
         enable_monitoring = true
       })
@@ -137,7 +137,7 @@ module "engineering_org_custom" {
     data_eng_example = {
       description = "Data engineering team (example)"
       runtime     = "default"
-      configuration = jsonencode({
+      settings = jsonencode({
         max_agents = 8
       })
     }
@@ -149,7 +149,7 @@ module "engineering_org_custom" {
       description = "Shell command execution (example)"
       type        = "shell"
       enabled     = true
-      configuration = jsonencode({
+      settings = jsonencode({
         allowed_commands = ["kubectl", "helm", "aws", "terraform", "ansible"]
         timeout          = 600
         working_dir      = "/app"
@@ -159,7 +159,7 @@ module "engineering_org_custom" {
       description = "File system operations (example)"
       type        = "file_system"
       enabled     = true
-      configuration = jsonencode({
+      settings = jsonencode({
         allowed_paths = ["/app/configs", "/app/data", "/tmp"]
         max_file_size = 52428800 # 50MB
         operations    = ["read", "write", "list", "delete"]
@@ -169,7 +169,7 @@ module "engineering_org_custom" {
       description = "Docker operations (example)"
       type        = "docker"
       enabled     = true
-      configuration = jsonencode({
+      settings = jsonencode({
         allowed_registries = ["docker.io", "gcr.io", "ghcr.io"]
         max_containers     = 20
         network_mode       = "bridge"
@@ -179,7 +179,7 @@ module "engineering_org_custom" {
       description = "API integrations (example)"
       type        = "custom"
       enabled     = true
-      configuration = jsonencode({
+      settings = jsonencode({
         allowed_domains = ["api.github.com", "api.slack.com", "hooks.slack.com"]
         timeout         = 30
       })
@@ -268,7 +268,7 @@ module "engineering_org_custom" {
         max_tokens  = 4000
       })
       capabilities = ["kubernetes_deploy", "helm_deploy", "rollback"]
-      configuration = jsonencode({
+      settings = jsonencode({
         max_retries     = 3
         timeout         = 900
         approval_needed = true
@@ -284,7 +284,7 @@ module "engineering_org_custom" {
         max_tokens  = 2000
       })
       capabilities = ["metrics_collection", "alerting", "log_analysis"]
-      configuration = jsonencode({
+      settings = jsonencode({
         check_interval = 60
         alert_channels = ["slack", "pagerduty"]
       })
@@ -299,7 +299,7 @@ module "engineering_org_custom" {
         max_tokens  = 3000
       })
       capabilities = ["incident_management", "root_cause_analysis", "remediation"]
-      configuration = jsonencode({
+      settings = jsonencode({
         escalation_timeout = 600
       })
       team_name = "sre_example"
@@ -313,7 +313,7 @@ module "engineering_org_custom" {
         max_tokens  = 2500
       })
       capabilities = ["etl", "data_quality", "pipeline_monitoring"]
-      configuration = jsonencode({
+      settings = jsonencode({
         max_retries = 5
       })
       team_name = "data_eng_example"

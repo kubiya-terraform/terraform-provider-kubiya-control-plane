@@ -21,7 +21,7 @@ resource "controlplane_team" "example" {
   runtime = "default"
 
   # Team configuration
-  configuration = jsonencode({
+  settings = jsonencode({
     max_agents        = 10
     enable_monitoring = true
   })

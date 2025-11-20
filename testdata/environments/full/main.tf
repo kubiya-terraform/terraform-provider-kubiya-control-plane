@@ -14,7 +14,7 @@ resource "controlplane_environment" "full" {
   display_name = "Test Environment Full"
   description  = "Comprehensive test environment with all fields configured"
 
-  configuration = jsonencode({
+  settings = jsonencode({
     region           = "us-east-1"
     instance_type    = "medium"
     auto_scaling     = true

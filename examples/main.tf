@@ -44,7 +44,7 @@ resource "controlplane_team" "ml_team" {
   # Runtime type: "default" (Agno) or "claude_code" (Claude Code SDK)
   runtime = "default"
 
-  configuration = jsonencode({
+  settings = jsonencode({
     slack_channel = "#ml-team"
     timezone      = "UTC"
   })
@@ -63,7 +63,7 @@ resource "controlplane_agent" "data_analyst" {
     max_tokens  = 4096
   })
 
-  configuration = jsonencode({
+  settings = jsonencode({
     role        = "data-analyst"
     permissions = ["read-data", "write-reports"]
   })

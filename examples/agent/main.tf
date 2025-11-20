@@ -31,7 +31,7 @@ resource "controlplane_agent" "example" {
   capabilities = ["code_execution", "file_operations"]
 
   # Agent configuration
-  configuration = jsonencode({
+  settings = jsonencode({
     max_retries = 3
     timeout     = 300
   })

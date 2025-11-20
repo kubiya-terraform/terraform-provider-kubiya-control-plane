@@ -29,6 +29,8 @@ func TestResourceUpdate(t *testing.T, config ResourceLifecycleTestConfig) {
 		TerraformDir: config.TestDataDir,
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
+			"TF_CLI_CONFIG_FILE":           getTFConfigFile(),
+			"HOME":                         os.Getenv("HOME"),
 		},
 	}
 
@@ -70,6 +72,8 @@ func TestResourceImport(t *testing.T, createDir, importDir, resourceType, resour
 		TerraformDir: createDir,
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
+			"TF_CLI_CONFIG_FILE":           getTFConfigFile(),
+			"HOME":                         os.Getenv("HOME"),
 		},
 	}
 
@@ -86,6 +90,8 @@ func TestResourceImport(t *testing.T, createDir, importDir, resourceType, resour
 		TerraformDir: importDir,
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
+			"TF_CLI_CONFIG_FILE":           getTFConfigFile(),
+			"HOME":                         os.Getenv("HOME"),
 		},
 		Vars: map[string]interface{}{
 			fmt.Sprintf("%s_id", resourceType):   resourceID,
@@ -118,6 +124,8 @@ func TestResourceStateRefresh(t *testing.T, testDataDir, resourceType string) {
 		TerraformDir: testDataDir,
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
+			"TF_CLI_CONFIG_FILE":           getTFConfigFile(),
+			"HOME":                         os.Getenv("HOME"),
 		},
 	}
 
@@ -149,6 +157,8 @@ func TestResourceComputedAttributes(t *testing.T, testDataDir, resourceType stri
 		TerraformDir: testDataDir,
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
+			"TF_CLI_CONFIG_FILE":           getTFConfigFile(),
+			"HOME":                         os.Getenv("HOME"),
 		},
 	}
 
@@ -191,4 +201,17 @@ func getAPIKey(t *testing.T) string {
 		t.Skip("KUBIYA_CONTROL_PLANE_API_KEY not set, skipping test")
 	}
 	return apiKey
+}
+
+// getTFConfigFile returns the path to the Terraform CLI config file
+func getTFConfigFile() string {
+	configFile := os.Getenv("TF_CLI_CONFIG_FILE")
+	if configFile == "" {
+		// Default to user's home directory
+		homeDir, err := os.UserHomeDir()
+		if err == nil {
+			configFile = homeDir + "/.terraformrc"
+		}
+	}
+	return configFile
 }
