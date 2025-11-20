@@ -23,8 +23,8 @@ func TestWorkerQueueDataSource(t *testing.T) {
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
 			"TF_CLI_CONFIG_FILE":           os.Getenv("TF_CLI_CONFIG_FILE"),
-			"HOME":                    os.Getenv("HOME"),
-			"TF_SKIP_PROVIDER_VERIFY": "1",
+			"HOME":                         os.Getenv("HOME"),
+			"TF_SKIP_PROVIDER_VERIFY":      "1",
 		},
 	}
 
@@ -68,8 +68,8 @@ func TestWorkerQueuesDataSource(t *testing.T) {
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
 			"TF_CLI_CONFIG_FILE":           os.Getenv("TF_CLI_CONFIG_FILE"),
-			"HOME":                    os.Getenv("HOME"),
-			"TF_SKIP_PROVIDER_VERIFY": "1",
+			"HOME":                         os.Getenv("HOME"),
+			"TF_SKIP_PROVIDER_VERIFY":      "1",
 		},
 	}
 

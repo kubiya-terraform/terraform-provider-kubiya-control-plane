@@ -12,11 +12,11 @@ import (
 
 // ResourceLifecycleTestConfig configures a lifecycle test
 type ResourceLifecycleTestConfig struct {
-	ResourceType     string            // e.g., "agent", "team", "project"
-	ResourceName     string            // e.g., "minimal", "test"
-	TestDataDir      string            // e.g., "../../testdata/agents/minimal"
-	UpdateVars       map[string]interface{} // Variables for update test
-	ExpectedOutputs  map[string]string // Expected output values after update
+	ResourceType    string                 // e.g., "agent", "team", "project"
+	ResourceName    string                 // e.g., "minimal", "test"
+	TestDataDir     string                 // e.g., "../../testdata/agents/minimal"
+	UpdateVars      map[string]interface{} // Variables for update test
+	ExpectedOutputs map[string]string      // Expected output values after update
 }
 
 // TestResourceUpdate tests updating a resource with in-place modifications

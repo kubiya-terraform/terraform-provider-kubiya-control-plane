@@ -1,10 +1,3 @@
-terraform {
-  required_providers {
-    controlplane = {
-      source = "kubiya/control-plane"
-    }
-  }
-}
 
 provider "controlplane" {
   # Configuration via environment variables:

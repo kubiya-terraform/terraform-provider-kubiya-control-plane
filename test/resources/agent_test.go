@@ -23,8 +23,8 @@ func TestAgentBasic(t *testing.T) {
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
 			"TF_CLI_CONFIG_FILE":           os.Getenv("TF_CLI_CONFIG_FILE"),
-			"HOME":                    os.Getenv("HOME"),
-			"TF_SKIP_PROVIDER_VERIFY": "1",
+			"HOME":                         os.Getenv("HOME"),
+			"TF_SKIP_PROVIDER_VERIFY":      "1",
 		},
 	}
 
@@ -50,8 +50,8 @@ func TestAgentMinimal(t *testing.T) {
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
 			"TF_CLI_CONFIG_FILE":           os.Getenv("TF_CLI_CONFIG_FILE"),
-			"HOME":                    os.Getenv("HOME"),
-			"TF_SKIP_PROVIDER_VERIFY": "1",
+			"HOME":                         os.Getenv("HOME"),
+			"TF_SKIP_PROVIDER_VERIFY":      "1",
 		},
 	}
 
@@ -86,8 +86,8 @@ func TestAgentFull(t *testing.T) {
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
 			"TF_CLI_CONFIG_FILE":           os.Getenv("TF_CLI_CONFIG_FILE"),
-			"HOME":                    os.Getenv("HOME"),
-			"TF_SKIP_PROVIDER_VERIFY": "1",
+			"HOME":                         os.Getenv("HOME"),
+			"TF_SKIP_PROVIDER_VERIFY":      "1",
 		},
 	}
 
@@ -131,8 +131,8 @@ func TestAgentClaudeCode(t *testing.T) {
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
 			"TF_CLI_CONFIG_FILE":           os.Getenv("TF_CLI_CONFIG_FILE"),
-			"HOME":                    os.Getenv("HOME"),
-			"TF_SKIP_PROVIDER_VERIFY": "1",
+			"HOME":                         os.Getenv("HOME"),
+			"TF_SKIP_PROVIDER_VERIFY":      "1",
 		},
 	}
 
@@ -170,8 +170,8 @@ func TestAgentWithTeam(t *testing.T) {
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
 			"TF_CLI_CONFIG_FILE":           os.Getenv("TF_CLI_CONFIG_FILE"),
-			"HOME":                    os.Getenv("HOME"),
-			"TF_SKIP_PROVIDER_VERIFY": "1",
+			"HOME":                         os.Getenv("HOME"),
+			"TF_SKIP_PROVIDER_VERIFY":      "1",
 		},
 	}
 
@@ -210,8 +210,8 @@ func TestAgentComprehensive(t *testing.T) {
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
 			"TF_CLI_CONFIG_FILE":           os.Getenv("TF_CLI_CONFIG_FILE"),
-			"HOME":                    os.Getenv("HOME"),
-			"TF_SKIP_PROVIDER_VERIFY": "1",
+			"HOME":                         os.Getenv("HOME"),
+			"TF_SKIP_PROVIDER_VERIFY":      "1",
 		},
 	}
 
@@ -268,8 +268,8 @@ func TestAgentUpdate_Name(t *testing.T) {
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
 			"TF_CLI_CONFIG_FILE":           os.Getenv("TF_CLI_CONFIG_FILE"),
-			"HOME":                    os.Getenv("HOME"),
-			"TF_SKIP_PROVIDER_VERIFY": "1",
+			"HOME":                         os.Getenv("HOME"),
+			"TF_SKIP_PROVIDER_VERIFY":      "1",
 		},
 	}
 
@@ -319,8 +319,8 @@ func TestAgentUpdate_MultipleFields(t *testing.T) {
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
 			"TF_CLI_CONFIG_FILE":           os.Getenv("TF_CLI_CONFIG_FILE"),
-			"HOME":                    os.Getenv("HOME"),
-			"TF_SKIP_PROVIDER_VERIFY": "1",
+			"HOME":                         os.Getenv("HOME"),
+			"TF_SKIP_PROVIDER_VERIFY":      "1",
 		},
 	}
 
@@ -372,8 +372,8 @@ func TestAgentUpdate_Runtime(t *testing.T) {
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
 			"TF_CLI_CONFIG_FILE":           os.Getenv("TF_CLI_CONFIG_FILE"),
-			"HOME":                    os.Getenv("HOME"),
-			"TF_SKIP_PROVIDER_VERIFY": "1",
+			"HOME":                         os.Getenv("HOME"),
+			"TF_SKIP_PROVIDER_VERIFY":      "1",
 		},
 	}
 
@@ -419,8 +419,8 @@ func TestAgentUpdate_TeamAssignment(t *testing.T) {
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
 			"TF_CLI_CONFIG_FILE":           os.Getenv("TF_CLI_CONFIG_FILE"),
-			"HOME":                    os.Getenv("HOME"),
-			"TF_SKIP_PROVIDER_VERIFY": "1",
+			"HOME":                         os.Getenv("HOME"),
+			"TF_SKIP_PROVIDER_VERIFY":      "1",
 		},
 	}
 
@@ -469,8 +469,8 @@ func TestAgentImport(t *testing.T) {
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
 			"TF_CLI_CONFIG_FILE":           os.Getenv("TF_CLI_CONFIG_FILE"),
-			"HOME":                    os.Getenv("HOME"),
-			"TF_SKIP_PROVIDER_VERIFY": "1",
+			"HOME":                         os.Getenv("HOME"),
+			"TF_SKIP_PROVIDER_VERIFY":      "1",
 		},
 	}
 
@@ -488,8 +488,8 @@ func TestAgentImport(t *testing.T) {
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
 			"TF_CLI_CONFIG_FILE":           os.Getenv("TF_CLI_CONFIG_FILE"),
-			"HOME":                    os.Getenv("HOME"),
-			"TF_SKIP_PROVIDER_VERIFY": "1",
+			"HOME":                         os.Getenv("HOME"),
+			"TF_SKIP_PROVIDER_VERIFY":      "1",
 		},
 		Vars: map[string]interface{}{
 			"agent_id":   agentID,
@@ -532,8 +532,8 @@ func TestAgentImport_FullConfiguration(t *testing.T) {
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
 			"TF_CLI_CONFIG_FILE":           os.Getenv("TF_CLI_CONFIG_FILE"),
-			"HOME":                    os.Getenv("HOME"),
-			"TF_SKIP_PROVIDER_VERIFY": "1",
+			"HOME":                         os.Getenv("HOME"),
+			"TF_SKIP_PROVIDER_VERIFY":      "1",
 		},
 	}
 
@@ -556,8 +556,8 @@ func TestAgentImport_FullConfiguration(t *testing.T) {
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
 			"TF_CLI_CONFIG_FILE":           os.Getenv("TF_CLI_CONFIG_FILE"),
-			"HOME":                    os.Getenv("HOME"),
-			"TF_SKIP_PROVIDER_VERIFY": "1",
+			"HOME":                         os.Getenv("HOME"),
+			"TF_SKIP_PROVIDER_VERIFY":      "1",
 		},
 		Vars: map[string]interface{}{
 			"agent_id": agentID,
@@ -606,8 +606,8 @@ func TestAgentStateRefresh(t *testing.T) {
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
 			"TF_CLI_CONFIG_FILE":           os.Getenv("TF_CLI_CONFIG_FILE"),
-			"HOME":                    os.Getenv("HOME"),
-			"TF_SKIP_PROVIDER_VERIFY": "1",
+			"HOME":                         os.Getenv("HOME"),
+			"TF_SKIP_PROVIDER_VERIFY":      "1",
 		},
 	}
 
@@ -650,8 +650,8 @@ func TestAgentComputedAttributes(t *testing.T) {
 		EnvVars: map[string]string{
 			"KUBIYA_CONTROL_PLANE_API_KEY": apiKey,
 			"TF_CLI_CONFIG_FILE":           os.Getenv("TF_CLI_CONFIG_FILE"),
-			"HOME":                    os.Getenv("HOME"),
-			"TF_SKIP_PROVIDER_VERIFY": "1",
+			"HOME":                         os.Getenv("HOME"),
+			"TF_SKIP_PROVIDER_VERIFY":      "1",
 		},
 	}
 
