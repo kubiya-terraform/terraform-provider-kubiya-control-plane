@@ -3,7 +3,7 @@
 [![CI](https://github.com/kubiya-terraform/kubiya-control-plane/actions/workflows/ci.yml/badge.svg)](https://github.com/kubiya-terraform/kubiya-control-plane/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/kubiya-terraform/kubiya-control-plane/branch/main/graph/badge.svg)](https://codecov.io/gh/kubiya-terraform/kubiya-control-plane)
 [![Go Version](https://img.shields.io/github/go-mod/go-version/kubiya-terraform/kubiya-control-plane)](https://go.dev/)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![License](https://img.shields.io/badge/license-AGPL--3.0-blue.svg)](LICENSE)
 
 Terraform provider for managing Kubiya Control Plane resources.
 
@@ -208,4 +208,10 @@ Now you can use the provider in your Terraform configurations without having to 
 
 ## License
 
-[Your License Here]
+This project is licensed under the GNU Affero General Public License v3.0 (AGPL-3.0). See the [LICENSE](LICENSE) file for details.
+
+Copyright (C) 2025 Kubiya
+
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+For more information, visit https://www.gnu.org/licenses/agpl-3.0.html
