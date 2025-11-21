@@ -21,6 +21,16 @@ jobs:
         with:
           go-version-file: 'go.mod'
           cache: true
+      - name: Configure GPG
+        run: |
+          mkdir -p ~/.gnupg
+          echo "allow-loopback-pinentry" > ~/.gnupg/gpg-agent.conf
+          echo "pinentry-mode loopback" > ~/.gnupg/gpg.conf
+          echo "use-agent" >> ~/.gnupg/gpg.conf
+          chmod 700 ~/.gnupg
+          chmod 600 ~/.gnupg/gpg-agent.conf
+          chmod 600 ~/.gnupg/gpg.conf
+          gpg-connect-agent reloadagent /bye || true
       - name: Import GPG key
         uses: crazy-max/ghaction-import-gpg@01dd5d3ca463c7f10f7f4f7b4f177225ac661ee4 # v6.1.0
         id: import_gpg
@@ -35,5 +45,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GPG_FINGERPRINT: ${{ steps.import_gpg.outputs.fingerprint }}
+          GPG_PASSWORD: ${{ secrets.PASSPHRASE }}
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
 
