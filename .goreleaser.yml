@@ -15,6 +15,9 @@ builds:
       - -trimpath
     ldflags:
       - '-s -w -X main.version={{.Version}} -X main.commit={{.Commit}}'
+      # Inject Sentry DSN at build time (set SENTRY_DSN environment variable)
+      - '-X terraform-provider-kubiya/internal/sentry.Version={{.Version}}'
+      - '-X terraform-provider-kubiya/internal/sentry.DSN={{.Env.SENTRY_DSN}}'
     goos:
       - freebsd
       - windows
@@ -57,4 +60,4 @@ release:
   # If you want to manually examine the release before its live, uncomment this line:
   # draft: true
 changelog:
-  skip: true
+  skip: true%
