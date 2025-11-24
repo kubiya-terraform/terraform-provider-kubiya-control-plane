@@ -38,21 +38,21 @@ Create a file named `main.tf`:
 ```terraform
 terraform {
   required_providers {
-    controlplane = {
-      source  = "kubiya/control-plane"
+    kubiya = {
+      source  = "kubiya/kubiya-control-plane"
       version = "~> 1.0"
     }
   }
 }
 
-provider "controlplane" {
+provider "kubiya" {
   # Configuration via environment variables:
   # KUBIYA_CONTROL_PLANE_API_KEY
   # KUBIYA_CONTROL_PLANE_BASE_URL (optional)
 }
 
 # Create an environment
-resource "controlplane_environment" "dev" {
+resource "kubiya_environment" "dev" {
   name        = "development"
   description = "Development environment"
 
@@ -63,7 +63,7 @@ resource "controlplane_environment" "dev" {
 }
 
 # Create a team
-resource "controlplane_team" "platform" {
+resource "kubiya_team" "platform" {
   name        = "platform-team"
   description = "Platform engineering team"
 
@@ -73,7 +73,7 @@ resource "controlplane_team" "platform" {
 }
 
 # Create an agent
-resource "controlplane_agent" "assistant" {
+resource "kubiya_agent" "assistant" {
   name        = "dev-assistant"
   description = "Development assistant agent"
   model_id    = "gpt-4"
@@ -87,12 +87,12 @@ resource "controlplane_agent" "assistant" {
 
 # Output important information
 output "environment_id" {
-  value       = controlplane_environment.dev.id
+  value       = kubiya_environment.dev.id
   description = "Development environment ID"
 }
 
 output "agent_id" {
-  value       = controlplane_agent.assistant.id
+  value       = kubiya_agent.assistant.id
   description = "Assistant agent ID"
 }
 ```
@@ -132,12 +132,12 @@ Create a file named `data.tf`:
 
 ```terraform
 # Look up the created agent
-data "controlplane_agent" "assistant" {
-  id = controlplane_agent.assistant.id
+data "kubiya_agent" "assistant" {
+  id = kubiya_agent.assistant.id
 }
 
 output "agent_status" {
-  value = data.controlplane_agent.assistant.status
+  value = data.kubiya_agent.assistant.status
 }
 ```
 
@@ -147,7 +147,7 @@ Expand your configuration by adding skills and policies:
 
 ```terraform
 # Add a shell skill
-resource "controlplane_skill" "shell" {
+resource "kubiya_skill" "shell" {
   name    = "shell-commands"
   type    = "shell"
   enabled = true
@@ -159,7 +159,7 @@ resource "controlplane_skill" "shell" {
 }
 
 # Add a security policy
-resource "controlplane_policy" "security" {
+resource "kubiya_policy" "security" {
   name        = "basic-security"
   description = "Basic security policy"
   enabled     = true
@@ -189,7 +189,7 @@ resource "controlplane_policy" "security" {
 
 ## Next Steps
 
-- Explore the [example configurations](https://github.com/kubiya/terraform-provider-kubiya-control-plane/tree/main/examples)
+- Explore the [example configurations](https://github.com/kubiya-terraform/terraform-provider-kubiya-control-plane/tree/main/examples)
 - Review the [resource documentation](../resources)
 - Check the [data source documentation](../data-sources)
 - Join the community for support and discussions
@@ -228,6 +228,6 @@ If you have state conflicts:
 ## Support
 
 For help and support:
-- GitHub Issues: [Report a bug](https://github.com/kubiya/terraform-provider-kubiya-control-plane/issues)
+- GitHub Issues: [Report a bug](https://github.com/kubiya-terraform/terraform-provider-kubiya-control-plane/issues)
 - Documentation: [Full documentation](https://docs.kubiya.ai)
 - Email: support@kubiya.ai

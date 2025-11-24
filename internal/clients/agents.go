@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"kubiya-control-plane/internal/entities"
+	"terraform-provider-kubiya-control-plane/internal/entities"
 )
 
 // CreateAgent creates a new agent

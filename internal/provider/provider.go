@@ -10,8 +10,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/provider/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 
-	"kubiya-control-plane/internal/clients"
-	kubiyasentry "kubiya-control-plane/internal/sentry"
+	"terraform-provider-kubiya-control-plane/internal/clients"
+	kubiyasentry "terraform-provider-kubiya-control-plane/internal/sentry"
 )
 
 type kubiyaControlPlaneProvider struct {

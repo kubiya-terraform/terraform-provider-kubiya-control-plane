@@ -8,7 +8,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 
-	"kubiya-control-plane/internal/clients"
+	"terraform-provider-kubiya-control-plane/internal/clients"
 )
 
 var _ datasource.DataSource = (*jobsDataSource)(nil)

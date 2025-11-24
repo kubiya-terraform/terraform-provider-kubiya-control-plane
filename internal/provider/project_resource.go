@@ -13,8 +13,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 
-	"kubiya-control-plane/internal/clients"
-	"kubiya-control-plane/internal/entities"
+	"terraform-provider-kubiya-control-plane/internal/clients"
+	"terraform-provider-kubiya-control-plane/internal/entities"
 )
 
 var _ resource.Resource = (*projectResource)(nil)

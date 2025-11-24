@@ -6,7 +6,7 @@ default: help
 # Build the provider
 build:
 	@echo "Building provider..."
-	go build -o kubiya-control-plane
+	go build -o terraform-provider-kubiya-control-plane
 
 # Install the provider locally
 install:
@@ -42,7 +42,7 @@ test-coverage:
 # Clean build artifacts
 clean:
 	@echo "Cleaning build artifacts..."
-	rm -f kubiya-control-plane coverage.out coverage.html
+	rm -f terraform-provider-kubiya-control-plane coverage.out coverage.html
 
 # Format code
 fmt:

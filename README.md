@@ -1,8 +1,8 @@
 # Control Plane Terraform Provider
 
-[![CI](https://github.com/kubiya-terraform/kubiya-control-plane/actions/workflows/ci.yml/badge.svg)](https://github.com/kubiya-terraform/kubiya-control-plane/actions/workflows/ci.yml)
-[![codecov](https://codecov.io/gh/kubiya-terraform/kubiya-control-plane/branch/main/graph/badge.svg)](https://codecov.io/gh/kubiya-terraform/kubiya-control-plane)
-[![Go Version](https://img.shields.io/github/go-mod/go-version/kubiya-terraform/kubiya-control-plane)](https://go.dev/)
+[![CI](https://github.com/kubiya-terraform/terraform-provider-kubiya-control-plane/actions/workflows/ci.yml/badge.svg)](https://github.com/kubiya-terraform/terraform-provider-kubiya-control-plane/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/kubiya-terraform/terraform-provider-kubiya-control-plane/branch/main/graph/badge.svg)](https://codecov.io/gh/kubiya-terraform/terraform-provider-kubiya-control-plane)
+[![Go Version](https://img.shields.io/github/go-mod/go-version/kubiya-terraform/terraform-provider-kubiya-control-plane)](https://go.dev/)
 [![License](https://img.shields.io/badge/license-AGPL--3.0-blue.svg)](LICENSE)
 
 Terraform provider for managing Kubiya Control Plane resources.
@@ -38,20 +38,20 @@ export KUBIYA_CONTROL_PLANE_BASE_URL=http://localhost:7777  # Optional: override
 ```terraform
 terraform {
   required_providers {
-    controlplane = {
-      source = "kubiya/control-plane"
+    kubiya = {
+      source = "kubiya/kubiya-control-plane"
     }
   }
 }
 
-provider "controlplane" {
+provider "kubiya" {
   # Configuration is read from environment variables:
   # - KUBIYA_CONTROL_PLANE_API_KEY (required)
   # - KUBIYA_CONTROL_PLANE_BASE_URL (optional, defaults to https://control-plane.kubiya.ai)
 }
 
 # Create a project
-resource "controlplane_project" "example" {
+resource "kubiya_project" "example" {
   name        = "example-project"
   key         = "EX"
   description = "Example project"
@@ -63,7 +63,7 @@ resource "controlplane_project" "example" {
 }
 
 # Create an environment
-resource "controlplane_environment" "production" {
+resource "kubiya_environment" "production" {
   name        = "production"
   description = "Production environment for agents"
 
@@ -74,7 +74,7 @@ resource "controlplane_environment" "production" {
 }
 
 # Create a team
-resource "controlplane_team" "example" {
+resource "kubiya_team" "example" {
   name        = "example-team"
   description = "Example team"
 
@@ -84,7 +84,7 @@ resource "controlplane_team" "example" {
 }
 
 # Create an agent
-resource "controlplane_agent" "example" {
+resource "kubiya_agent" "example" {
   name        = "example-agent"
   description = "Example AI agent"
   model_id    = "gpt-4"
@@ -101,53 +101,53 @@ resource "controlplane_agent" "example" {
 
 The provider currently supports the following resources:
 
-- `controlplane_agent` - Manage AI agents
-- `controlplane_team` - Manage teams
-- `controlplane_project` - Manage projects
-- `controlplane_environment` - Manage execution environments
-- `controlplane_skill` - Manage skills (filesystem, shell, docker)
-- `controlplane_policy` - Manage OPA Rego governance policies
-- `controlplane_worker` - Register and manage workers
+- `kubiya_agent` - Manage AI agents
+- `kubiya_team` - Manage teams
+- `kubiya_project` - Manage projects
+- `kubiya_environment` - Manage execution environments
+- `kubiya_skill` - Manage skills (filesystem, shell, docker)
+- `kubiya_policy` - Manage OPA Rego governance policies
+- `kubiya_worker` - Register and manage workers
 
 ## Data Sources
 
 The provider supports the following data sources for read-only lookups:
 
-- `controlplane_agent` - Lookup existing agents by ID
-- `controlplane_team` - Lookup existing teams by ID
-- `controlplane_project` - Lookup existing projects by ID
-- `controlplane_environment` - Lookup existing environments by ID
-- `controlplane_skill` - Lookup existing skills by ID
-- `controlplane_policy` - Lookup existing policies by ID
+- `kubiya_agent` - Lookup existing agents by ID
+- `kubiya_team` - Lookup existing teams by ID
+- `kubiya_project` - Lookup existing projects by ID
+- `kubiya_environment` - Lookup existing environments by ID
+- `kubiya_skill` - Lookup existing skills by ID
+- `kubiya_policy` - Lookup existing policies by ID
 
 ### Example Data Source Usage
 
 ```terraform
 # Lookup an existing agent
-data "controlplane_agent" "existing" {
+data "kubiya_agent" "existing" {
   id = "agent-uuid-here"
 }
 
 # Use the data source in other resources
-resource "controlplane_agent" "new_agent" {
+resource "kubiya_agent" "new_agent" {
   name        = "new-agent"
-  description = "New agent based on ${data.controlplane_agent.existing.name}"
-  model_id    = data.controlplane_agent.existing.model_id
-  runtime     = data.controlplane_agent.existing.runtime
+  description = "New agent based on ${data.kubiya_agent.existing.name}"
+  model_id    = data.kubiya_agent.existing.model_id
+  runtime     = data.kubiya_agent.existing.runtime
 
-  llm_config = data.controlplane_agent.existing.llm_config
+  llm_config = data.kubiya_agent.existing.llm_config
 }
 
 # Lookup a project and use its information
-data "controlplane_project" "ml_project" {
+data "kubiya_project" "ml_project" {
   id = "project-uuid-here"
 }
 
 output "project_info" {
   value = {
-    name     = data.controlplane_project.ml_project.name
-    key      = data.controlplane_project.ml_project.key
-    settings = data.controlplane_project.ml_project.settings
+    name     = data.kubiya_project.ml_project.name
+    key      = data.kubiya_project.ml_project.key
+    settings = data.kubiya_project.ml_project.settings
   }
 }
 ```
@@ -173,7 +173,7 @@ For local development and testing, you can use the following configuration in yo
 ```hcl
 provider_installation {
   dev_overrides {
-    "kubiya/control-plane" = "/path/to/your/GOPATH/bin"
+    "kubiya/kubiya-control-plane" = "/path/to/your/GOPATH/bin"
   }
 
   direct {}

@@ -86,7 +86,7 @@ Integration tests require:
 ## Test Organization
 
 ```
-kubiya-control-plane-terraform-provider/
+terraform-provider-kubiya-control-plane/
 ├── test/                               # Integration tests
 │   ├── integration_test.go             # All integration tests
 │   └── README.md                       # Integration test docs

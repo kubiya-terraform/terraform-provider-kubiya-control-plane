@@ -3,11 +3,11 @@ package sentry
 import "time"
 
 // DSN will be set at build time via ldflags
-// Use: -ldflags "-X kubiya-control-plane/internal/sentry.DSN=your-dsn-here"
+// Use: -ldflags "-X terraform-provider-kubiya-control-plane/internal/sentry.DSN=your-dsn-here"
 var DSN string
 
 // Version will be set at build time via ldflags
-// Use: -ldflags "-X kubiya-control-plane/internal/sentry.Version=your-dsn-here"
+// Use: -ldflags "-X terraform-provider-kubiya-control-plane/internal/sentry.Version=your-dsn-here"
 var Version string
 
 const (
