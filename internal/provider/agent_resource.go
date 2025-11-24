@@ -12,9 +12,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 
-	"kubiya-control-plane/internal/clients"
-	"kubiya-control-plane/internal/entities"
-	kubiyasentry "kubiya-control-plane/internal/sentry"
+	"terraform-provider-kubiya-control-plane/internal/clients"
+	"terraform-provider-kubiya-control-plane/internal/entities"
+	kubiyasentry "terraform-provider-kubiya-control-plane/internal/sentry"
 )
 
 var _ resource.Resource = (*agentResource)(nil)

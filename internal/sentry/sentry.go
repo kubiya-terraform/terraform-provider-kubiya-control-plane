@@ -110,7 +110,7 @@ func getConfig() *Config {
 		Debug:            false,
 		SampleRate:       1.0,
 		TracesSampleRate: 0.1,
-		Release:          fmt.Sprintf("kubiya-control-plane@%s", Version),
+		Release:          fmt.Sprintf("terraform-provider-kubiya-control-plane@%s", Version),
 	}
 
 	return config

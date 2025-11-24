@@ -9,7 +9,7 @@ import (
 	"os"
 	"time"
 
-	kubiyasentry "kubiya-control-plane/internal/sentry"
+	kubiyasentry "terraform-provider-kubiya-control-plane/internal/sentry"
 
 	"github.com/getsentry/sentry-go"
 )

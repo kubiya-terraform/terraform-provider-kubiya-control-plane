@@ -4,7 +4,7 @@ import (
 	"context"
 	"log"
 
-	"kubiya-control-plane/internal/provider"
+	"terraform-provider-kubiya-control-plane/internal/provider"
 
 	"github.com/hashicorp/terraform-plugin-framework/providerserver"
 )

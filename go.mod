@@ -1,4 +1,4 @@
-module kubiya-control-plane
+module terraform-provider-kubiya-control-plane
 
 go 1.25.1
 

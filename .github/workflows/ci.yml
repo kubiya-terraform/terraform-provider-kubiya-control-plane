@@ -106,12 +106,12 @@ jobs:
             ${{ runner.os }}-go-
 
       - name: Build provider
-        run: go build -o kubiya-control-plane .
+        run: go build -o terraform-provider-kubiya-control-plane .
 
       - name: Verify binary
         run: |
-          ./kubiya-control-plane --version || true
-          ls -lh kubiya-control-plane
+          ./terraform-provider-kubiya-control-plane --version || true
+          ls -lh terraform-provider-kubiya-control-plane
 
   validate:
     name: Validate

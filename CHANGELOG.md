@@ -51,5 +51,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Authentication via API key and organization ID
 - Support for local development and testing
 
-[Unreleased]: https://github.com/kubiya-terraform/kubiya-control-plane/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/kubiya-terraform/kubiya-control-plane/releases/tag/v0.1.0
+[Unreleased]: https://github.com/kubiya-terraform/terraform-provider-kubiya-control-plane/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/kubiya-terraform/terraform-provider-kubiya-control-plane/releases/tag/v0.1.0
