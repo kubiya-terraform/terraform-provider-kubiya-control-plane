@@ -32,10 +32,16 @@ jobs:
 
       - name: Configure GPG for non-interactive use
         run: |
+          mkdir -p ~/.gnupg
+          chmod 700 ~/.gnupg
           echo "allow-loopback-pinentry" >> ~/.gnupg/gpg-agent.conf
           echo "pinentry-mode loopback" >> ~/.gnupg/gpg.conf
+          chmod 600 ~/.gnupg/gpg-agent.conf
+          chmod 600 ~/.gnupg/gpg.conf
           gpg-connect-agent reloadagent /bye
-          echo "test" | gpg --batch --pinentry-mode loopback --passphrase "${{ secrets.PASSPHRASE }}" --local-user "${{ steps.import_gpg.outputs.fingerprint }}" --armor --detach-sign
+          echo "Testing GPG signing..."
+          echo "test" | gpg --batch --pinentry-mode loopback --passphrase "${{ secrets.PASSPHRASE }}" --local-user "${{ steps.import_gpg.outputs.fingerprint }}" --armor --detach-sign > /dev/null
+          echo "GPG signing test successful!"
 
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v5
