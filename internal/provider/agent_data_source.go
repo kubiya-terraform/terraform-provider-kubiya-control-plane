@@ -33,7 +33,7 @@ type agentDataSourceModel struct {
 	Runtime              types.String `tfsdk:"runtime"`
 	TeamID               types.String `tfsdk:"team_id"`
 	SystemPrompt         types.String `tfsdk:"system_prompt"`
-	Skills               types.List   `tfsdk:"skills"`
+	Skills               types.String `tfsdk:"skills"`
 	ExecutionEnvironment types.String `tfsdk:"execution_environment"`
 	CreatedAt            types.String `tfsdk:"created_at"`
 	UpdatedAt            types.String `tfsdk:"updated_at"`
@@ -92,10 +92,9 @@ func (d *agentDataSource) Schema(_ context.Context, _ datasource.SchemaRequest, 
 				Description: "System prompt for the agent",
 				Computed:    true,
 			},
-			"skills": schema.ListAttribute{
-				Description: "List of skills available to the agent",
+			"skills": schema.StringAttribute{
+				Description: "Skills configuration as JSON string",
 				Computed:    true,
-				ElementType: types.StringType,
 			},
 			"execution_environment": schema.StringAttribute{
 				Description: "Execution environment configuration as JSON string",
@@ -212,17 +211,16 @@ func (d *agentDataSource) Read(ctx context.Context, req datasource.ReadRequest, 
 		config.SystemPrompt = types.StringNull()
 	}
 
-	// Convert skills to list
+	// Convert skills to JSON string
 	if len(agent.Skills) > 0 {
-		skillList := make([]types.String, len(agent.Skills))
-		for i, skill := range agent.Skills {
-			skillList[i] = types.StringValue(skill)
+		skillsJSON, err := toJSONString(agent.Skills)
+		if err != nil {
+			resp.Diagnostics.AddError("Error converting skills", err.Error())
+			return
 		}
-		listVal, diags := types.ListValueFrom(ctx, types.StringType, skillList)
-		resp.Diagnostics.Append(diags...)
-		config.Skills = listVal
+		config.Skills = types.StringValue(skillsJSON)
 	} else {
-		config.Skills = types.ListNull(types.StringType)
+		config.Skills = types.StringNull()
 	}
 
 	// Convert execution environment to JSON string
