@@ -24,45 +24,54 @@ const (
 
 // Agent represents an agent in the control plane
 type Agent struct {
-	ID            string                 `json:"id,omitempty"`
-	Name          string                 `json:"name"`
-	Description   *string                `json:"description,omitempty"`
-	Status        AgentStatus            `json:"status,omitempty"`
-	Capabilities  []string               `json:"capabilities,omitempty"`
-	Configuration map[string]interface{} `json:"configuration,omitempty"`
-	ModelID       *string                `json:"model_id,omitempty"`
-	LLMConfig     map[string]interface{} `json:"llm_config,omitempty"`
-	Runtime       RuntimeType            `json:"runtime,omitempty"`
-	TeamID        *string                `json:"team_id,omitempty"`
-	CreatedAt     *time.Time             `json:"created_at,omitempty"`
-	UpdatedAt     *time.Time             `json:"updated_at,omitempty"`
-	LastActiveAt  *time.Time             `json:"last_active_at,omitempty"`
-	State         map[string]interface{} `json:"state,omitempty"`
-	ErrorMessage  *string                `json:"error_message,omitempty"`
+	ID                   string                 `json:"id,omitempty"`
+	Name                 string                 `json:"name"`
+	Description          *string                `json:"description,omitempty"`
+	Status               AgentStatus            `json:"status,omitempty"`
+	Capabilities         []string               `json:"capabilities,omitempty"`
+	Configuration        map[string]interface{} `json:"configuration,omitempty"`
+	ModelID              *string                `json:"model_id,omitempty"`
+	LLMConfig            map[string]interface{} `json:"llm_config,omitempty"`
+	Runtime              RuntimeType            `json:"runtime,omitempty"`
+	TeamID               *string                `json:"team_id,omitempty"`
+	SystemPrompt         *string                `json:"system_prompt,omitempty"`
+	Skills               []string               `json:"skills,omitempty"`
+	ExecutionEnvironment map[string]interface{} `json:"execution_environment,omitempty"`
+	CreatedAt            *time.Time             `json:"created_at,omitempty"`
+	UpdatedAt            *time.Time             `json:"updated_at,omitempty"`
+	LastActiveAt         *time.Time             `json:"last_active_at,omitempty"`
+	State                map[string]interface{} `json:"state,omitempty"`
+	ErrorMessage         *string                `json:"error_message,omitempty"`
 }
 
 // AgentCreateRequest represents the request to create an agent
 type AgentCreateRequest struct {
-	Name          string                 `json:"name"`
-	Description   *string                `json:"description,omitempty"`
-	Capabilities  []string               `json:"capabilities,omitempty"`
-	Configuration map[string]interface{} `json:"configuration,omitempty"`
-	ModelID       *string                `json:"model_id,omitempty"`
-	LLMConfig     map[string]interface{} `json:"llm_config,omitempty"`
-	Runtime       *RuntimeType           `json:"runtime,omitempty"`
-	TeamID        *string                `json:"team_id,omitempty"`
+	Name                 string                 `json:"name"`
+	Description          *string                `json:"description,omitempty"`
+	Capabilities         []string               `json:"capabilities,omitempty"`
+	Configuration        map[string]interface{} `json:"configuration,omitempty"`
+	ModelID              *string                `json:"model_id,omitempty"`
+	LLMConfig            map[string]interface{} `json:"llm_config,omitempty"`
+	Runtime              *RuntimeType           `json:"runtime,omitempty"`
+	TeamID               *string                `json:"team_id,omitempty"`
+	SystemPrompt         *string                `json:"system_prompt,omitempty"`
+	Skills               []string               `json:"skills,omitempty"`
+	ExecutionEnvironment map[string]interface{} `json:"execution_environment,omitempty"`
 }
 
 // AgentUpdateRequest represents the request to update an agent
 type AgentUpdateRequest struct {
-	Name          *string                `json:"name,omitempty"`
-	Description   *string                `json:"description,omitempty"`
-	Status        *AgentStatus           `json:"status,omitempty"`
-	Capabilities  []string               `json:"capabilities,omitempty"`
-	Configuration map[string]interface{} `json:"configuration,omitempty"`
-	State         map[string]interface{} `json:"state,omitempty"`
-	ModelID       *string                `json:"model_id,omitempty"`
-	LLMConfig     map[string]interface{} `json:"llm_config,omitempty"`
-	Runtime       *RuntimeType           `json:"runtime,omitempty"`
-	TeamID        *string                `json:"team_id,omitempty"`
+	Name                 *string                `json:"name,omitempty"`
+	Description          *string                `json:"description,omitempty"`
+	Status               *AgentStatus           `json:"status,omitempty"`
+	Capabilities         []string               `json:"capabilities,omitempty"`
+	Configuration        map[string]interface{} `json:"configuration,omitempty"`
+	State                map[string]interface{} `json:"state,omitempty"`
+	ModelID              *string                `json:"model_id,omitempty"`
+	LLMConfig            map[string]interface{} `json:"llm_config,omitempty"`
+	Runtime              *RuntimeType           `json:"runtime,omitempty"`
+	TeamID               *string                `json:"team_id,omitempty"`
+	SystemPrompt         *string                `json:"system_prompt,omitempty"`
+	Skills               []string               `json:"skills,omitempty"`
+	ExecutionEnvironment map[string]interface{} `json:"execution_environment,omitempty"`
 }

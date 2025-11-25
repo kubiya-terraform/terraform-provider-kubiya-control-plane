@@ -29,18 +29,21 @@ type agentResource struct {
 }
 
 type agentResourceModel struct {
-	ID            types.String `tfsdk:"id"`
-	Name          types.String `tfsdk:"name"`
-	Description   types.String `tfsdk:"description"`
-	Status        types.String `tfsdk:"status"`
-	Capabilities  types.List   `tfsdk:"capabilities"`
-	Configuration types.String `tfsdk:"configuration"`
-	ModelID       types.String `tfsdk:"model_id"`
-	LLMConfig     types.String `tfsdk:"llm_config"`
-	Runtime       types.String `tfsdk:"runtime"`
-	TeamID        types.String `tfsdk:"team_id"`
-	CreatedAt     types.String `tfsdk:"created_at"`
-	UpdatedAt     types.String `tfsdk:"updated_at"`
+	ID                   types.String `tfsdk:"id"`
+	Name                 types.String `tfsdk:"name"`
+	Description          types.String `tfsdk:"description"`
+	Status               types.String `tfsdk:"status"`
+	Capabilities         types.List   `tfsdk:"capabilities"`
+	Configuration        types.String `tfsdk:"configuration"`
+	ModelID              types.String `tfsdk:"model_id"`
+	LLMConfig            types.String `tfsdk:"llm_config"`
+	Runtime              types.String `tfsdk:"runtime"`
+	TeamID               types.String `tfsdk:"team_id"`
+	SystemPrompt         types.String `tfsdk:"system_prompt"`
+	Skills               types.List   `tfsdk:"skills"`
+	ExecutionEnvironment types.String `tfsdk:"execution_environment"`
+	CreatedAt            types.String `tfsdk:"created_at"`
+	UpdatedAt            types.String `tfsdk:"updated_at"`
 }
 
 func (r *agentResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -94,6 +97,19 @@ func (r *agentResource) Schema(_ context.Context, _ resource.SchemaRequest, resp
 			},
 			"team_id": schema.StringAttribute{
 				Description: "Team ID to assign this agent to",
+				Optional:    true,
+			},
+			"system_prompt": schema.StringAttribute{
+				Description: "System prompt for the agent",
+				Optional:    true,
+			},
+			"skills": schema.ListAttribute{
+				Description: "List of skills available to the agent",
+				Optional:    true,
+				ElementType: types.StringType,
+			},
+			"execution_environment": schema.StringAttribute{
+				Description: "Execution environment configuration as JSON string",
 				Optional:    true,
 			},
 			"created_at": schema.StringAttribute{
@@ -195,6 +211,31 @@ func (r *agentResource) Create(ctx context.Context, req resource.CreateRequest, 
 		createReq.TeamID = &teamID
 	}
 
+	if !plan.SystemPrompt.IsNull() {
+		systemPrompt := plan.SystemPrompt.ValueString()
+		createReq.SystemPrompt = &systemPrompt
+	}
+
+	// Handle skills
+	if !plan.Skills.IsNull() {
+		var skills []string
+		diags = plan.Skills.ElementsAs(ctx, &skills, false)
+		resp.Diagnostics.Append(diags...)
+		if resp.Diagnostics.HasError() {
+			return
+		}
+		createReq.Skills = skills
+	}
+
+	if !plan.ExecutionEnvironment.IsNull() {
+		execEnv, err := parseJSON(plan.ExecutionEnvironment.ValueString())
+		if err != nil {
+			resp.Diagnostics.AddError("Invalid Execution Environment", fmt.Sprintf("Failed to parse execution_environment JSON: %s", err))
+			return
+		}
+		createReq.ExecutionEnvironment = execEnv
+	}
+
 	// Create agent
 	agent, err := r.client.CreateAgent(createReq)
 	if err != nil {
@@ -234,8 +275,12 @@ func (r *agentResource) Create(ctx context.Context, req resource.CreateRequest, 
 		plan.TeamID = types.StringValue(*agent.TeamID)
 	}
 
+	if agent.SystemPrompt != nil {
+		plan.SystemPrompt = types.StringValue(*agent.SystemPrompt)
+	}
+
 	// Keep the input values for fields not returned by API
-	// Capabilities, Configuration, and LLMConfig are preserved from plan
+	// Capabilities, Configuration, LLMConfig, Skills, and ExecutionEnvironment are preserved from plan
 
 	if agent.CreatedAt != nil {
 		plan.CreatedAt = types.StringValue(agent.CreatedAt.String())
@@ -302,8 +347,12 @@ func (r *agentResource) Read(ctx context.Context, req resource.ReadRequest, resp
 		state.TeamID = types.StringValue(*agent.TeamID)
 	}
 
+	if agent.SystemPrompt != nil {
+		state.SystemPrompt = types.StringValue(*agent.SystemPrompt)
+	}
+
 	// Keep existing values for fields not returned by API
-	// Capabilities, Configuration, and LLMConfig are preserved from existing state
+	// Capabilities, Configuration, LLMConfig, Skills, and ExecutionEnvironment are preserved from existing state
 
 	if agent.CreatedAt != nil {
 		state.CreatedAt = types.StringValue(agent.CreatedAt.String())
@@ -374,6 +423,30 @@ func (r *agentResource) Update(ctx context.Context, req resource.UpdateRequest, 
 		updateReq.TeamID = &teamID
 	}
 
+	if !plan.SystemPrompt.Equal(state.SystemPrompt) {
+		systemPrompt := plan.SystemPrompt.ValueString()
+		updateReq.SystemPrompt = &systemPrompt
+	}
+
+	if !plan.Skills.Equal(state.Skills) && !plan.Skills.IsNull() {
+		var skills []string
+		diags = plan.Skills.ElementsAs(ctx, &skills, false)
+		resp.Diagnostics.Append(diags...)
+		if resp.Diagnostics.HasError() {
+			return
+		}
+		updateReq.Skills = skills
+	}
+
+	if !plan.ExecutionEnvironment.Equal(state.ExecutionEnvironment) && !plan.ExecutionEnvironment.IsNull() {
+		execEnv, err := parseJSON(plan.ExecutionEnvironment.ValueString())
+		if err != nil {
+			resp.Diagnostics.AddError("Invalid Execution Environment", fmt.Sprintf("Failed to parse execution_environment JSON: %s", err))
+			return
+		}
+		updateReq.ExecutionEnvironment = execEnv
+	}
+
 	// Update agent
 	agent, err := r.client.UpdateAgent(state.ID.ValueString(), updateReq)
 	if err != nil {
@@ -413,6 +486,10 @@ func (r *agentResource) Update(ctx context.Context, req resource.UpdateRequest, 
 
 	if agent.TeamID != nil {
 		plan.TeamID = types.StringValue(*agent.TeamID)
+	}
+
+	if agent.SystemPrompt != nil {
+		plan.SystemPrompt = types.StringValue(*agent.SystemPrompt)
 	}
 
 	if agent.CreatedAt != nil {

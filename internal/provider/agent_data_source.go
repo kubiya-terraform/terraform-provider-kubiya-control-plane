@@ -22,18 +22,21 @@ type agentDataSource struct {
 }
 
 type agentDataSourceModel struct {
-	ID            types.String `tfsdk:"id"`
-	Name          types.String `tfsdk:"name"`
-	Description   types.String `tfsdk:"description"`
-	Status        types.String `tfsdk:"status"`
-	Capabilities  types.List   `tfsdk:"capabilities"`
-	Configuration types.String `tfsdk:"configuration"`
-	ModelID       types.String `tfsdk:"model_id"`
-	LLMConfig     types.String `tfsdk:"llm_config"`
-	Runtime       types.String `tfsdk:"runtime"`
-	TeamID        types.String `tfsdk:"team_id"`
-	CreatedAt     types.String `tfsdk:"created_at"`
-	UpdatedAt     types.String `tfsdk:"updated_at"`
+	ID                   types.String `tfsdk:"id"`
+	Name                 types.String `tfsdk:"name"`
+	Description          types.String `tfsdk:"description"`
+	Status               types.String `tfsdk:"status"`
+	Capabilities         types.List   `tfsdk:"capabilities"`
+	Configuration        types.String `tfsdk:"configuration"`
+	ModelID              types.String `tfsdk:"model_id"`
+	LLMConfig            types.String `tfsdk:"llm_config"`
+	Runtime              types.String `tfsdk:"runtime"`
+	TeamID               types.String `tfsdk:"team_id"`
+	SystemPrompt         types.String `tfsdk:"system_prompt"`
+	Skills               types.List   `tfsdk:"skills"`
+	ExecutionEnvironment types.String `tfsdk:"execution_environment"`
+	CreatedAt            types.String `tfsdk:"created_at"`
+	UpdatedAt            types.String `tfsdk:"updated_at"`
 }
 
 func (d *agentDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -83,6 +86,19 @@ func (d *agentDataSource) Schema(_ context.Context, _ datasource.SchemaRequest, 
 			},
 			"team_id": schema.StringAttribute{
 				Description: "Team ID this agent belongs to",
+				Computed:    true,
+			},
+			"system_prompt": schema.StringAttribute{
+				Description: "System prompt for the agent",
+				Computed:    true,
+			},
+			"skills": schema.ListAttribute{
+				Description: "List of skills available to the agent",
+				Computed:    true,
+				ElementType: types.StringType,
+			},
+			"execution_environment": schema.StringAttribute{
+				Description: "Execution environment configuration as JSON string",
 				Computed:    true,
 			},
 			"created_at": schema.StringAttribute{
@@ -188,6 +204,37 @@ func (d *agentDataSource) Read(ctx context.Context, req datasource.ReadRequest, 
 		config.TeamID = types.StringValue(*agent.TeamID)
 	} else {
 		config.TeamID = types.StringNull()
+	}
+
+	if agent.SystemPrompt != nil {
+		config.SystemPrompt = types.StringValue(*agent.SystemPrompt)
+	} else {
+		config.SystemPrompt = types.StringNull()
+	}
+
+	// Convert skills to list
+	if len(agent.Skills) > 0 {
+		skillList := make([]types.String, len(agent.Skills))
+		for i, skill := range agent.Skills {
+			skillList[i] = types.StringValue(skill)
+		}
+		listVal, diags := types.ListValueFrom(ctx, types.StringType, skillList)
+		resp.Diagnostics.Append(diags...)
+		config.Skills = listVal
+	} else {
+		config.Skills = types.ListNull(types.StringType)
+	}
+
+	// Convert execution environment to JSON string
+	if len(agent.ExecutionEnvironment) > 0 {
+		execEnvJSON, err := toJSONString(agent.ExecutionEnvironment)
+		if err != nil {
+			resp.Diagnostics.AddError("Error converting execution_environment", err.Error())
+			return
+		}
+		config.ExecutionEnvironment = types.StringValue(execEnvJSON)
+	} else {
+		config.ExecutionEnvironment = types.StringNull()
 	}
 
 	if agent.CreatedAt != nil {
