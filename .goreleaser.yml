@@ -31,7 +31,7 @@ builds:
     ignore:
       - goos: darwin
         goarch: '386'
-    binary: 'terraform-provider-kubiya-control-plane_v{{ .Version }}'
+    binary: '{{ .ProjectName }}_v{{ .Version }}'
 archives:
   - format: zip
     name_template: '{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}'
