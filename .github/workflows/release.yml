@@ -25,10 +25,17 @@ jobs:
 
       - name: Import GPG key
         id: import_gpg
-        uses: crazy-max/ghaction-import-gpg@v6
+        uses: crazy-max/ghaction-import-gpg@01dd5d3ca463c7f10f7f4f7b4f177225ac661ee4 # v6.1.0
         with:
           gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
+
+      - name: Configure GPG for non-interactive use
+        run: |
+          echo "allow-loopback-pinentry" >> ~/.gnupg/gpg-agent.conf
+          echo "pinentry-mode loopback" >> ~/.gnupg/gpg.conf
+          gpg-connect-agent reloadagent /bye
+          echo "test" | gpg --batch --pinentry-mode loopback --passphrase "${{ secrets.PASSPHRASE }}" --local-user "${{ steps.import_gpg.outputs.fingerprint }}" --armor --detach-sign
 
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v5
@@ -36,6 +43,6 @@ jobs:
           version: '~> v1'
           args: release --clean
         env:
-          GPG_FINGERPRINT: ${{ steps.import_gpg.outputs.fingerprint }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GPG_FINGERPRINT: ${{ steps.import_gpg.outputs.fingerprint }}
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
