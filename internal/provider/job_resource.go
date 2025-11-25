@@ -93,7 +93,7 @@ func (r *jobResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *
 				Required:    true,
 			},
 			"cron_schedule": schema.StringAttribute{
-				Description: "Cron expression (e.g., '0 17 * * *' for daily at 5pm). Required when trigger_type is 'cron'",
+				Description: "Cron expression in 5-field format: 'minute hour day month weekday' (e.g., '0 17 * * *' for daily at 5pm, '0 9 * * 1-5' for weekdays at 9am). Required when trigger_type is 'cron'. Day of week: 0=Sunday, 1=Monday, ..., 6=Saturday",
 				Optional:    true,
 			},
 			"cron_timezone": schema.StringAttribute{

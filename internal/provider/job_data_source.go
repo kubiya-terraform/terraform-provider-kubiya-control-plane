@@ -76,7 +76,7 @@ func (d *jobDataSource) Schema(_ context.Context, _ datasource.SchemaRequest, re
 				Computed:    true,
 			},
 			"cron_schedule": schema.StringAttribute{
-				Description: "Cron expression",
+				Description: "Cron expression in 5-field format: 'minute hour day month weekday'",
 				Computed:    true,
 			},
 			"cron_timezone": schema.StringAttribute{
