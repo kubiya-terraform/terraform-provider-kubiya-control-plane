@@ -212,12 +212,11 @@ func (d *agentDataSource) Read(ctx context.Context, req datasource.ReadRequest, 
 		config.SystemPrompt = types.StringNull()
 	}
 
-	// Convert skills from object to list of skill IDs
-	// API returns: {"skill-id-1": {}, "skill-id-2": {}} -> convert to ["skill-id-1", "skill-id-2"]
-	if len(agent.Skills) > 0 {
-		skillsList := make([]types.String, 0, len(agent.Skills))
-		for skillID := range agent.Skills {
-			skillsList = append(skillsList, types.StringValue(skillID))
+	// Convert skill IDs to list
+	if len(agent.SkillIDs) > 0 {
+		skillsList := make([]types.String, len(agent.SkillIDs))
+		for i, skillID := range agent.SkillIDs {
+			skillsList[i] = types.StringValue(skillID)
 		}
 		listVal, diags := types.ListValueFrom(ctx, types.StringType, skillsList)
 		resp.Diagnostics.Append(diags...)

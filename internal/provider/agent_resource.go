@@ -216,20 +216,15 @@ func (r *agentResource) Create(ctx context.Context, req resource.CreateRequest, 
 		createReq.SystemPrompt = &systemPrompt
 	}
 
-	// Handle skills - convert skill IDs array to object format for API
+	// Handle skill IDs
 	if !plan.Skills.IsNull() {
-		var skillsList []string
-		diags = plan.Skills.ElementsAs(ctx, &skillsList, false)
+		var skillIDs []string
+		diags = plan.Skills.ElementsAs(ctx, &skillIDs, false)
 		resp.Diagnostics.Append(diags...)
 		if resp.Diagnostics.HasError() {
 			return
 		}
-		// Convert skill IDs array to object format: ["skill-id-1", "skill-id-2"] -> {"skill-id-1": {}, "skill-id-2": {}}
-		skillsMap := make(map[string]interface{})
-		for _, skillID := range skillsList {
-			skillsMap[skillID] = map[string]interface{}{}
-		}
-		createReq.Skills = skillsMap
+		createReq.SkillIDs = skillIDs
 	}
 
 	if !plan.ExecutionEnvironment.IsNull() {
@@ -434,18 +429,13 @@ func (r *agentResource) Update(ctx context.Context, req resource.UpdateRequest, 
 	}
 
 	if !plan.Skills.Equal(state.Skills) && !plan.Skills.IsNull() {
-		var skillsList []string
-		diags = plan.Skills.ElementsAs(ctx, &skillsList, false)
+		var skillIDs []string
+		diags = plan.Skills.ElementsAs(ctx, &skillIDs, false)
 		resp.Diagnostics.Append(diags...)
 		if resp.Diagnostics.HasError() {
 			return
 		}
-		// Convert skill IDs array to object format: ["skill-id-1", "skill-id-2"] -> {"skill-id-1": {}, "skill-id-2": {}}
-		skillsMap := make(map[string]interface{})
-		for _, skillID := range skillsList {
-			skillsMap[skillID] = map[string]interface{}{}
-		}
-		updateReq.Skills = skillsMap
+		updateReq.SkillIDs = skillIDs
 	}
 
 	if !plan.ExecutionEnvironment.Equal(state.ExecutionEnvironment) && !plan.ExecutionEnvironment.IsNull() {

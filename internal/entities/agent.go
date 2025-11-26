@@ -35,7 +35,7 @@ type Agent struct {
 	Runtime              RuntimeType            `json:"runtime,omitempty"`
 	TeamID               *string                `json:"team_id,omitempty"`
 	SystemPrompt         *string                `json:"system_prompt,omitempty"`
-	Skills               map[string]interface{} `json:"skills,omitempty"`
+	SkillIDs             []string               `json:"skill_ids,omitempty"`
 	ExecutionEnvironment map[string]interface{} `json:"execution_environment,omitempty"`
 	CreatedAt            *time.Time             `json:"created_at,omitempty"`
 	UpdatedAt            *time.Time             `json:"updated_at,omitempty"`
@@ -55,7 +55,7 @@ type AgentCreateRequest struct {
 	Runtime              *RuntimeType           `json:"runtime,omitempty"`
 	TeamID               *string                `json:"team_id,omitempty"`
 	SystemPrompt         *string                `json:"system_prompt,omitempty"`
-	Skills               map[string]interface{} `json:"skills,omitempty"`
+	SkillIDs             []string               `json:"skill_ids,omitempty"`
 	ExecutionEnvironment map[string]interface{} `json:"execution_environment,omitempty"`
 }
 
@@ -72,6 +72,6 @@ type AgentUpdateRequest struct {
 	Runtime              *RuntimeType           `json:"runtime,omitempty"`
 	TeamID               *string                `json:"team_id,omitempty"`
 	SystemPrompt         *string                `json:"system_prompt,omitempty"`
-	Skills               map[string]interface{} `json:"skills,omitempty"`
+	SkillIDs             []string               `json:"skill_ids,omitempty"`
 	ExecutionEnvironment map[string]interface{} `json:"execution_environment,omitempty"`
 }
