@@ -104,7 +104,7 @@ func (r *agentResource) Schema(_ context.Context, _ resource.SchemaRequest, resp
 				Optional:    true,
 			},
 			"skills": schema.ListAttribute{
-				Description: "List of skills available to the agent",
+				Description: "List of skill IDs to assign to the agent",
 				Optional:    true,
 				ElementType: types.StringType,
 			},
@@ -216,7 +216,7 @@ func (r *agentResource) Create(ctx context.Context, req resource.CreateRequest, 
 		createReq.SystemPrompt = &systemPrompt
 	}
 
-	// Handle skills - convert array to object format for API
+	// Handle skills - convert skill IDs array to object format for API
 	if !plan.Skills.IsNull() {
 		var skillsList []string
 		diags = plan.Skills.ElementsAs(ctx, &skillsList, false)
@@ -224,10 +224,10 @@ func (r *agentResource) Create(ctx context.Context, req resource.CreateRequest, 
 		if resp.Diagnostics.HasError() {
 			return
 		}
-		// Convert array to object format: ["skill1", "skill2"] -> {"skill1": {}, "skill2": {}}
+		// Convert skill IDs array to object format: ["skill-id-1", "skill-id-2"] -> {"skill-id-1": {}, "skill-id-2": {}}
 		skillsMap := make(map[string]interface{})
-		for _, skill := range skillsList {
-			skillsMap[skill] = map[string]interface{}{}
+		for _, skillID := range skillsList {
+			skillsMap[skillID] = map[string]interface{}{}
 		}
 		createReq.Skills = skillsMap
 	}
@@ -440,10 +440,10 @@ func (r *agentResource) Update(ctx context.Context, req resource.UpdateRequest, 
 		if resp.Diagnostics.HasError() {
 			return
 		}
-		// Convert array to object format: ["skill1", "skill2"] -> {"skill1": {}, "skill2": {}}
+		// Convert skill IDs array to object format: ["skill-id-1", "skill-id-2"] -> {"skill-id-1": {}, "skill-id-2": {}}
 		skillsMap := make(map[string]interface{})
-		for _, skill := range skillsList {
-			skillsMap[skill] = map[string]interface{}{}
+		for _, skillID := range skillsList {
+			skillsMap[skillID] = map[string]interface{}{}
 		}
 		updateReq.Skills = skillsMap
 	}

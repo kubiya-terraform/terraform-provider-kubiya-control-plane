@@ -93,7 +93,7 @@ func (d *agentDataSource) Schema(_ context.Context, _ datasource.SchemaRequest, 
 				Computed:    true,
 			},
 			"skills": schema.ListAttribute{
-				Description: "List of skills available to the agent",
+				Description: "List of skill IDs assigned to the agent",
 				Computed:    true,
 				ElementType: types.StringType,
 			},
@@ -212,12 +212,12 @@ func (d *agentDataSource) Read(ctx context.Context, req datasource.ReadRequest, 
 		config.SystemPrompt = types.StringNull()
 	}
 
-	// Convert skills from object to list
-	// API returns: {"skill1": {}, "skill2": {}} -> convert to ["skill1", "skill2"]
+	// Convert skills from object to list of skill IDs
+	// API returns: {"skill-id-1": {}, "skill-id-2": {}} -> convert to ["skill-id-1", "skill-id-2"]
 	if len(agent.Skills) > 0 {
 		skillsList := make([]types.String, 0, len(agent.Skills))
-		for skillName := range agent.Skills {
-			skillsList = append(skillsList, types.StringValue(skillName))
+		for skillID := range agent.Skills {
+			skillsList = append(skillsList, types.StringValue(skillID))
 		}
 		listVal, diags := types.ListValueFrom(ctx, types.StringType, skillsList)
 		resp.Diagnostics.Append(diags...)
