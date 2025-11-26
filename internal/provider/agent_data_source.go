@@ -93,7 +93,7 @@ func (d *agentDataSource) Schema(_ context.Context, _ datasource.SchemaRequest, 
 				Computed:    true,
 			},
 			"skills": schema.ListAttribute{
-				Description: "List of skill IDs assigned to the agent",
+				Description: "List of skill resource IDs assigned to the agent. Note: This field is named 'skills' in Terraform but maps to 'skill_ids' in the API",
 				Computed:    true,
 				ElementType: types.StringType,
 			},

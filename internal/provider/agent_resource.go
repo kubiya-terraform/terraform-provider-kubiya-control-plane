@@ -104,7 +104,7 @@ func (r *agentResource) Schema(_ context.Context, _ resource.SchemaRequest, resp
 				Optional:    true,
 			},
 			"skills": schema.ListAttribute{
-				Description: "List of skill IDs to assign to the agent",
+				Description: "List of skill resource IDs to assign to the agent. Example: skills = [controlplane_skill.shell.id]. Note: This field is named 'skills' in Terraform but maps to 'skill_ids' in the API",
 				Optional:    true,
 				ElementType: types.StringType,
 			},
