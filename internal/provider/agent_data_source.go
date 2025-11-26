@@ -33,7 +33,7 @@ type agentDataSourceModel struct {
 	Runtime              types.String `tfsdk:"runtime"`
 	TeamID               types.String `tfsdk:"team_id"`
 	SystemPrompt         types.String `tfsdk:"system_prompt"`
-	Skills               types.String `tfsdk:"skills"`
+	Skills               types.List   `tfsdk:"skills"`
 	ExecutionEnvironment types.String `tfsdk:"execution_environment"`
 	CreatedAt            types.String `tfsdk:"created_at"`
 	UpdatedAt            types.String `tfsdk:"updated_at"`
@@ -92,9 +92,10 @@ func (d *agentDataSource) Schema(_ context.Context, _ datasource.SchemaRequest, 
 				Description: "System prompt for the agent",
 				Computed:    true,
 			},
-			"skills": schema.StringAttribute{
-				Description: "Skills configuration as JSON string",
+			"skills": schema.ListAttribute{
+				Description: "List of skills available to the agent",
 				Computed:    true,
+				ElementType: types.StringType,
 			},
 			"execution_environment": schema.StringAttribute{
 				Description: "Execution environment configuration as JSON string",
@@ -211,16 +212,18 @@ func (d *agentDataSource) Read(ctx context.Context, req datasource.ReadRequest, 
 		config.SystemPrompt = types.StringNull()
 	}
 
-	// Convert skills to JSON string
+	// Convert skills from object to list
+	// API returns: {"skill1": {}, "skill2": {}} -> convert to ["skill1", "skill2"]
 	if len(agent.Skills) > 0 {
-		skillsJSON, err := toJSONString(agent.Skills)
-		if err != nil {
-			resp.Diagnostics.AddError("Error converting skills", err.Error())
-			return
+		skillsList := make([]types.String, 0, len(agent.Skills))
+		for skillName := range agent.Skills {
+			skillsList = append(skillsList, types.StringValue(skillName))
 		}
-		config.Skills = types.StringValue(skillsJSON)
+		listVal, diags := types.ListValueFrom(ctx, types.StringType, skillsList)
+		resp.Diagnostics.Append(diags...)
+		config.Skills = listVal
 	} else {
-		config.Skills = types.StringNull()
+		config.Skills = types.ListNull(types.StringType)
 	}
 
 	// Convert execution environment to JSON string

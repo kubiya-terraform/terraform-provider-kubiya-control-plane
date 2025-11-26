@@ -40,7 +40,7 @@ type agentResourceModel struct {
 	Runtime              types.String `tfsdk:"runtime"`
 	TeamID               types.String `tfsdk:"team_id"`
 	SystemPrompt         types.String `tfsdk:"system_prompt"`
-	Skills               types.String `tfsdk:"skills"`
+	Skills               types.List   `tfsdk:"skills"`
 	ExecutionEnvironment types.String `tfsdk:"execution_environment"`
 	CreatedAt            types.String `tfsdk:"created_at"`
 	UpdatedAt            types.String `tfsdk:"updated_at"`
@@ -103,9 +103,10 @@ func (r *agentResource) Schema(_ context.Context, _ resource.SchemaRequest, resp
 				Description: "System prompt for the agent",
 				Optional:    true,
 			},
-			"skills": schema.StringAttribute{
-				Description: "Skills configuration as JSON string",
+			"skills": schema.ListAttribute{
+				Description: "List of skills available to the agent",
 				Optional:    true,
+				ElementType: types.StringType,
 			},
 			"execution_environment": schema.StringAttribute{
 				Description: "Execution environment configuration as JSON string",
@@ -215,14 +216,20 @@ func (r *agentResource) Create(ctx context.Context, req resource.CreateRequest, 
 		createReq.SystemPrompt = &systemPrompt
 	}
 
-	// Handle skills
+	// Handle skills - convert array to object format for API
 	if !plan.Skills.IsNull() {
-		skills, err := parseJSON(plan.Skills.ValueString())
-		if err != nil {
-			resp.Diagnostics.AddError("Invalid Skills", fmt.Sprintf("Failed to parse skills JSON: %s", err))
+		var skillsList []string
+		diags = plan.Skills.ElementsAs(ctx, &skillsList, false)
+		resp.Diagnostics.Append(diags...)
+		if resp.Diagnostics.HasError() {
 			return
 		}
-		createReq.Skills = skills
+		// Convert array to object format: ["skill1", "skill2"] -> {"skill1": {}, "skill2": {}}
+		skillsMap := make(map[string]interface{})
+		for _, skill := range skillsList {
+			skillsMap[skill] = map[string]interface{}{}
+		}
+		createReq.Skills = skillsMap
 	}
 
 	if !plan.ExecutionEnvironment.IsNull() {
@@ -427,12 +434,18 @@ func (r *agentResource) Update(ctx context.Context, req resource.UpdateRequest, 
 	}
 
 	if !plan.Skills.Equal(state.Skills) && !plan.Skills.IsNull() {
-		skills, err := parseJSON(plan.Skills.ValueString())
-		if err != nil {
-			resp.Diagnostics.AddError("Invalid Skills", fmt.Sprintf("Failed to parse skills JSON: %s", err))
+		var skillsList []string
+		diags = plan.Skills.ElementsAs(ctx, &skillsList, false)
+		resp.Diagnostics.Append(diags...)
+		if resp.Diagnostics.HasError() {
 			return
 		}
-		updateReq.Skills = skills
+		// Convert array to object format: ["skill1", "skill2"] -> {"skill1": {}, "skill2": {}}
+		skillsMap := make(map[string]interface{})
+		for _, skill := range skillsList {
+			skillsMap[skill] = map[string]interface{}{}
+		}
+		updateReq.Skills = skillsMap
 	}
 
 	if !plan.ExecutionEnvironment.Equal(state.ExecutionEnvironment) && !plan.ExecutionEnvironment.IsNull() {
