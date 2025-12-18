@@ -18,3 +18,11 @@ override.tf.json
 *_override.tf.json
 .terraformrc
 terraform.rc
+
+
+# Added by Maturity Check
+.DS_Store
+.idea/
+.vscode/
+*.exe
+*.test
