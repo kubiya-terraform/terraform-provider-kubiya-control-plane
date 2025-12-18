@@ -6,7 +6,7 @@ require (
 	github.com/getsentry/sentry-go v0.36.2
 	github.com/gruntwork-io/terratest v0.52.0
 	github.com/hashicorp/terraform-plugin-framework v1.16.1
-	github.com/stretchr/testify v1.10.0
+	github.com/stretchr/testify v1.11.1
 )
 
 require (
