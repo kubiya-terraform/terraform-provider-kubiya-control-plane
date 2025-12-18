@@ -3,7 +3,7 @@ module terraform-provider-kubiya-control-plane
 go 1.25.1
 
 require (
-	github.com/getsentry/sentry-go v0.36.2
+	github.com/getsentry/sentry-go v0.40.0
 	github.com/gruntwork-io/terratest v0.52.0
 	github.com/hashicorp/terraform-plugin-framework v1.16.1
 	github.com/stretchr/testify v1.10.0
